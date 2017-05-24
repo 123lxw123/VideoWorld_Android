@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "videoworld.com.lxw.videoworld"
+        applicationId "com.lxw.videoworld"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1

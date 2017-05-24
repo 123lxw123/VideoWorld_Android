@@ -1,4 +1,4 @@
-package videoworld.com.lxw.videoworld;
+package com.lxw.videoworld;
 
 import org.junit.Test;
 

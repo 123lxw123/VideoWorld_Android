@@ -1,4 +1,4 @@
-package videoworld.com.lxw.videoworld;
+package com.lxw.videoworld;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("videoworld.com.lxw.videoworld", appContext.getPackageName());
+        assertEquals("com.lxw.videoworld", appContext.getPackageName());
     }
 }

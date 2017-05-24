@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="videoworld.com.lxw.videoworld">
+    package="com.lxw.videoworld">
 
     <application
         android:allowBackup="true"

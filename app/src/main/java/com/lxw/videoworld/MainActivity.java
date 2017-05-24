@@ -1,4 +1,4 @@
-package videoworld.com.lxw.videoworld;
+package com.lxw.videoworld;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
