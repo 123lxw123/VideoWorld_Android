@@ -1,8 +1,5 @@
 package com.lxw.videoworld.framework.util;
 
-import android.provider.CalendarContract;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

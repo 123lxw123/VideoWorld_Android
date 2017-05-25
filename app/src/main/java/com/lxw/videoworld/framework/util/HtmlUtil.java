@@ -1,15 +1,9 @@
 package com.lxw.videoworld.framework.util;
 
-import com.lxw.dailynews.framework.log.LoggerHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static android.R.attr.name;
-import static android.R.attr.width;
-import static android.R.string.no;
 
 /**
  * Created by lxw9047 on 2016/11/22.

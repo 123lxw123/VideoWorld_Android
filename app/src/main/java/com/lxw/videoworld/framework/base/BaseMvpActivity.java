@@ -5,16 +5,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpActivity;
-import com.hannesdorfmann.mosby.mvp.MvpView;
-import com.lxw.dailynews.R;
-import com.lxw.dailynews.framework.config.Constant;
-import com.lxw.dailynews.framework.activitystack.ActivityStack;
-import com.lxw.dailynews.framework.log.LoggerHelper;
 
-import butterknife.ButterKnife;
+import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.hannesdorfmann.mosby3.mvp.MvpView;
+import com.lxw.videoworld.framework.activitystack.ActivityStack;
+import com.lxw.videoworld.framework.config.Constant;
+import com.lxw.videoworld.framework.log.LoggerHelper;
 import butterknife.Unbinder;
-import dmax.dialog.SpotsDialog;
 
 /**
  * Created by lxw9047 on 2016/10/12.

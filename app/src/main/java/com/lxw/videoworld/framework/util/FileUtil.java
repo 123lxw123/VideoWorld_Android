@@ -8,13 +8,11 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.lxw.dailynews.app.bean.FileInfoBean;
-import com.lxw.dailynews.framework.config.Constant;
+
+import com.lxw.videoworld.framework.config.Constant;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by lxw9047 on 2016/10/20.
@@ -86,32 +84,6 @@ public class FileUtil {
         filePath = cursor.getString(columnIndex);
         cursor.close();
         return filePath;
-    }
-
-    //文件按照文件名排序
-    public static ArrayList<FileInfoBean> getFileSortByTime(File[] files) {
-        ArrayList<FileInfoBean> fileList = new ArrayList<FileInfoBean>();//将需要的子文件信息存入到FileInfo里面
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            FileInfoBean fileInfo = new FileInfoBean();
-            fileInfo.name = file.getName();
-            fileInfo.path = file.getPath();
-            fileInfo.lastModified = file.lastModified();
-            fileList.add(fileInfo);
-        }
-        Collections.sort(fileList, new FileComparator());//通过重写Comparator的实现类FileComparator来实现按文件创建时间排序。
-        return fileList;
-    }
-
-    //文件名比较类
-    public static class FileComparator implements Comparator<FileInfoBean> {
-        public int compare(FileInfoBean file1, FileInfoBean file2) {
-            if (Integer.valueOf(file1.getName()) > Integer.valueOf(file2.getName())) {
-                return -1;
-            } else {
-                return 1;
-            }
-        }
     }
 
     //删除文件/文件夹及子文件
