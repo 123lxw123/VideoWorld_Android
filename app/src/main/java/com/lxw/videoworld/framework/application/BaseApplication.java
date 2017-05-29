@@ -4,10 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
-import com.lxw.dailynews.app.service.ClearOfflineCachService;
-import com.lxw.dailynews.app.ui.viewImp.MainActivity;
-import com.lxw.dailynews.framework.log.LoggerHelper;
-import com.lxw.dailynews.framework.util.SharePreferencesUtil;
+
+import com.lxw.videoworld.MainActivity;
+import com.lxw.videoworld.framework.log.LoggerHelper;
+import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -37,11 +37,6 @@ public class BaseApplication extends Application implements
         appStartCount = SharePreferencesUtil.getIntSharePreferences(appContext, APP_START_COUNT, 0);
         appStartCount = appStartCount + 1;
         SharePreferencesUtil.setIntSharePreferences(appContext, APP_START_COUNT, appStartCount);
-
-        //清理过时的离线下载图片
-        Intent intent = new Intent(BaseApplication.this, ClearOfflineCachService.class);
-        startService(intent);
-
     }
 
     public static Context getappContext() {

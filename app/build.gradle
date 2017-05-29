@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
@@ -62,5 +63,4 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
     // BaseRecyclerViewAdapterHelper
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.17'
-
 }

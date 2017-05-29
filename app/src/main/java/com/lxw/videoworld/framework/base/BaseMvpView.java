@@ -1,6 +1,7 @@
 package com.lxw.videoworld.framework.base;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+
+import com.hannesdorfmann.mosby3.mvp.MvpView;
 
 /**
  * Created by lxw9047 on 2016/10/24.

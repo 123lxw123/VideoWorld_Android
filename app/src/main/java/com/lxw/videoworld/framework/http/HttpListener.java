@@ -7,5 +7,5 @@ package com.lxw.videoworld.framework.http;
 
 public interface HttpListener<T> {
     void onSuccess(T response);
-    void onFailure(Throwable error);
+    void onFailure(T response);
 }
