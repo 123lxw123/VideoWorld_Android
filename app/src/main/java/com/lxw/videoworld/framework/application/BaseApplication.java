@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 
-import com.lxw.videoworld.MainActivity;
+import com.lxw.videoworld.app.ui.MainActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 
