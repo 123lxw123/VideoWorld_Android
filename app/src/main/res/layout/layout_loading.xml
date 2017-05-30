@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/text"
-        android:text="Dialog"
-        android:layout_width="match_parent"
+    <com.lxw.videoworld.framework.widget.LoadingView
+        app:titleText="@string/loading"
+        app:titleTextColor="?attr/com_font_B"
+        app:titleTextSize="14sp"
+        app:progressBackground="@color/color_BBE6DE"
+        app:progressColor="@color/color_16B998"
+        android:layout_width="70dp"
         android:layout_height="wrap_content" />
 </LinearLayout>

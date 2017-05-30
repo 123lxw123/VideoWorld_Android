@@ -50,4 +50,10 @@
         <item name="com_dialog_bg">@color/com_dialog_bg_gold</item>
     </style>
 
+    <!--透明 dialog-->
+    <style name="TransDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item><!-- 内容区域背景透明 -->
+        <item name="android:backgroundDimEnabled">false</item><!--背景不模糊-->
+    </style>
+
 </resources>

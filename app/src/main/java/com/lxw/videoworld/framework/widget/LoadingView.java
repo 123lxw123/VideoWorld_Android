@@ -43,15 +43,15 @@ public class LoadingView extends View {
     private int progressSleep;// 加载间隔时间
     private int marginSpace;// 加载条与标题的间距
     // 自定义属性默认值
-    private static final int TITLE_TEXT_SIZE = 16;
+    private static final int TITLE_TEXT_SIZE = 14;
     private static final int TITLE_TEXT_COLOR = Color.GRAY;
     private static final int PROGRESS_COLOR = Color.BLUE;
     private static final int PROGRESS_BACKGROUND_COLOR = Color.GRAY;
     private static final int PROGRESS_WIDTH = 50;
-    private static final int PROGRESS_HEIGHT = 10;
+    private static final int PROGRESS_HEIGHT = 3;
     private static final int MARGIN_SPACE = 10;
     private static final int PROGRESS_SLEEP = 20;
-    private static final int PROGRESS_SPEED = 1;
+    private static final int PROGRESS_SPEED = 5;
 
     public LoadingView(Context context) {
         this(context, null);
@@ -86,10 +86,6 @@ public class LoadingView extends View {
         if (StringUtil.isEmpty(titleText)) {
             titleText = "";
             marginSpace = 0;
-        }
-        // 加载条每段宽度不能超过或等于加载条宽度
-        if (progressWidth >= width) {
-            progressWidth = width / 2;
         }
         paint = new Paint();
         textBound = new Rect();

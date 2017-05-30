@@ -65,6 +65,8 @@
     <color name="com_dialog_bg_gold">#161010</color>
     <!--基本色 END-->
 
-    <color name="color_6E7271">#6E7271</color>
+    <!--LoadingDialog-->
+    <color name="color_BBE6DE">#BBE6DE</color>
+    <color name="color_16B998">#16B998</color>
 
 </resources>
