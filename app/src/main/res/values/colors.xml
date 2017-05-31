@@ -66,7 +66,16 @@
     <!--基本色 END-->
 
     <!--LoadingDialog-->
-    <color name="color_BBE6DE">#BBE6DE</color>
-    <color name="color_16B998">#16B998</color>
+    <color name="color_BBE6DE_red">#BBE6DE</color>
+    <color name="color_16B998_red">#16B998</color>
+    <color name="color_BBE6DE_blue">#BBE6DE</color>
+    <color name="color_16B998_blue">#16B998</color>
+    <color name="color_BBE6DE_gold">#BBE6DE</color>
+    <color name="color_16B998_gold">#16B998</color>
+
+
+    <color name="color_E8E8E8">#E8E8E8</color>
+
+
 
 </resources>

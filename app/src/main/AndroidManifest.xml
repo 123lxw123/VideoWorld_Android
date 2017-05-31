@@ -2,6 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lxw.videoworld">
 
+    <!-- glide配置 -->
+    <!--<meta-data-->
+        <!--android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"-->
+        <!--android:value="http://blog.csdn.net/wyb112233/article/details/GlideModule" />-->
+
+    <!-- 访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 往sdcard中写入数据的权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 在sdcard中创建/删除文件的权限 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 获取手机网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 读取日历 -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
     <application
         android:name=".framework.application.BaseApplication"
         android:allowBackup="true"
@@ -10,13 +28,54 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/GoldAppTheme">
-        <activity android:name=".app.ui.MainActivity">
+        <!-- Hotfix2.0 配置 -->
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="114702-1" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="d3162097817a58e5e257dca8bb9978ad" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDA8vKlUHT+gSYtVvQesbQ3S4lOr3VBXRK4Ch9dRQl+E33FPHTgnOOggrSyW/sopZIqn/rvzf2IpNBwEFlERgn+R7cYlpC0S1TupZAw2KGk6FCG97c197LmkWZ1a5T3JLDphXIty3Ogdl0iSq6mlOaRq67ajT/GS8A4kzV0Vcrjw9SUTZvClaUFGEjbIi93XBzKLZ0qKiJO7uQkgUyZjTB5+gfCX66WgzzP3KfEitCNfeukOuRsE4EXCSYUipjYgz1zr54ZjSSpF9SrV2OeT8YdXawV2E6OZubK9lusDI48ee+PkG67fH6htNr1skgzI1Y2M/wTjezMuP5XrI1zxIuTAgMBAAECggEBAJWhEii/PytK7ldE0mWnO3GSI3YgvRamXejY+L+01QqvhN5a5ux03lVQZ17V0+0OkU565/flz9KStY3iL8exZPiLluL7iFY5ATFctXgb1ybyfdhc6/hvEY6afVFbz5blHkjKEuSOnSl4APuh3NUULcYT1LJpzWYywmtdRZvlGEUN8lz+Z3VKvkGvHmkgwVFaFhgtJOmVIRaR9YE/dI7tvd+IhwjppvT3ECa+XR9eeleuY+1yg26bvDUmawATS01nQyHzvV3ruMQ1Jb6TcJbUJ+VZQZ2N+iJvHslWxWerxrEdwHgk2JmsOtp1Ceaw+yCJosRmuXcsVwCL0KZwhoiBgekCgYEA+wqnmGvY/xwPBnnh0nqHHGeAgtqsswxcjeR2/VIuYNCEykPCEzFc/Ke7FUjBtst8R2/RRoSdNY865t4PUV6YEOuI8BpSl+xS5MIC/74R6OV6eMWOjBh1THkZlc1m+/xsZH4n4tZombHgCewEekvOEFE+2riLC2TvP5LGj7Z0p7cCgYEAxMKPBspuzA8epXQCOn47mtJAZZs2W5839L8FPQHgjXAdHQxpSt583ilBwT04zK3zN5iIVrBtDtWKNxnCMxPaszE7Ue+RZVKQDEbVC/Euw6rrMxPs+l2Eg3GsgPhdf7BnJ7eLjOzBTbMmaRqWym996m+M8udrzVu+zHGMfgdq4wUCgYEAqBpZYdKOCz5RvWduVVAhG18figA+duMHMyjSmQ0n60KWOQ8obUu31aPHvhfrR6l4/ikdPRheYVgY/DGkljs+ns3p88XcmsjwNSjJc1FmksrfuPGpY5yZJ21MOajClmhQePaVZOtoPcsDmAFIelA6m2icK0A6M5YSM0Lo3aEy+n8CgYAX7yK+zLkVkXFE5wuuWdSeTJ0QvwSpuIByARp+BVBvZAfmlK/qL4446APbobrbCv3e8WsEQInDmC4r7bI1zGB6E68HlIC3NofXNnaL8Vai7pOVrwLQobeQ1a8KMSwOcELcDfOnvNT2wqgVeOqGzXEfp1oZ4hS28kYPUHCqk/RokQKBgQCA/iEWphmJVZVtQPQaoGLOshDdKBoPg43EnxaVjcldDpWxGvhKVE6l/7PuGY19RbQYcnJuptaqMSgSxxd8+PTVEfXWsCXpH4wrnQPrslbsYNMYQHgd2Sp0s/rKGRRatAkB6F5SUI6KzHUI3JdlW8SJN9p0Z6PZBNKONwKtDk0KHg==" />
+
+        <activity android:name=".app.ui.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 微信分享 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <receiver
+            android:name=".framework.receiver.MyJpushReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
+                <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.noahwm.android" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

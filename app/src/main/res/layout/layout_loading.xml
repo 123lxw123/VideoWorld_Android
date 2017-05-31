@@ -7,8 +7,8 @@
         app:titleText="@string/loading"
         app:titleTextColor="?attr/com_font_B"
         app:titleTextSize="14sp"
-        app:progressBackground="@color/color_BBE6DE"
-        app:progressColor="@color/color_16B998"
+        app:progressBackground="?attr/color_BBE6DE"
+        app:progressColor="?attr/color_16B998"
         android:layout_width="70dp"
         android:layout_height="wrap_content" />
 </LinearLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/common_dialog_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/update_version_dialog_head_tev"
+        android:layout_width="@dimen/common_dialog_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/common_margin_middle"
+        android:layout_marginRight="@dimen/common_margin_middle"
+        android:layout_marginTop="13dp"
+        android:gravity="center_horizontal"
+        android:text="有版本更新(V1.0.3)"
+        android:textColor="@color/common_black"
+        android:textSize="@dimen/common_32px" />
+
+    <EditText
+        android:id="@+id/update_version_dialog_content_edt"
+        android:layout_width="@dimen/common_dialog_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/common_margin_middle"
+        android:layout_marginLeft="@dimen/common_margin_middle"
+        android:layout_marginRight="@dimen/common_margin_middle"
+        android:layout_marginTop="@dimen/common_margin_small"
+        android:background="@null"
+        android:editable="false"
+        android:gravity="center_horizontal"
+        android:maxLines="9"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:text="1.增加新功能 \n2.修改bug\n3.增加新功能 \n4.修改bug\n5test"
+        android:textColor="@color/common_black"
+        android:textSize="@dimen/common_26px" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.2dp"
+        android:background="@color/common_gray_line" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/update_version_dialog_cancel_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/account_loginbutton_height"
+            android:layout_weight="1.0"
+            android:background="@drawable/setting_item_bg"
+            android:text="稍后下载"
+            android:textColor="@color/common_black"
+            android:textSize="@dimen/common_36px" />
+
+        <View
+            android:layout_width="0.2dp"
+            android:layout_height="match_parent"
+            android:background="@color/common_gray_line" />
+
+        <Button
+            android:id="@+id/update_version_dialog_ok_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/account_loginbutton_height"
+            android:layout_weight="1.0"
+            android:background="@drawable/setting_item_bg"
+            android:text="下载新版本"
+            android:textColor="@color/common_black"
+            android:textSize="@dimen/common_36px" />
+    </LinearLayout>
+</LinearLayout>

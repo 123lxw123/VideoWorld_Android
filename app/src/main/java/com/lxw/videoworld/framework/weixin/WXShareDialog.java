@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.lxw.dailynews.R;
-import com.lxw.dailynews.framework.util.ToastUtil;
-
+import com.lxw.videoworld.R;
+import com.lxw.videoworld.framework.util.ToastUtil;
 
 //分享的dialog
 public class WXShareDialog extends AlertDialog {
@@ -106,7 +105,7 @@ public class WXShareDialog extends AlertDialog {
                         .getContext().getSystemService(
                                 Context.CLIPBOARD_SERVICE);
                 clip.setText(link);
-                ToastUtil.showMessage(WXShareDialog.this.getContext(), "已复制到剪切板");
+                ToastUtil.showMessage("已复制到剪切板");
                 WXShareDialog.this.dismiss();
             }
         });

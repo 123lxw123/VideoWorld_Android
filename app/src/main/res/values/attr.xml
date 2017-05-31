@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!--LoadingView-->
     <attr name="titleText" format="string" />
     <attr name="titleTextSize" format="dimension" />
@@ -12,6 +11,8 @@
     <attr name="progressSpeed" format="integer" />
     <attr name="progressSleep" format="integer" />
     <attr name="marginSpace" format="dimension" />
+    <attr name="color_BBE6DE" format="color" />
+    <attr name="color_16B998" format="color" />
     <!--基本色 START-->
     <attr name="com_wm_bg" format="color" />
     <attr name="com_space_line" format="color" />

@@ -9,11 +9,23 @@ import android.widget.Toast;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.image.ImageManager;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import org.reactivestreams.Subscriber;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class WXShareAction {
@@ -26,7 +38,7 @@ public class WXShareAction {
     public final String APP_ID = "wx16b17af3bfbcaf4d";// 正式签名
 
     private Context context;
-    private final int THUMB_SIZE = 150;
+    private final int THUMB_SIZE = 120;
 
     public WXShareAction(Context context) {
         this.context = context;
@@ -58,18 +70,18 @@ public class WXShareAction {
         }
         switch (bean.shareType) {
             case SHAREIMG:
-                Observable.create(new Observable.OnSubscribe<Bitmap>() {
+                Observable.create(new ObservableOnSubscribe<Bitmap>() {
                     @Override
-                    public void call(Subscriber<? super Bitmap> subscriber) {
+                    public void subscribe(ObservableEmitter<Bitmap> emitter) {
                         Bitmap bmp = ImageManager.getInstance().downloadImage(BaseApplication.appContext, ((WXShareImgBean) bean).imageUrl);
-                        subscriber.onNext(bmp);
+                        emitter.onNext(bmp);
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
-                        .subscribe(new Action1<Bitmap>() {
+                        .subscribe(new Consumer<Bitmap>() {
 
                             @Override
-                            public void call(Bitmap bmp) {
+                            public void accept(Bitmap bmp) {
                                 weixinShareImg(bean, bmp);
                             }
                         });
@@ -78,18 +90,18 @@ public class WXShareAction {
                 weixinShareText(bean);
                 break;
             case SHAREIMGURL:
-                Observable.create(new Observable.OnSubscribe<Bitmap>() {
+                Observable.create(new ObservableOnSubscribe<Bitmap>() {
                     @Override
-                    public void call(Subscriber<? super Bitmap> subscriber) {
+                    public void subscribe(ObservableEmitter<Bitmap> emitter) {
                         Bitmap bmp = ImageManager.getInstance().downloadImage(BaseApplication.appContext, ((WXShareImgUrlBean) bean).imageUrl);
-                        subscriber.onNext(bmp);
+                        emitter.onNext(bmp);
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
-                        .subscribe(new Action1<Bitmap>() {
+                        .subscribe(new Consumer<Bitmap>() {
 
                             @Override
-                            public void call(Bitmap bmp) {
+                            public void accept(Bitmap bmp) {
                                 weixinShareImgUrl(bean, bmp);
                             }
                         });
@@ -153,7 +165,7 @@ public class WXShareAction {
         }
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE,
                 THUMB_SIZE, true);
-        msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+        msg.thumbData = bitmap2Byte(thumbBmp); // 设置缩略图
         int imageSize = msg.thumbData.length / 1024;
         if (imageSize > 32) {
             Toast.makeText(context, "您分享的图片过大", Toast.LENGTH_SHORT).show();
@@ -175,11 +187,11 @@ public class WXShareAction {
         msg.title = ibean.title;
         msg.description = ibean.description;
         if(bmp == null){
-            bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_share_logo);
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
         }
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE,
                 THUMB_SIZE, true);
-        msg.thumbData = Util.bmpToByteArray(thumbBmp, true); // 设置缩略图
+        msg.thumbData = bitmap2Byte(thumbBmp); // 设置缩略图
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = buildTransaction("webpage");
         req.message = msg;
@@ -191,5 +203,28 @@ public class WXShareAction {
     private String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis())
                 : type + System.currentTimeMillis();
+    }
+
+    /**
+     * 把图片转换成字节数组
+     *
+     * @param bm
+     * @return
+     */
+    public static byte[] bitmap2Byte(Bitmap bm) {
+        byte[] compressData = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            try {
+                bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            compressData = baos.toByteArray();
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return compressData;
     }
 }

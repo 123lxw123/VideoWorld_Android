@@ -22,6 +22,8 @@
         <item name="com_font_C">@color/com_font_C_red</item>
         <item name="com_font_D">@color/com_font_D_red</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_red</item>
+        <item name="color_BBE6DE">@color/color_BBE6DE_red</item>
+        <item name="color_16B998">@color/color_16B998_red</item>
     </style>
     <style name="BlueAppTheme" parent="BaseAppTheme">
         <item name="com_wm_bg">@color/com_wm_bg_blue</item>
@@ -35,6 +37,8 @@
         <item name="com_font_C">@color/com_font_C_blue</item>
         <item name="com_font_D">@color/com_font_D_blue</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_blue</item>
+        <item name="color_BBE6DE">@color/color_BBE6DE_blue</item>
+        <item name="color_16B998">@color/color_16B998_blue</item>
     </style>
     <style name="GoldAppTheme" parent="BaseAppTheme">
         <item name="com_wm_bg">@color/com_wm_bg_gold</item>
@@ -48,12 +52,21 @@
         <item name="com_font_C">@color/com_font_C_gold</item>
         <item name="com_font_D">@color/com_font_D_gold</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_gold</item>
+        <item name="color_BBE6DE">@color/color_BBE6DE_gold</item>
+        <item name="color_16B998">@color/color_16B998_gold</item>
     </style>
 
     <!--透明 dialog-->
     <style name="TransDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item><!-- 内容区域背景透明 -->
         <item name="android:backgroundDimEnabled">false</item><!--背景不模糊-->
+    </style>
+
+    <!-- 分割线高度，颜色 -->
+    <style name="split_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">?attr/com_space_line</item>
     </style>
 
 </resources>

@@ -34,6 +34,7 @@
   **[] $VALUES;
   public *;
 }
+
 # glide
 # for DexGuard only
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
@@ -41,3 +42,21 @@
 -keep class com.chad.library.adapter.** {
    *;
 }
+#基线包使用，生成mapping.txt
+-printmapping mapping.txt
+#生成的mapping.txt在app/buidl/outputs/mapping/release路径下，移动到/app路径下
+
+#修复后的项目使用，保证混淆结果一致
+#-applymapping mapping.txt
+
+#hotfix
+-keep class com.taobao.sophix.**{*;}
+-keep class com.ta.utdid2.device.**{*;}
+
+# jpush
+-dontoptimize
+-dontpreverify
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">影视天地</string>
     <string name="loading">loading</string>
+    <string name="weixin_share">微信分享</string>
 </resources>
