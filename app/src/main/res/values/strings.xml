@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">VideoWorld</string>
-    <string name="loading">loading...</string>
+    <string name="app_name">影视天地</string>
+    <string name="loading">loading</string>
 </resources>
