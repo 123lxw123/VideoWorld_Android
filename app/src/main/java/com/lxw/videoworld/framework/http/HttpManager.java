@@ -2,9 +2,9 @@ package com.lxw.videoworld.framework.http;
 
 
 import android.net.ParseException;
-import android.widget.Toast;
 
 import com.google.gson.JsonParseException;
+import com.lxw.videoworld.framework.config.Constant;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
@@ -77,7 +77,7 @@ public class HttpManager {
             public void onNext(BaseResponse response) {
                 LoggerHelper.info("HttpManager-onNext-->>",response.toString());
                 if(response != null){
-                    if(response.getCode() == 1000){// 服务器返回正确结果
+                    if(response.getCode() == Constant.CODE_SUCCESS){// 服务器返回正确结果
                         httpListener.onSuccess(response);
                     }else {// 服务器返回结果异常
                         if(flag_toast && StringUtil.isNotEmpty(response.getMessage())){
