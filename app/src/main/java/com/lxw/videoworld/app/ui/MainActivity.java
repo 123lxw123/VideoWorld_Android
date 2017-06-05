@@ -1,29 +1,27 @@
 package com.lxw.videoworld.app.ui;
 
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextPaint;
-import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.widget.DownloadDialog;
-import com.lxw.videoworld.framework.widget.LoadingDialog;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.width;
-import static com.lxw.videoworld.R.attr.progressSleep;
-
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends BaseActivity {
     @BindView(R.id.text)
     TextView text;
     int progress;
+
+    private boolean flag_exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,5 +50,34 @@ public class MainActivity extends AppCompatActivity {
                 }.start();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            exitByDoubleClick();
+        }
+        return false;
+    }
+
+    /**
+     * 双击退出程序
+     */
+    private void exitByDoubleClick() {
+        Timer tExit = null;
+        if(!flag_exit){
+            flag_exit = true;
+            Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+            tExit = new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    flag_exit=false;//取消退出
+                }
+            },2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+        }else{
+            finish();
+            System.exit(0);
+        }
     }
 }

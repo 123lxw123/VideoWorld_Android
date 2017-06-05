@@ -1,6 +1,6 @@
 package com.lxw.videoworld.framework.log;
 
-import com.lxw.videoworld.framework.config.Constant;
+import com.lxw.videoworld.app.config.Constant;
 import com.orhanobut.logger.Logger;
 
 /**

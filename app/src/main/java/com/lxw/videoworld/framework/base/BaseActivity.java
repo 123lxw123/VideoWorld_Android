@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.lxw.videoworld.framework.activitystack.ActivityStack;
-import com.lxw.videoworld.framework.config.Constant;
+import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.widget.LoadingDialog;
 
@@ -109,4 +109,5 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }

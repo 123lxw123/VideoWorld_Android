@@ -9,10 +9,9 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 
-import com.lxw.videoworld.framework.config.Constant;
+import com.lxw.videoworld.app.config.Constant;
 
 import java.io.File;
-import java.util.Collections;
 
 /**
  * Created by lxw9047 on 2016/10/20.
