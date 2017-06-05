@@ -7,7 +7,7 @@ import com.lxw.videoworld.framework.http.BaseResponse;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -41,7 +41,7 @@ public class HttpHelper {
         return httpHelper;
     }
 
-    public Flowable<BaseResponse<ConfigModel>> getConfig(String id){
+    public Observable<BaseResponse<ConfigModel>> getConfig(String id){
         return httpService.getConfig(id);
     }
 }

@@ -66,7 +66,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(R.drawable.img_loading_error)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
@@ -89,7 +88,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(errorImgId)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
@@ -186,7 +184,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(R.drawable.img_loading_error)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
@@ -210,7 +207,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(R.drawable.img_loading_error)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
@@ -231,7 +227,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(R.drawable.img_loading_error)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
@@ -252,7 +247,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(R.drawable.img_loading_error)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级
@@ -273,7 +267,6 @@ public class ImageManager {
         if (flag_loadImage) {
             Glide.with(context)
                     .load(imgUrl)
-                    .placeholder(R.drawable.img_loading)
                     .error(R.drawable.img_loading_error)
                     .crossFade()
                     .priority(Priority.NORMAL) //下载的优先级

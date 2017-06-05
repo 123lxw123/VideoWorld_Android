@@ -4,22 +4,22 @@ package com.lxw.videoworld.framework.http;
 import android.net.ParseException;
 
 import com.google.gson.JsonParseException;
-import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 
 import org.json.JSONException;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.io.InterruptedIOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
 
@@ -30,28 +30,28 @@ import retrofit2.HttpException;
 
 public abstract class HttpManager<T> {
     private BaseActivity activity;
-    private Flowable<BaseResponse<T>> flowable;
+    private Observable<BaseResponse<T>> observable;
     private boolean flag_dialog;
     private boolean flag_toast;
-    private Subscription subscription;
+    private Disposable disposable;
 
-    public HttpManager(BaseActivity activity, Flowable<BaseResponse<T>> flowable){
-        this(activity, flowable, true);
+    public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable){
+        this(activity, observable, true);
     }
 
-    public HttpManager(BaseActivity activity, Flowable<BaseResponse<T>> flowable, boolean flag_dialog){
-        this(activity, flowable, true, true);
+    public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable, boolean flag_dialog){
+        this(activity, observable, true, true);
     }
 
-    public HttpManager(BaseActivity activity, Flowable<BaseResponse<T>> flowable, boolean flag_dialog, boolean flag_toast){
+    public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable, boolean flag_dialog, boolean flag_toast){
         this.activity = activity;
-        this.flowable = flowable;
+        this.observable = observable;
         this.flag_dialog = flag_dialog;
         this.flag_toast = flag_toast;
     }
 
     public void doRequest(){
-        Subscriber<BaseResponse<T>> subscriber = new Subscriber<BaseResponse<T>>(){
+        Observer<BaseResponse<T>> observer = new Observer<BaseResponse<T>>(){
             @Override
             public void onError(Throwable error) {
                 activity.hideProgressBar();
@@ -89,8 +89,8 @@ public abstract class HttpManager<T> {
             }
 
             @Override
-            public void onSubscribe(Subscription s) {
-                subscription = s;
+            public void onSubscribe(Disposable d) {
+                disposable = d;
                 if(flag_dialog){
                     activity.showProgressBar();
                 }
@@ -118,18 +118,17 @@ public abstract class HttpManager<T> {
             }
         };
 
-        if(flowable != null && subscriber != null){
-            flowable.subscribeOn(Schedulers.io())
+        if(observable != null && observer != null){
+            observable.subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
-                    .onBackpressureLatest()
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber);
+                    .subscribe(observer);
         }
     }
 
     public void cancel(){
-        if(subscription != null){
-            subscription.cancel();
+        if(disposable != null){
+            disposable.dispose();
             activity.hideProgressBar();
         }
     }

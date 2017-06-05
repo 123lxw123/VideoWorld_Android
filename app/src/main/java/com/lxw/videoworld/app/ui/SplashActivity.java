@@ -20,11 +20,9 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -40,6 +38,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.translucentStatusBar(this);
+        StatusBarUtil.hideNavigationBar(this);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         setSplashPicture();
@@ -56,7 +55,7 @@ public class SplashActivity extends BaseActivity {
     //跳转到主页
     public void jumpToNext() {
 
-        Observable.timer(15000, TimeUnit.MILLISECONDS)
+        Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -71,25 +70,25 @@ public class SplashActivity extends BaseActivity {
                 });
     }
 
-    public void downloadSplashPicture(){
+    public void downloadSplashPicture() {
         final String url = SharePreferencesUtil.getStringSharePreferences(this, SPLASH_PICTURE_LINK, null);
-        new HttpManager<ConfigModel>(SplashActivity.this, HttpHelper.getInstance().getConfig("5"), false, false){
+        new HttpManager<ConfigModel>(SplashActivity.this, HttpHelper.getInstance().getConfig("1"), false, false) {
 
             @Override
             public void onSuccess(BaseResponse<ConfigModel> response) {
                 final String imageUrl = response.getResult().getImage();
-                if(!TextUtils.isEmpty(imageUrl)){
-                    if(!TextUtils.isEmpty(url) && !url.equals(imageUrl)){
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
                         return;
-                    }else {
+                    } else {
                         SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, SPLASH_PICTURE_LINK, imageUrl);
                         // 缓存启动页图片
-                        Flowable.create(new FlowableOnSubscribe<Integer>() {
+                        Observable.create(new ObservableOnSubscribe<Integer>() {
                             @Override
-                            public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
-                                ImageManager.getInstance().downloadImage(SplashActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG);
+                            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                                ImageManager.getInstance().downloadImage(SplashActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG, true);
                             }
-                        }, BackpressureStrategy.ERROR).subscribeOn(Schedulers.io())
+                        }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Consumer<Integer>() {
 
