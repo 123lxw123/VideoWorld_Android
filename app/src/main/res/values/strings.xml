@@ -2,4 +2,9 @@
     <string name="app_name">影视天地</string>
     <string name="loading">loading</string>
     <string name="weixin_share">微信分享</string>
+    <string name="txt_tab1">电影</string>
+    <string name="txt_tab2">电视</string>
+    <string name="txt_tab3">综艺</string>
+    <string name="txt_tab4">动漫</string>
+    <string name="txt_tab5">游戏</string>
 </resources>

@@ -1,14 +1,14 @@
 package com.lxw.videoworld.app.ui;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.framework.widget.DownloadDialog;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,10 +17,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
-    @BindView(R.id.text)
-    TextView text;
-    int progress;
 
+    @BindView(R.id.viewpager_main)
+    ViewPager viewpagerMain;
+    @BindView(R.id.navigationbar_main)
+    BottomNavigationBar navigationbarMain;
     private boolean flag_exit = false;
 
     @Override
@@ -28,33 +29,41 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        text.setOnClickListener(new View.OnClickListener() {
+        initViews();
+    }
+
+    private void initViews() {
+        navigationbarMain.addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_1, getString(R.string.txt_tab1)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_2, getString(R.string.txt_tab2)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_3, getString(R.string.txt_tab3)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_4, getString(R.string.txt_tab4)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_5, getString(R.string.txt_tab5)))
+                .initialise();
+
+        navigationbarMain.setBarBackgroundColor();
+        navigationbarMain
+                .setMode(BottomNavigationBar.MODE_FIXED);
+        navigationbarMain.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener(){
             @Override
-            public void onClick(View v) {
-//                LoadingDialog dialog = new LoadingDialog(MainActivity.this);
-//                dialog.show();
-                final DownloadDialog dialog = new DownloadDialog(MainActivity.this);
-                dialog.show();
-                new Thread() {
-                    public void run() {
-                        while (true) {
-                            progress ++;
-                            dialog.updateProgress(progress);
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }.start();
+            public void onTabSelected(int position) {
+                switch (position){
+                    case 0:
+
+                        break;
+                }
+            }
+            @Override
+            public void onTabUnselected(int position) {
+            }
+            @Override
+            public void onTabReselected(int position) {
             }
         });
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitByDoubleClick();
         }
         return false;
@@ -65,17 +74,17 @@ public class MainActivity extends BaseActivity {
      */
     private void exitByDoubleClick() {
         Timer tExit = null;
-        if(!flag_exit){
+        if (!flag_exit) {
             flag_exit = true;
-            Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             tExit = new Timer();
             tExit.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    flag_exit=false;//取消退出
+                    flag_exit = false;//取消退出
                 }
-            },2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
-        }else{
+            }, 2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+        } else {
             finish();
             System.exit(0);
         }

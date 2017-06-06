@@ -2,12 +2,13 @@ package com.lxw.videoworld.framework.base;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.lxw.videoworld.framework.activitystack.ActivityStack;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.framework.activitystack.ActivityStack;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.widget.LoadingDialog;
 
@@ -103,6 +104,23 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
     public void showMessage(String message, int showTime){
         Toast.makeText(BaseActivity.this, message, showTime).show();
+    }
+
+    public int getCustomColor(int colorId){
+        return getCustomColor(colorId, 0xFFFFFF);
+    }
+
+    /**
+     * 获取主题某颜色的值
+     * @param colorId 如 R.attr.com_main_A
+     * @param defValue 默认颜色值
+     * @return
+     */
+    public int getCustomColor(int colorId, int defValue){
+        TypedArray array = getTheme().obtainStyledAttributes(new int[] {colorId});
+        int color = array.getColor(0, defValue);
+        array.recycle();
+        return color;
     }
 
     @Override
