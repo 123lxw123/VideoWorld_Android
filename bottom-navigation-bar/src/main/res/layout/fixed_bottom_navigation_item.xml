@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fixed_bottom_navigation_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/fixed_height"
+    android:background="?selectableItemBackgroundBorderless"
+    android:paddingBottom="@dimen/fixed_height_bottom_padding"
+    android:paddingLeft="@dimen/fixed_width_padding"
+    android:paddingRight="@dimen/fixed_width_padding"
+    android:paddingTop="@dimen/fixed_height_top_padding_inactive">
+
+    <FrameLayout
+        android:id="@+id/fixed_bottom_navigation_layout"
+        android:layout_width="@dimen/fixed_icon_badge_grid_width"
+        android:layout_height="@dimen/fixed_icon_badge_grid_height"
+        android:layout_gravity="center_horizontal|top">
+
+        <ImageView
+            android:id="@+id/fixed_bottom_navigation_icon"
+            android:layout_width="@dimen/fixed_icon_grid"
+            android:layout_height="@dimen/fixed_icon_grid"
+            android:contentDescription="@string/icon"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:scaleType="fitXY" />
+
+
+
+        <FrameLayout
+            android:id="@+id/ll_badge_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#000000"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/fixed_bottom_navigation_badge"
+                style="@style/BadgeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:gravity="center" />
+
+        </FrameLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/fixed_bottom_navigation_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:lines="1"
+        android:scaleX="@dimen/fixed_label_active_to_inactive_ratio"
+        android:scaleY="@dimen/fixed_label_active_to_inactive_ratio"
+        android:textSize="@dimen/fixed_label_active" />
+
+</FrameLayout>

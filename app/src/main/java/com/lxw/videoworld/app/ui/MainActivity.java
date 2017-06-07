@@ -2,6 +2,7 @@ package com.lxw.videoworld.app.ui;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ public class MainActivity extends BaseActivity {
     ViewPager viewpagerMain;
     @BindView(R.id.navigationbar_main)
     BottomNavigationBar navigationbarMain;
+    @BindView(R.id.toobar_main)
+    Toolbar toobarMain;
     private boolean flag_exit = false;
 
     @Override
@@ -33,6 +36,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initViews() {
+        toobarMain.inflateMenu(R.menu.toolbar_main);//设置右上角的填充菜单
+
+        navigationbarMain.setBackgroundColor(getCustomColor(R.styleable.BaseColor_com_main_A));
+        navigationbarMain
+                .setMode(BottomNavigationBar.MODE_FIXED);
+
         navigationbarMain.addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_1, getString(R.string.txt_tab1)))
                 .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_2, getString(R.string.txt_tab2)))
                 .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_3, getString(R.string.txt_tab3)))
@@ -40,21 +49,20 @@ public class MainActivity extends BaseActivity {
                 .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_5, getString(R.string.txt_tab5)))
                 .initialise();
 
-        navigationbarMain.setBarBackgroundColor();
-        navigationbarMain
-                .setMode(BottomNavigationBar.MODE_FIXED);
-        navigationbarMain.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener(){
+        navigationbarMain.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
 
                         break;
                 }
             }
+
             @Override
             public void onTabUnselected(int position) {
             }
+
             @Override
             public void onTabReselected(int position) {
             }
