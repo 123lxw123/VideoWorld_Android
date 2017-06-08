@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.ui.MainActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.ManifestUtil;
@@ -33,12 +34,20 @@ public class BaseApplication extends Application implements
     @Override
     public void onCreate() {
         super.onCreate();
+
+        appContext = getApplicationContext();
+        appStartCount = SharePreferencesUtil.getIntSharePreferences(appContext, APP_START_COUNT, 0);
+        appStartCount = appStartCount + 1;
+        SharePreferencesUtil.setIntSharePreferences(appContext, APP_START_COUNT, appStartCount);
+
         try {
             this.versionName = ManifestUtil.getApkVersionName(getApplicationContext());
 //            Log.i("<<",versionName);
         } catch (Exception e) {
             this.versionName = "1.0";
         }
+        // 切换影视来源
+        Constant.SOURCE_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
         // Jpush 初始化
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
@@ -72,11 +81,6 @@ public class BaseApplication extends Application implements
         Realm.init(this);
         RealmConfiguration configuration = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(configuration);
-
-        appContext = getApplicationContext();
-        appStartCount = SharePreferencesUtil.getIntSharePreferences(appContext, APP_START_COUNT, 0);
-        appStartCount = appStartCount + 1;
-        SharePreferencesUtil.setIntSharePreferences(appContext, APP_START_COUNT, appStartCount);
     }
 
     public static Context getappContext() {

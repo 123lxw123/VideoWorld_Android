@@ -3,6 +3,7 @@ package com.lxw.videoworld.app.api;
 
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.http.BaseResponse;
 
 import java.util.concurrent.TimeUnit;
@@ -43,5 +44,9 @@ public class HttpHelper {
 
     public Observable<BaseResponse<ConfigModel>> getConfig(String id){
         return httpService.getConfig(id);
+    }
+
+    public Observable<BaseResponse<SourceListModel>> getList(String category, String type, String start, String limit){
+        return httpService.getList(Constant.SOURCE_TYPE, category, type, start, limit);
     }
 }

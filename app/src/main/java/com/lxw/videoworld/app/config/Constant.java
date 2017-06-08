@@ -10,11 +10,12 @@ public class Constant {
     /**
      * 网络请求
      */
+    public static String SOURCE_TYPE;
     public static final String API_VERSION = "v1/";
+    public static final String KEY_SOURCE_TYPE = "SOURCE_TYPE";
     public static final String SOURCE_TYPE_1 = "1";
     public static final String SOURCE_TYPE_2 = "2";
     public static final String SOURCE_TYPE_3 = "3";
-    public static final String SOURCE_TYPE = SOURCE_TYPE_1;
     public static final String BASE_URL = "http://172840g32p.iok.la:80/videoworld/" + Constant.API_VERSION;
 
     /** 是否debug模式 **/
