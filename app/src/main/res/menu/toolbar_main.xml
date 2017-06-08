@@ -16,16 +16,15 @@
         android:orderInCategory="100"
         app:showAsAction="always" />
 
-    <!--<item-->
-        <!--android:id="@+id/action_setting"-->
-        <!--android:icon="@drawable/ic_setting"-->
-        <!--android:title="@string/menu_search"-->
-        <!--app:showAsAction="ifRoom" />-->
-
     <item
         android:id="@+id/action_change_theme"
         android:icon="@drawable/ic_change_theme"
         android:title="@string/menu_change_theme"
         app:showAsAction="never" />
+
+    <item
+    android:id="@+id/action_setting"
+    android:title="@string/menu_search"
+    app:showAsAction="never" />
 
 </menu>
