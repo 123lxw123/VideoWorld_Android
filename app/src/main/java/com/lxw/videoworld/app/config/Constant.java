@@ -108,6 +108,7 @@ public class Constant {
     public static final String CATEGORY_21 = "game";// 游戏
     public static final String CATEGORY_22 = "2009zongyi";// 旧版综艺
 
+    public static final String TYPE_0 = "all";
     public static final String TYPE_1 = "jddy";// 经典电影
     public static final String TYPE_2 = "dyzz";// 最新电影
     public static final String TYPE_3 = "hytv";// 华语电视剧
@@ -118,4 +119,5 @@ public class Constant {
     public static final String TYPE_8 = "qitazongyi";// 其他综艺
     public static final String TYPE_9 = "jingdianyouxifabu";// 经典游戏
     public static final String TYPE_10 = "remenyouxi";// 热门游戏
+    public static final String TYPE_11 = "zuixinyouxifabu";// 最新游戏
 }

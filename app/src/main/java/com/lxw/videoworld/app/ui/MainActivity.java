@@ -32,7 +32,6 @@ public class MainActivity extends BaseActivity {
     Toolbar toobarMain;
     private boolean flag_exit = false;
     private QuickFragmentPageAdapter pagerAdapter;
-    private List<String> categorys = new ArrayList<>();
     private List<Fragment> fragments = new ArrayList<>();
     private String[] tabs = new String[]{getString(R.string.txt_tab1), getString(R.string.txt_tab2), getString(R.string.txt_tab3), getString(R.string.txt_tab4), getString(R.string.txt_tab5)};
 
@@ -77,14 +76,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        categorys.clear();
-        categorys.add(Constant.TAB_1);
-        categorys.add(Constant.TAB_2);
-        categorys.add(Constant.TAB_3);
-        categorys.add(Constant.TAB_4);
-        categorys.add(Constant.TAB_5);
         createFragment();
-
         pagerAdapter = new QuickFragmentPageAdapter(getSupportFragmentManager(), fragments, tabs);
         viewpagerMain.setAdapter(pagerAdapter);
     }
@@ -119,15 +111,46 @@ public class MainActivity extends BaseActivity {
     }
 
     public void createFragment() {
-        if (categorys != null && categorys.size() > 0) {
-            fragments.clear();
-            for (int i = 0; i < categorys.size(); i++) {
-                SourceCategoryFragment fragment = new SourceCategoryFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("category", categorys.get(i));
-                fragment.setArguments(bundle);
-                fragments.add(fragment);
-            }
+        fragments.clear();
+        switch (Constant.SOURCE_TYPE){
+            case Constant.SOURCE_TYPE_1:
+                createSourceCategoryFragment(Constant.TAB_1);
+                createSourceTypeFragment(Constant.CATEGORY_11, null);
+                createSourceTypeFragment(Constant.CATEGORY_13, null);
+                createSourceTypeFragment(Constant.CATEGORY_12, null);
+                createSourceCategoryFragment(Constant.TAB_5);
+                break;
+            case Constant.SOURCE_TYPE_2:
+                createSourceTypeFragment(Constant.CATEGORY_14, null);
+                createSourceTypeFragment(Constant.CATEGORY_15, null);
+                createSourceCategoryFragment(Constant.TAB_3);
+                createSourceTypeFragment(Constant.CATEGORY_16, null);
+                createSourceCategoryFragment(Constant.TAB_5);
+                break;
+            case Constant.SOURCE_TYPE_3:
+                createSourceCategoryFragment(Constant.TAB_1);
+                createSourceCategoryFragment(Constant.TAB_2);
+                createSourceCategoryFragment(Constant.TAB_3);
+                createSourceTypeFragment(Constant.CATEGORY_20, null);
+                createSourceCategoryFragment(Constant.TAB_5);
+                break;
         }
+    }
+
+    public void createSourceCategoryFragment(String tab){
+        SourceCategoryFragment fragment = new SourceCategoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("tab", tab);
+        fragment.setArguments(bundle);
+        fragments.add(fragment);
+    }
+
+    public void createSourceTypeFragment(String category, String type){
+        SourceTypeFragment fragment = new SourceTypeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("category", category);
+        bundle.putString("type", type);
+        fragment.setArguments(bundle);
+        fragments.add(fragment);
     }
 }
