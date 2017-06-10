@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -20,6 +20,8 @@ import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
+import com.lxw.videoworld.framework.image.ImageManager;
+import com.lxw.videoworld.framework.util.ValueUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,9 +82,33 @@ public class SourceTypeFragment extends Fragment {
                 }
             });
             // 列表适配器
-            sourceAdapter = new BaseQuickAdapter<SourceDetailModel, BaseViewHolder>(R.layout., sourceDetails) {
+            sourceAdapter = new BaseQuickAdapter<SourceDetailModel, BaseViewHolder>(R.layout.item_source_list, sourceDetails) {
                 @Override
-                protected void convert(BaseViewHolder helper, SourceDetailModel item) {
+                protected void convert(BaseViewHolder helper, final SourceDetailModel item) {
+                    // 图片
+                    List<String> images = ValueUtil.string2list(item.getImages());
+                    if(images != null && images.size() > 0){
+                        ImageManager.getInstance().loadImage(SourceTypeFragment.this.getActivity(), (ImageView) helper.getView(R.id.img_picture), images.get(0));
+                    }
+                    // 标题
+                    if(!TextUtils.isEmpty(item.getTranslateName())){
+                        helper.setText(R.id.txt_title, item.getTranslateName());
+                    }else if(!TextUtils.isEmpty(item.getName())){
+                        helper.setText(R.id.txt_title, item.getName());
+                    }
+                    // 评分
+                    if(Math.abs(item.getImdbScore()) < 0.001){
+                        helper.setText(R.id.txt_imdb, String.valueOf(item.getImdbScore()));
+                        helper.setVisible(R.id.txt_imdb, true);
+                    }else{
+                        helper.setVisible(R.id.txt_imdb, false);
+                    }
+                    if(Math.abs(item.getDoubanScore()) < 0.001){
+                        helper.setText(R.id.txt_douban, String.valueOf(item.getDoubanScore()));
+                        helper.setVisible(R.id.txt_douban, true);
+                    }else{
+                        helper.setVisible(R.id.txt_douban, false);
+                    }
 
                 }
             };

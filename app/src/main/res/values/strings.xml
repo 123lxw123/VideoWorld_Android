@@ -12,6 +12,25 @@
     <string name="menu_change_theme">切换主题</string>
     <string name="menu_setting">设置</string>
 
+    <string name="txt_type1">动作</string>
+    <string name="txt_type2">喜剧</string>
+    <string name="txt_type3">爱情</string>
+    <string name="txt_type4">科幻</string>
+    <string name="txt_type5">剧情</string>
+    <string name="txt_type6">悬疑</string>
+    <string name="txt_type7">文艺</string>
+    <string name="txt_type8">战争</string>
+    <string name="txt_type9">恐怖</string>
+    <string name="txt_type10">灾难</string>
+
+    <string name="txt_type11">华语</string>
+    <string name="txt_type12">欧美</string>
+    <string name="txt_type13">日韩</string>
+    <string name="txt_type14">经典</string>
+    <string name="txt_type15">华语</string>
+    <string name="txt_type16">日韩</string>
+    <string name="txt_type17">欧美</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -25,6 +25,8 @@
 
     <style name="RedAppTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/com_wm_bg_red</item>
+        <item name="color_bg_white">@color/color_FFFFFF</item>
+        <item name="color_bg_gray">@color/color_DDDDDD</item>
         <item name="com_wm_bg">@color/com_wm_bg_red</item>
         <item name="com_space_line">@color/com_space_line_red</item>
         <item name="com_main_A">@color/com_main_A_red</item>
@@ -41,6 +43,8 @@
     </style>
     <style name="BlueAppTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/com_wm_bg_blue</item>
+        <item name="color_bg_white">@color/color_FFFFFF</item>
+        <item name="color_bg_gray">@color/color_DDDDDD</item>
         <item name="com_wm_bg">@color/com_wm_bg_blue</item>
         <item name="com_space_line">@color/com_space_line_blue</item>
         <item name="com_main_A">@color/com_main_A_blue</item>
@@ -57,6 +61,8 @@
     </style>
     <style name="GoldAppTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/com_wm_bg_gold</item>
+        <item name="color_bg_white">@color/color_FFFFFF</item>
+        <item name="color_bg_gray">@color/color_DDDDDD</item>
         <item name="com_wm_bg">@color/com_wm_bg_gold</item>
         <item name="com_space_line">@color/com_space_line_gold</item>
         <item name="com_main_A">@color/com_main_A_gold</item>

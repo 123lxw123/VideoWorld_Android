@@ -1,6 +1,10 @@
 package com.lxw.videoworld.framework.util;
 
 import android.content.Context;
+import android.text.TextUtils;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by lxw9047 on 2016/11/25.
@@ -45,5 +49,22 @@ public class ValueUtil {
     public static int sp2px(Context context, float spValue) {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     * 数组 string 转成 List
+     * @param string 数组 string
+     * @return
+     */
+    public static List<String> string2list(String string){
+        if(!TextUtils.isEmpty(string) && string.length() > 2){
+            String[] array = string.substring(1, string.length() - 1).split(",");
+            if(array != null && array.length > 0){
+                return Arrays.asList(array);
+            }else{
+                return null;
+            }
+        }
+        return null;
     }
 }

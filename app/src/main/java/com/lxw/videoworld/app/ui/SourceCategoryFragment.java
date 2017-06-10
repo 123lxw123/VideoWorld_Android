@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.config.Constant;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
@@ -48,12 +49,9 @@ public class SourceCategoryFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_source_category, null);
             ButterKnife.bind(this, rootView);
             unbinder = ButterKnife.bind(this, rootView);
-            FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
-                    getChildFragmentManager(), FragmentPagerItems.with(this.getActivity())
-                    .add(R.string.title, PageFragment.class)
-                    .add("title", PageFragment.class)
-                    .create());
 
+            FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
+                    getChildFragmentManager(), createFragmentPagerItems());
             viewpagerSourceCategory.setAdapter(adapter);
             tabSourceCategory.setViewPager(viewpagerSourceCategory);
         }
@@ -69,5 +67,18 @@ public class SourceCategoryFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public FragmentPagerItems createFragmentPagerItems() {
+        FragmentPagerItems fragmentPagerItems = null;
+        switch (Constant.SOURCE_TYPE){
+            case Constant.SOURCE_TYPE_1:
+                fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
+                        .add(getString(R.string.txt_type1), SourceTypeFragment.class)
+                        .add("title", SourceTypeFragment.class)
+                        .create();
+                break;
+        }
+        return fragmentPagerItems;
     }
 }
