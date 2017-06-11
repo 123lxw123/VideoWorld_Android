@@ -50,7 +50,7 @@ public class HttpHelper {
         return httpService.getConfig(id);
     }
 
-    public Observable<BaseResponse<SourceListModel>> getList(String category, String type, String start, String limit){
-        return httpService.getList(Constant.SOURCE_TYPE, category, type, start, limit);
+    public Observable<BaseResponse<SourceListModel>> getList(String sourceType, String category, String type, String start, String limit){
+        return httpService.getList(sourceType, category, type, start, limit);
     }
 }

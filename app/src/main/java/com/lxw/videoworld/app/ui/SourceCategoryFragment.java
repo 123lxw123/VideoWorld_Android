@@ -48,7 +48,6 @@ public class SourceCategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null && !TextUtils.isEmpty(tab)) {
             rootView = inflater.inflate(R.layout.fragment_source_category, null);
-            ButterKnife.bind(this, rootView);
             unbinder = ButterKnife.bind(this, rootView);
 
             FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
@@ -66,8 +65,14 @@ public class SourceCategoryFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        if(unbinder != null){
+            try{
+                unbinder.unbind();
+            }catch (IllegalStateException e){
+                e.printStackTrace();
+            }
+        }
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     public FragmentPagerItems createFragmentPagerItems() {
@@ -76,24 +81,24 @@ public class SourceCategoryFragment extends Fragment {
             case Constant.SOURCE_TYPE_1:
                 if(tab.equals(Constant.TAB_1)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.TAB_1).putString("type", Constant.TYPE_0).get())
-                            .add(getString(R.string.txt_type1), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_1).get())
-                            .add(getString(R.string.txt_type2), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_2).get())
-                            .add(getString(R.string.txt_type3), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_3).get())
-                            .add(getString(R.string.txt_type4), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_4).get())
-                            .add(getString(R.string.txt_type5), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_5).get())
-                            .add(getString(R.string.txt_type6), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_6).get())
-                            .add(getString(R.string.txt_type7), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_7).get())
-                            .add(getString(R.string.txt_type8), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_8).get())
-                            .add(getString(R.string.txt_type9), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_9).get())
-                            .add(getString(R.string.txt_type10), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_10).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.TAB_1).putString("type", Constant.TYPE_0).get())
+                            .add(getString(R.string.txt_type1), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_1).get())
+                            .add(getString(R.string.txt_type2), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_2).get())
+                            .add(getString(R.string.txt_type3), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_3).get())
+                            .add(getString(R.string.txt_type4), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_4).get())
+                            .add(getString(R.string.txt_type5), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_5).get())
+                            .add(getString(R.string.txt_type6), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_6).get())
+                            .add(getString(R.string.txt_type7), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_7).get())
+                            .add(getString(R.string.txt_type8), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_8).get())
+                            .add(getString(R.string.txt_type9), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_9).get())
+                            .add(getString(R.string.txt_type10), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_1).putString("category", Constant.CATEGORY_10).get())
                             .create();
                 }else if(tab.equals(Constant.TAB_5)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).get())
-                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
-                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
-                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).get())
+                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
+                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
+                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
                             .create();
                 }
 
@@ -101,17 +106,17 @@ public class SourceCategoryFragment extends Fragment {
             case Constant.SOURCE_TYPE_2:
                 if(tab.equals(Constant.TAB_3)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).get())
-                            .add(getString(R.string.txt_type17), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_6).get())
-                            .add(getString(R.string.txt_type18), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_7).get())
-                            .add(getString(R.string.txt_type19), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_8).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).get())
+                            .add(getString(R.string.txt_type17), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_6).get())
+                            .add(getString(R.string.txt_type18), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_7).get())
+                            .add(getString(R.string.txt_type19), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_8).get())
                             .create();
                 }else if(tab.equals(Constant.TAB_5)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).get())
-                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
-                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
-                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).get())
+                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
+                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
+                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
                             .create();
                 }
 
@@ -119,30 +124,30 @@ public class SourceCategoryFragment extends Fragment {
             case Constant.SOURCE_TYPE_3:
                 if(tab.equals(Constant.TAB_1)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_17).get())
-                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_17).putString("type", Constant.TYPE_2).get())
-                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_17).putString("type", Constant.TYPE_1).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_17).get())
+                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_17).putString("type", Constant.TYPE_2).get())
+                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_17).putString("type", Constant.TYPE_1).get())
                             .create();
                 }else if(tab.equals(Constant.TAB_2)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_18).get())
-                            .add(getString(R.string.txt_type11), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_18).putString("type", Constant.TYPE_3).get())
-                            .add(getString(R.string.txt_type12), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_18).putString("type", Constant.TYPE_5).get())
-                            .add(getString(R.string.txt_type13), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_18).putString("type", Constant.TYPE_4).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_18).get())
+                            .add(getString(R.string.txt_type11), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_18).putString("type", Constant.TYPE_3).get())
+                            .add(getString(R.string.txt_type12), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_18).putString("type", Constant.TYPE_5).get())
+                            .add(getString(R.string.txt_type13), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_18).putString("type", Constant.TYPE_4).get())
                             .create();
                 }else if(tab.equals(Constant.TAB_3)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).get())
-                            .add(getString(R.string.txt_type17), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_6).get())
-                            .add(getString(R.string.txt_type18), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_7).get())
-                            .add(getString(R.string.txt_type19), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_8).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).get())
+                            .add(getString(R.string.txt_type17), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_6).get())
+                            .add(getString(R.string.txt_type18), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_7).get())
+                            .add(getString(R.string.txt_type19), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_19).putString("type", Constant.TYPE_8).get())
                             .create();
                 }else if(tab.equals(Constant.TAB_5)){
                     fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
-                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).get())
-                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
-                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
-                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).get())
+                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
+                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
+                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
                             .create();
                 }
 

@@ -113,23 +113,23 @@ public class MainActivity extends BaseActivity {
         switch (Constant.SOURCE_TYPE){
             case Constant.SOURCE_TYPE_1:
                 createSourceCategoryFragment(Constant.TAB_1);
-                createSourceTypeFragment(Constant.CATEGORY_11, null);
-                createSourceTypeFragment(Constant.CATEGORY_13, null);
-                createSourceTypeFragment(Constant.CATEGORY_12, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_11, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_13, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_12, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
             case Constant.SOURCE_TYPE_2:
-                createSourceTypeFragment(Constant.CATEGORY_14, null);
-                createSourceTypeFragment(Constant.CATEGORY_15, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_2, Constant.CATEGORY_14, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_2, Constant.CATEGORY_15, null);
                 createSourceCategoryFragment(Constant.TAB_3);
-                createSourceTypeFragment(Constant.CATEGORY_16, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_2, Constant.CATEGORY_16, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
             case Constant.SOURCE_TYPE_3:
                 createSourceCategoryFragment(Constant.TAB_1);
                 createSourceCategoryFragment(Constant.TAB_2);
                 createSourceCategoryFragment(Constant.TAB_3);
-                createSourceTypeFragment(Constant.CATEGORY_20, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_3, Constant.CATEGORY_20, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
         }
@@ -143,9 +143,10 @@ public class MainActivity extends BaseActivity {
         fragments.add(fragment);
     }
 
-    public void createSourceTypeFragment(String category, String type){
+    public void createSourceTypeFragment(String sourceType, String category, String type){
         SourceTypeFragment fragment = new SourceTypeFragment();
         Bundle bundle = new Bundle();
+        bundle.putString("sourceType", sourceType);
         bundle.putString("category", category);
         bundle.putString("type", type);
         fragment.setArguments(bundle);

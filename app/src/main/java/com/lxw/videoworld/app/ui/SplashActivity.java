@@ -61,6 +61,7 @@ public class SplashActivity extends BaseActivity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long along) {
+                        imgPicture.pause();
                         Bundle bundle = new Bundle();
                         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                         intent.putExtras(bundle);
