@@ -16,16 +16,16 @@ public class SourceDetailModel implements Serializable {
     private String content;// 详情信息
     private String name;// 名字
     private String translateName;// 译名
-    private int year;// 年份
+    private String year;// 年份
     private String area;// 国家、地区
     private String style;// 详情里的分类
     private String language;// 语言
     private String subtitles;// 字幕语言
     private String releaseDate;// 首映日期
-    private float imdbScore;
+    private String imdbScore;
     private String imdbIntro;
     private String imdbUrl;
-    private float doubanScore;// 豆瓣评分
+    private String doubanScore;// 豆瓣评分
     private String doubanIntro;// 豆瓣评分说明
     private String doubanUrl;// 豆瓣评分地址
     private String fileFormat;// 文件格式
@@ -39,7 +39,7 @@ public class SourceDetailModel implements Serializable {
     private String awards;// 获奖情况
     private String episodes;// 集数
     private String links;// 下载链接
-    private int date;// 网站更新时间
+    private String date;// 网站更新时间
     private String status;
     private long time;// 数据库时间
 
@@ -91,11 +91,11 @@ public class SourceDetailModel implements Serializable {
         this.translateName = translateName;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
@@ -139,19 +139,19 @@ public class SourceDetailModel implements Serializable {
         this.releaseDate = releaseDate;
     }
 
-    public float getImdbScore() {
+    public String getImdbScore() {
         return imdbScore;
     }
 
-    public void setImdbScore(float imdbScore) {
+    public void setImdbScore(String imdbScore) {
         this.imdbScore = imdbScore;
     }
 
-    public float getDoubanScore() {
+    public String getDoubanScore() {
         return doubanScore;
     }
 
-    public void setDoubanScore(float doubanScore) {
+    public void setDoubanScore(String doubanScore) {
         this.doubanScore = doubanScore;
     }
 
@@ -307,11 +307,11 @@ public class SourceDetailModel implements Serializable {
         this.type = type;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

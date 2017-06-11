@@ -103,14 +103,14 @@ public class SourceTypeFragment extends Fragment {
                         helper.setText(R.id.txt_title, item.getName());
                     }
                     // 评分
-                    if(Math.abs(item.getImdbScore()) < 0.001){
-                        helper.setText(R.id.txt_imdb, String.valueOf(item.getImdbScore()));
+                    if(!TextUtils.isEmpty(item.getImdbScore())){
+                        helper.setText(R.id.txt_imdb, item.getImdbScore());
                         helper.setVisible(R.id.txt_imdb, true);
                     }else{
                         helper.setVisible(R.id.txt_imdb, false);
                     }
-                    if(Math.abs(item.getDoubanScore()) < 0.001){
-                        helper.setText(R.id.txt_douban, String.valueOf(item.getDoubanScore()));
+                    if(!TextUtils.isEmpty(item.getDoubanScore())){
+                        helper.setText(R.id.txt_douban, item.getDoubanScore());
                         helper.setVisible(R.id.txt_douban, true);
                     }else{
                         helper.setVisible(R.id.txt_douban, false);
