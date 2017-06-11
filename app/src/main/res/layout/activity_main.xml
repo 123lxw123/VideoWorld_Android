@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"/>
 
-    <android.support.v4.view.ViewPager
+    <com.lxw.videoworld.framework.widget.NoScrollViewPager
         android:id="@+id/viewpager_main"
         android:layout_weight="1"
         android:layout_width="match_parent"

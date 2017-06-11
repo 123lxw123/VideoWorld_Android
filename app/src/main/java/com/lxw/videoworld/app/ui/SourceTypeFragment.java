@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -64,7 +65,7 @@ public class SourceTypeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (rootView == null && !TextUtils.isEmpty(category) && !TextUtils.isEmpty(type)) {
+        if (rootView == null && !TextUtils.isEmpty(category)) {
             rootView = inflater.inflate(R.layout.fragment_source_type, null);
             ButterKnife.bind(this, rootView);
             // 下拉刷新
@@ -81,6 +82,7 @@ public class SourceTypeFragment extends Fragment {
 
                 }
             });
+            recyclerviewSourceType.setLayoutManager(new GridLayoutManager(SourceTypeFragment.this.getActivity(), 2));
             // 列表适配器
             sourceAdapter = new BaseQuickAdapter<SourceDetailModel, BaseViewHolder>(R.layout.item_source_list, sourceDetails) {
                 @Override
@@ -141,11 +143,14 @@ public class SourceTypeFragment extends Fragment {
             // 加载数据
             getList(category, type, "0", LIST_LIMIT + BANNER_LIMIT + "");
         }
-        ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null) {
-            parent.removeView(rootView);
+        if(rootView != null){
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
+            unbinder = ButterKnife.bind(this, rootView);
         }
-        unbinder = ButterKnife.bind(this, rootView);
+
         return rootView;
     }
 

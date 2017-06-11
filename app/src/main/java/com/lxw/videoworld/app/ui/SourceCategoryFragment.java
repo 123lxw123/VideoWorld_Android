@@ -13,8 +13,8 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.Bundler;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +51,7 @@ public class SourceCategoryFragment extends Fragment {
             ButterKnife.bind(this, rootView);
             unbinder = ButterKnife.bind(this, rootView);
 
-            FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
+            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                     getChildFragmentManager(), createFragmentPagerItems());
             viewpagerSourceCategory.setAdapter(adapter);
             tabSourceCategory.setViewPager(viewpagerSourceCategory);

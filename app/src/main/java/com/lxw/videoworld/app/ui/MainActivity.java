@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
     private boolean flag_exit = false;
     private QuickFragmentPageAdapter pagerAdapter;
     private List<Fragment> fragments = new ArrayList<>();
-    private String[] tabs = new String[]{getString(R.string.txt_tab1), getString(R.string.txt_tab2), getString(R.string.txt_tab3), getString(R.string.txt_tab4), getString(R.string.txt_tab5)};
+    private String[] tabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initViews() {
+
+        tabs = new String[]{getString(R.string.txt_tab1), getString(R.string.txt_tab2), getString(R.string.txt_tab3), getString(R.string.txt_tab4), getString(R.string.txt_tab5)};
         toobarMain.inflateMenu(R.menu.toolbar_main);//设置右上角的填充菜单
 
         navigationbarMain.setBackgroundColor(getCustomColor(R.styleable.BaseColor_com_main_A));
@@ -60,11 +62,7 @@ public class MainActivity extends BaseActivity {
         navigationbarMain.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
-                switch (position) {
-                    case 0:
-
-                        break;
-                }
+                viewpagerMain.setCurrentItem(position);
             }
 
             @Override

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lxw.videoworld.app.ui.SplashActivity">
-    <ImageView
+    <com.flaviofaria.kenburnsview.KenBurnsView
         android:id="@+id/img_picture"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"

@@ -3,8 +3,8 @@ package com.lxw.videoworld.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageView;
 
+import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
@@ -30,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashActivity extends BaseActivity {
 
     @BindView(R.id.img_picture)
-    ImageView imgPicture;
+    KenBurnsView imgPicture;
 
     private final String SPLASH_PICTURE_LINK = "SPLASH_PICTURE_LINK";
 
@@ -55,7 +55,7 @@ public class SplashActivity extends BaseActivity {
     //跳转到主页
     public void jumpToNext() {
 
-        Observable.timer(3000, TimeUnit.MILLISECONDS)
+        Observable.timer(4000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
