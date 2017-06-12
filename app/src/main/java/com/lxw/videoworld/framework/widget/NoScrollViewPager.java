@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
+ * 禁止滑动 ViewPager
  * Created by Zion on 2017/6/8.
  */
 

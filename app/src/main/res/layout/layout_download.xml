@@ -7,8 +7,8 @@
         android:id="@+id/download"
         app:titleTextColor="?attr/com_font_B"
         app:titleTextSize="14sp"
-        app:progressBackground="?attr/color_BBE6DE"
-        app:progressColor="?attr/color_16B998"
+        app:progressBackground="?attr/color_progress"
+        app:progressColor="?attr/color_progress_background"
         android:layout_width="70dp"
         android:layout_height="wrap_content" />
 </LinearLayout>

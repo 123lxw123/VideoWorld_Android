@@ -42,6 +42,13 @@ public class Constant {
     public static final String STATUS_2 = "2";
     public static final String STATUS_3 = "3";
 
+    /** GridLayoutManager 每行显示列数**/
+    public static int GRIDLAYOUTMANAGER_SPANCOUNT = 3;
+    public static final String KEY_GRIDLAYOUTMANAGER_SPANCOUNT = "GRIDLAYOUTMANAGER_SPANCOUNT";
+    public static final int DEFAULT_GRIDLAYOUTMANAGER_SPANCOUNT = 3;
+    /** Banner 条数和列表条数**/
+    public static final int BANNER_LIMIT = 5;
+    public static final int LIST_LIMIT = 18;
     /**
      * 请求网络成功
      */

@@ -13,6 +13,10 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <!-- 加入toolbar溢出【弹出】菜单的风格 -->
         <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+        // recyclerview 分割线样式
+        <item name="android:listDivider">@drawable/bg_grid_divider</item>
+        <item name="color_tab_indicator">@color/color_009587</item>
+        <item name="color_tab_text_default">@color/color_CBCBCB</item>
     </style>
 
     <style name="TranslucentAppTheme" parent="BaseAppTheme">
@@ -38,8 +42,8 @@
         <item name="com_font_C">@color/com_font_C_red</item>
         <item name="com_font_D">@color/com_font_D_red</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_red</item>
-        <item name="color_BBE6DE">@color/color_BBE6DE_red</item>
-        <item name="color_16B998">@color/color_16B998_red</item>
+        <item name="color_progress">@color/color_BBE6DE_red</item>
+        <item name="color_progress_background">@color/color_16B998_red</item>
     </style>
     <style name="BlueAppTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/com_wm_bg_blue</item>
@@ -56,8 +60,8 @@
         <item name="com_font_C">@color/com_font_C_blue</item>
         <item name="com_font_D">@color/com_font_D_blue</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_blue</item>
-        <item name="color_BBE6DE">@color/color_BBE6DE_blue</item>
-        <item name="color_16B998">@color/color_16B998_blue</item>
+        <item name="color_progress">@color/color_BBE6DE_blue</item>
+        <item name="color_progress_background">@color/color_16B998_blue</item>
     </style>
     <style name="GoldAppTheme" parent="BaseAppTheme">
         <item name="android:windowBackground">@color/com_wm_bg_gold</item>
@@ -74,8 +78,8 @@
         <item name="com_font_C">@color/com_font_C_gold</item>
         <item name="com_font_D">@color/com_font_D_gold</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_gold</item>
-        <item name="color_BBE6DE">@color/color_BBE6DE_gold</item>
-        <item name="color_16B998">@color/color_16B998_gold</item>
+        <item name="color_progress">@color/color_BBE6DE_gold</item>
+        <item name="color_progress_background">@color/color_16B998_gold</item>
     </style>
 
     <!--透明 dialog-->

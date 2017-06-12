@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="BaseColor">
-    <attr name="color_BBE6DE" format="color" />
-    <attr name="color_16B998" format="color" />
+    <!--tab 自定义颜色-->
+    <attr name="color_tab_text_default" format="color" />
+    <attr name="color_tab_indicator" format="color" />
+    <!--自定义 loadingView 颜色-->
+    <attr name="color_progress" format="color" />
+    <attr name="color_progress_background" format="color" />
     <attr name="color_bg_white" format="color" />
     <attr name="color_bg_gray" format="color" />
     <!--基本色 START-->

@@ -36,6 +36,7 @@ public class BaseApplication extends Application implements
         super.onCreate();
 
         appContext = getApplicationContext();
+        // app启动次数
         appStartCount = SharePreferencesUtil.getIntSharePreferences(appContext, APP_START_COUNT, 0);
         appStartCount = appStartCount + 1;
         SharePreferencesUtil.setIntSharePreferences(appContext, APP_START_COUNT, appStartCount);
@@ -48,9 +49,8 @@ public class BaseApplication extends Application implements
         }
         // 切换影视来源
         Constant.SOURCE_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
-        // Jpush 初始化
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
+        // GridLayoutManager 每行显示列数
+        Constant.GRIDLAYOUTMANAGER_SPANCOUNT = SharePreferencesUtil.getIntSharePreferences(appContext, Constant.KEY_GRIDLAYOUTMANAGER_SPANCOUNT, Constant.DEFAULT_GRIDLAYOUTMANAGER_SPANCOUNT);
 
         /**
          * Hotfix2.0初始化
@@ -81,6 +81,9 @@ public class BaseApplication extends Application implements
         Realm.init(this);
         RealmConfiguration configuration = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(configuration);
+        // Jpush 初始化
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     public static Context getappContext() {
