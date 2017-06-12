@@ -7,7 +7,6 @@
         android:id="@+id/viewpager_banner"
         android:layout_width="match_parent"
         android:layout_height="360dp"
-        android:visibility="gone"
         app:icvp_center_page_scale_offset="30dp"
         app:icvp_max_page_scale="0.8"
         app:icvp_medium_scaled="true"

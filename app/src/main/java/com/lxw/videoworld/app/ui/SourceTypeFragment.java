@@ -33,6 +33,7 @@ import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +115,7 @@ public class SourceTypeFragment extends Fragment {
             // banner
             View bannerLayout = inflater.inflate(R.layout.layout_banner, null);
             viewpagerBanner = (HorizontalInfiniteCycleViewPager)bannerLayout.findViewById(R.id.viewpager_banner);
-            viewpagerBanner.setScrollDuration(500);
+            viewpagerBanner.setScrollDuration(3000);
 //            viewpagerBanner.setInterpolator(...);
             viewpagerBanner.setMediumScaled(true);
             viewpagerBanner.setMaxPageScale(0.8F);
@@ -140,7 +141,9 @@ public class SourceTypeFragment extends Fragment {
                         ImageManager.getInstance().loadImage(SourceTypeFragment.this.getActivity(), (ImageView) helper.getView(R.id.img_picture), images.get(0));
                     }
                     // 标题
-                    if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
+                    if(!TextUtils.isEmpty(item.getTitle())){
+                        helper.setText(R.id.txt_title, item.getTitle());
+                    }else if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
                         helper.setText(R.id.txt_title, item.getName());
                     } else if (!TextUtils.isEmpty(item.getTranslateName())) {
                         helper.setText(R.id.txt_title, item.getTranslateName());
@@ -214,34 +217,33 @@ public class SourceTypeFragment extends Fragment {
 //                    public void run() {
                         if (sourceListModel != null && sourceListModel.getList() != null) {
                             page++;
-                            sourceBannerFragments.clear();
-                            sourceDetails.clear();
                             List<SourceDetailModel> sources = sourceListModel.getList();
                             if (frag_refresh) {
-                                // banner 数据
-                                for(int i = 0; i < Constant.BANNER_LIMIT; i++){
-                                    List<String> images = ValueUtil.string2list(sources.get(i).getImages());
-                                    if (images != null && images.size() > 0) {
+                                if(sources.size() >= Constant.BANNER_LIMIT){
+                                    sourceBannerFragments.clear();
+                                    sourceDetails.clear();
+                                    // banner 数据
+                                    for(int i = 0; i < Constant.BANNER_LIMIT; i++){
                                         SourceBannerFragment fragment = new SourceBannerFragment();
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("imgUrl", images.get(0));
+                                        bundle.putSerializable("item", (Serializable)sources.get(i));
                                         fragment.setArguments(bundle);
                                         sourceBannerFragments.add(fragment);
                                     }
+                                    // banner 初始化
+                                    if(sourceBannerFragments.size() > 0){
+                                        bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                        viewpagerBanner.setAdapter(bannerAdapter);
+                                        viewpagerBanner.startAutoScroll(true);
+                                        if(sourceAdapter.getHeaderLayoutCount() == 0){
+                                            ViewGroup parent = (ViewGroup) viewpagerBanner.getParent();
+                                            if (parent != null) {
+                                                parent.removeView(viewpagerBanner);
+                                            }
+                                            sourceAdapter.addHeaderView(viewpagerBanner);
+                                        }
+                                    }
                                 }
-                                // banner 初始化
-//                                if(sourceBannerFragments.size() > 0){
-//                                    bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
-//                                    viewpagerBanner.setAdapter(bannerAdapter);
-//                                    if(sourceAdapter.getHeaderLayoutCount() == 0){
-//                                        ViewGroup parent = (ViewGroup) viewpagerBanner.getParent();
-//                                        if (parent != null) {
-//                                            parent.removeView(viewpagerBanner);
-//                                        }
-//                                        sourceAdapter.addHeaderView(viewpagerBanner);
-//                                    }
-//                                }
-
                                 // 列表数据
                                 for(int j = Constant.BANNER_LIMIT; j < sources.size(); j++){
                                     sourceDetails.add(sources.get(j));
@@ -249,8 +251,8 @@ public class SourceTypeFragment extends Fragment {
                                 sourceAdapter.setNewData(sourceDetails);
                                 llContent.setVisibility(View.VISIBLE);
                             } else {
-                                sourceAdapter.getData().addAll(sources);
-                                sourceAdapter.notifyDataSetChanged();
+                                sourceDetails.addAll(sources);
+                                sourceAdapter.addData(sources);
                                 sourceAdapter.loadMoreComplete();
                             }
                         } else {
@@ -271,6 +273,22 @@ public class SourceTypeFragment extends Fragment {
                 });
             }
         }.doRequest();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(viewpagerBanner != null){
+            viewpagerBanner.startAutoScroll(true);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(viewpagerBanner != null){
+            viewpagerBanner.stopAutoScroll();
+        }
     }
 
     @Override

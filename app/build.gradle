@@ -78,7 +78,7 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.jakewharton:butterknife:8.6.0'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.17'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     compile 'com.taobao.android:alisdk-hotfix:2.0.9'
     compile 'cn.jiguang.sdk:jpush:3.0.6'
