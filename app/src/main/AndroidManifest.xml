@@ -43,16 +43,17 @@
 
         <activity
             android:name=".app.ui.SplashActivity"
-            android:theme="@style/TranslucentAppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".app.ui.MainActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".app.ui.MainActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 微信分享 -->
         <activity
@@ -83,6 +84,8 @@
                 <category android:name="com.noahwm.android" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".app.ui.SourceDetailActivity"></activity>
     </application>
 
 </manifest>

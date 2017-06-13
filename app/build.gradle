@@ -54,7 +54,7 @@ dependencies {
     // jpush
     // smarttablayout
     // infinitecycleviewpager
-    
+
 
     compile project(path: ':bottom-navigation-bar')
     compile 'com.android.support:appcompat-v7:25.3.1'

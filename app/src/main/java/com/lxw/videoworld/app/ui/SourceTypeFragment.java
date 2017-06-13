@@ -41,7 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static butterknife.ButterKnife.bind;
 import static com.lxw.videoworld.app.config.Constant.BANNER_LIMIT;
 
 /**
@@ -109,7 +108,9 @@ public class SourceTypeFragment extends Fragment {
             unbinder = ButterKnife.bind(this, rootView);
             // 计算列表 Item 图片展示宽高 比例 4:3
             WindowManager wm = this.getActivity().getWindowManager();
-            picWidth = (wm.getDefaultDisplay().getWidth() - ValueUtil.dip2px(getActivity(), recyclerviewSourceType.getPaddingLeft() + recyclerviewSourceType.getPaddingRight()) -
+            int width = wm.getDefaultDisplay().getWidth();
+            int height = wm.getDefaultDisplay().getHeight();
+            picWidth = (width - ValueUtil.dip2px(getActivity(), recyclerviewSourceType.getPaddingLeft() + recyclerviewSourceType.getPaddingRight()) -
                     ValueUtil.dip2px(getActivity(), (Constant.GRIDLAYOUTMANAGER_SPANCOUNT - 1) * 10)) / Constant.GRIDLAYOUTMANAGER_SPANCOUNT;
             if (!category.equals(Constant.CATEGORY_21)) {
                 picHeight = picWidth * 4 / 3;
@@ -133,7 +134,12 @@ public class SourceTypeFragment extends Fragment {
             });
             // banner
             View bannerLayout = inflater.inflate(R.layout.layout_banner, null);
-            viewpagerBanner = (HorizontalInfiniteCycleViewPager)bannerLayout.findViewById(R.id.viewpager_banner);
+            viewpagerBanner = (HorizontalInfiniteCycleViewPager) bannerLayout.findViewById(R.id.viewpager_banner);
+            if(category.equals(Constant.CATEGORY_21)){
+                viewpagerBanner.getLayoutParams().height = width *(2 / 3) * (3 / 4) + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+            }else{
+                viewpagerBanner.getLayoutParams().height = height / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+            }
             viewpagerBanner.setScrollDuration(3000);
 //            viewpagerBanner.setInterpolator(...);
             viewpagerBanner.setMediumScaled(true);
@@ -159,9 +165,9 @@ public class SourceTypeFragment extends Fragment {
                         ImageManager.getInstance().loadImage(SourceTypeFragment.this.getActivity(), (ImageView) helper.getView(R.id.img_picture), images.get(0));
                     }
                     // 标题
-                    if(!TextUtils.isEmpty(item.getTitle())){
+                    if (!TextUtils.isEmpty(item.getTitle())) {
                         helper.setText(R.id.txt_title, item.getTitle());
-                    }else if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
+                    } else if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
                         helper.setText(R.id.txt_title, item.getName());
                     } else if (!TextUtils.isEmpty(item.getTranslateName())) {
                         helper.setText(R.id.txt_title, item.getTranslateName());
@@ -210,15 +216,12 @@ public class SourceTypeFragment extends Fragment {
             // 动画
             sourceAdapter.openLoadAnimation();
             recyclerviewSourceType.setAdapter(sourceAdapter);
-            // 加载数据
-            getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "");
         }
         if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
             if (parent != null) {
                 parent.removeView(rootView);
             }
-            unbinder = bind(this, rootView);
         }
 
         return rootView;
@@ -231,54 +234,49 @@ public class SourceTypeFragment extends Fragment {
             public void onSuccess(BaseResponse<SourceListModel> response) {
                 sourceListModel = response.getResult();
 
-//                SourceTypeFragment.this.getActivity().runOnUiThread(new Runnable() {
-//                    public void run() {
-                        if (sourceListModel != null && sourceListModel.getList() != null) {
-                            page++;
-                            List<SourceDetailModel> sources = sourceListModel.getList();
-                            if (frag_refresh) {
-                                if(sources.size() >= Constant.BANNER_LIMIT){
-                                    sourceBannerFragments.clear();
-                                    sourceDetails.clear();
-                                    // banner 数据
-                                    for(int i = 0; i < Constant.BANNER_LIMIT; i++){
-                                        SourceBannerFragment fragment = new SourceBannerFragment();
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("item", (Serializable)sources.get(i));
-                                        fragment.setArguments(bundle);
-                                        sourceBannerFragments.add(fragment);
-                                    }
-                                    // banner 初始化
-                                    if(sourceBannerFragments.size() > 0){
-                                        bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
-                                        viewpagerBanner.setAdapter(bannerAdapter);
-                                        viewpagerBanner.startAutoScroll(true);
-                                        if(sourceAdapter.getHeaderLayoutCount() == 0){
-                                            ViewGroup parent = (ViewGroup) viewpagerBanner.getParent();
-                                            if (parent != null) {
-                                                parent.removeView(viewpagerBanner);
-                                            }
-                                            sourceAdapter.addHeaderView(viewpagerBanner);
-                                        }
-                                    }
-                                }
-                                // 列表数据
-                                for(int j = Constant.BANNER_LIMIT; j < sources.size(); j++){
-                                    sourceDetails.add(sources.get(j));
-                                }
-                                sourceAdapter.setNewData(sourceDetails);
-                                llContent.setVisibility(View.VISIBLE);
-                            } else {
-                                sourceDetails.addAll(sources);
-                                sourceAdapter.addData(sources);
-                                sourceAdapter.loadMoreComplete();
+                if (sourceListModel != null && sourceListModel.getList() != null) {
+                    page++;
+                    List<SourceDetailModel> sources = sourceListModel.getList();
+                    if (frag_refresh) {
+                        if (sources.size() >= Constant.BANNER_LIMIT) {
+                            sourceBannerFragments.clear();
+                            sourceDetails.clear();
+                            // banner 数据
+                            for (int i = 0; i < Constant.BANNER_LIMIT; i++) {
+                                SourceBannerFragment fragment = new SourceBannerFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("item", (Serializable) sources.get(i));
+                                fragment.setArguments(bundle);
+                                sourceBannerFragments.add(fragment);
                             }
-                        } else {
-                            sourceAdapter.loadMoreFail();
+                            // banner 初始化
+                            if (sourceBannerFragments.size() > 0) {
+                                bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                viewpagerBanner.setAdapter(bannerAdapter);
+                                viewpagerBanner.startAutoScroll(true);
+                                if (sourceAdapter.getHeaderLayoutCount() == 0) {
+                                    ViewGroup parent = (ViewGroup) viewpagerBanner.getParent();
+                                    if (parent != null) {
+                                        parent.removeView(viewpagerBanner);
+                                    }
+                                    sourceAdapter.addHeaderView(viewpagerBanner);
+                                }
+                            }
                         }
-//                    }
-
-//                });
+                        // 列表数据
+                        for (int j = Constant.BANNER_LIMIT; j < sources.size(); j++) {
+                            sourceDetails.add(sources.get(j));
+                        }
+                        sourceAdapter.setNewData(sourceDetails);
+                        llContent.setVisibility(View.VISIBLE);
+                    } else {
+                        sourceDetails.addAll(sources);
+                        sourceAdapter.addData(sources);
+                        sourceAdapter.loadMoreComplete();
+                    }
+                } else {
+                    sourceAdapter.loadMoreFail();
+                }
             }
 
             @Override
@@ -296,7 +294,7 @@ public class SourceTypeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(viewpagerBanner != null){
+        if (viewpagerBanner != null) {
             viewpagerBanner.startAutoScroll(true);
         }
     }
@@ -304,7 +302,7 @@ public class SourceTypeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(viewpagerBanner != null){
+        if (viewpagerBanner != null) {
             viewpagerBanner.stopAutoScroll();
         }
     }
@@ -346,6 +344,8 @@ public class SourceTypeFragment extends Fragment {
 
     protected void onFragmentVisibleChange(boolean isVisible) {
         if (isVisible) {
+            // 加载数据
+            getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "");
         }
     }
 }

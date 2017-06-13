@@ -7,11 +7,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StringUtil;
@@ -45,6 +47,8 @@ public class SourceBannerFragment extends Fragment {
     private View rootView;
     private String imgUrl;
     private SourceDetailModel item;
+    private int picWidth;
+    private int picHeight;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,15 +60,26 @@ public class SourceBannerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null && item != null) {
-            rootView = inflater.inflate(R.layout.item_source_list, null);
+            rootView = inflater.inflate(R.layout.item_source_banner, null);
             unbinder = ButterKnife.bind(this, rootView);
-//            ImageManager.getInstance().loadImage(SourceBannerFragment.this.getActivity(), imgBanner, imgUrl);
+            WindowManager wm = this.getActivity().getWindowManager();
+            picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3 ;
+            picHeight = wm.getDefaultDisplay().getHeight() / 2 ;
+            if (!TextUtils.isEmpty(item.getCategory()) && item.getCategory().equals(Constant.CATEGORY_21)) {
+                picHeight = picWidth * 3 / 4;
+            } else {
+                picWidth = picHeight * 3 / 4;
+            }
+            FrameLayout flPicture = ((FrameLayout) rootView.findViewById(R.id.fl_picture));
+            flPicture.getLayoutParams().width = picWidth;
+            flPicture.getLayoutParams().height = picHeight;
             // 图片
             List<String> images = ValueUtil.string2list(item.getImages());
             if (images != null && images.size() > 0) {
                 ImageManager.getInstance().loadImage(SourceBannerFragment.this.getActivity(), imgPicture, images.get(0));
             }
             // 标题
+            txtTitle.setTextSize(18);
             if(!TextUtils.isEmpty(item.getTitle())){
                 txtTitle.setText(item.getTitle());
             }else if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
@@ -90,7 +105,6 @@ public class SourceBannerFragment extends Fragment {
         if (parent != null) {
             parent.removeView(rootView);
         }
-        unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
