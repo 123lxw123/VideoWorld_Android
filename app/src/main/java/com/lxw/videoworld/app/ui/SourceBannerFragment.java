@@ -1,5 +1,6 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lxw.videoworld.R;
@@ -19,6 +21,7 @@ import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -100,6 +103,16 @@ public class SourceBannerFragment extends Fragment {
             } else {
                 txtDouban.setVisibility(View.GONE);
             }
+
+            LinearLayout ll_banner = ((LinearLayout) rootView.findViewById(R.id.ll_banner));
+            ll_banner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(SourceBannerFragment.this.getActivity(), SourceDetailActivity.class);
+                    intent.putExtra("sourceDetailModel", (Serializable) item);
+                    startActivity(intent);
+                }
+            });
         }
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {

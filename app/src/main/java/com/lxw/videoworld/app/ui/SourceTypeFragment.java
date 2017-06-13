@@ -1,5 +1,6 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -193,7 +194,9 @@ public class SourceTypeFragment extends Fragment {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     // TODO
-
+                    Intent intent = new Intent(SourceTypeFragment.this.getActivity(), SourceDetailActivity.class);
+                    intent.putExtra("sourceDetailModel", (Serializable) adapter.getData().get(position));
+                    startActivity(intent);
                 }
             });
             // 加载更多
@@ -343,7 +346,7 @@ public class SourceTypeFragment extends Fragment {
     }
 
     protected void onFragmentVisibleChange(boolean isVisible) {
-        if (isVisible) {
+        if (isVisible && !TextUtils.isEmpty(sourceType) && !TextUtils.isEmpty(category)) {
             // 加载数据
             getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "");
         }

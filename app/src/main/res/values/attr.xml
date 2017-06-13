@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="BaseColor">
     <!--tab 自定义颜色-->
+    <attr name="color_source_link" format="color" />
     <attr name="color_tab_text_default" format="color" />
     <attr name="color_tab_indicator" format="color" />
     <!--自定义 loadingView 颜色-->

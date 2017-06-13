@@ -17,6 +17,7 @@
         <item name="android:listDivider">@drawable/bg_grid_divider</item>
         <item name="color_tab_indicator">@color/color_009587</item>
         <item name="color_tab_text_default">@color/color_CBCBCB</item>
+        <item name="color_source_link">@color/color_3385FF</item>
     </style>
 
     <style name="TranslucentAppTheme" parent="BaseAppTheme">

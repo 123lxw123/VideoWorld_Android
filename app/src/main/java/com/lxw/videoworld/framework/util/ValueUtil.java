@@ -3,7 +3,7 @@ package com.lxw.videoworld.framework.util;
 import android.content.Context;
 import android.text.TextUtils;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +60,13 @@ public class ValueUtil {
         if(!TextUtils.isEmpty(string) && string.length() > 2){
             String[] array = string.substring(1, string.length() - 1).split(",");
             if(array != null && array.length > 0){
-                return Arrays.asList(array);
+                List<String> list = new ArrayList<>();
+                for(int i = 0; i < array.length; i++){
+                    if(!TextUtils.isEmpty(array[i])){
+                        list.add(array[i]);
+                    }
+                }
+                return list;
             }else{
                 return null;
             }

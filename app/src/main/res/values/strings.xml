@@ -34,6 +34,27 @@
     <string name="txt_type18">台湾</string>
     <string name="txt_type19">其他</string>
 
+    <string name="txt_date">更新日期</string>
+    <string name="txt_name">名称</string>
+    <string name="txt_translate_name">别名</string>
+    <string name="txt_year">年份</string>
+    <string name="txt_area">地区</string>
+    <string name="txt_style">类型</string>
+    <string name="txt_language">语言</string>
+    <string name="txt_subtitles">字幕</string>
+    <string name="txt_release_date">上映日期</string>
+    <string name="txt_imdb_score">IMDB评分</string>
+    <string name="txt_douban_score">豆瓣评分</string>
+    <string name="txt_file_format">文件格式</string>
+    <string name="txt_file_size">分辨率</string>
+    <string name="txt_file_amounts">文件大小</string>
+    <string name="txt_file_length">时长</string>
+    <string name="txt_author">编剧</string>
+    <string name="txt_director">导演</string>
+    <string name="txt_performer">主演</string>
+    <string name="txt_awards">获奖情况</string>
+    <string name="txt_episodes">集数</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
