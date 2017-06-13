@@ -56,6 +56,15 @@ public class SourceTypeFragment extends Fragment {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     HorizontalInfiniteCycleViewPager viewpagerBanner;
+    /**
+     * rootView是否初始化标志，防止回调函数在rootView为空的时候触发
+     */
+    private boolean hasCreateView;
+
+    /**
+     * 当前Fragment是否处于可见状态标志，防止因ViewPager的缓存机制而导致回调函数的触发
+     */
+    private boolean isFragmentVisible;
     private View rootView;
     private QuickFragmentPageAdapter<SourceBannerFragment> bannerAdapter;
     private List<SourceBannerFragment> sourceBannerFragments = new ArrayList<>();
@@ -77,9 +86,19 @@ public class SourceTypeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initVariable();
         sourceType = getArguments().getString("sourceType");
         category = getArguments().getString("category");
         type = getArguments().getString("type");
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!hasCreateView && getUserVisibleHint()) {
+            onFragmentVisibleChange(true);
+            isFragmentVisible = true;
+        }
     }
 
     @Nullable
@@ -124,7 +143,6 @@ public class SourceTypeFragment extends Fragment {
             viewpagerBanner.setMinPageScaleOffset(5.0F);
 //            viewpagerBanner.setOnInfiniteCyclePageTransformListener(...);
             recyclerviewSourceType.setLayoutManager(new GridLayoutManager(SourceTypeFragment.this.getActivity(), Constant.GRIDLAYOUTMANAGER_SPANCOUNT));
-//            recyclerviewSourceType.addItemDecoration(new DividerGridItemDecoration(getActivity()));
             // 列表适配器
             sourceAdapter = new BaseQuickAdapter<SourceDetailModel, BaseViewHolder>(R.layout.item_source_list, sourceDetails) {
                 @Override
@@ -301,5 +319,33 @@ public class SourceTypeFragment extends Fragment {
             }
         }
         super.onDestroyView();
+    }
+
+    private void initVariable() {
+        hasCreateView = false;
+        isFragmentVisible = false;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (rootView == null) {
+            return;
+        }
+        hasCreateView = true;
+        if (isVisibleToUser) {
+            onFragmentVisibleChange(true);
+            isFragmentVisible = true;
+            return;
+        }
+        if (isFragmentVisible) {
+            onFragmentVisibleChange(false);
+            isFragmentVisible = false;
+        }
+    }
+
+    protected void onFragmentVisibleChange(boolean isVisible) {
+        if (isVisible) {
+        }
     }
 }
