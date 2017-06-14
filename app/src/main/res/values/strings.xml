@@ -55,6 +55,12 @@
     <string name="txt_awards">获奖情况</string>
     <string name="txt_episodes">集数</string>
 
+    <string name="txt_link">链接</string>
+    <string name="txt_thunder">手机迅雷(边下边播)</string>
+    <string name="txt_copy_link">复制下载链接</string>
+
+    <string name="txt_detail">资源详情</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -35,7 +35,7 @@ public class WXShareAction {
     // IWXAPI 是第三方app和微信通信的openapi接口
     private IWXAPI api;
     // 已通过审核APP_ID
-    public final String APP_ID = "wx16b17af3bfbcaf4d";// 正式签名
+    public final String APP_ID = "wx93b7ea4ca0948094";// 正式签名
 
     private Context context;
     private final int THUMB_SIZE = 120;

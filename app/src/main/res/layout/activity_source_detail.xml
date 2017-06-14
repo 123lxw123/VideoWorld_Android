@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lxw.videoworld.app.ui.SourceDetailActivity">
@@ -11,100 +12,148 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.flaviofaria.kenburnsview.KenBurnsView
-            android:id="@+id/img_picture"
-            android:scaleType="fitXY"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/com_main_A"
+            android:orientation="horizontal">
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scrollView"
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/txt_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/txt_detail"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_18" />
+
+            <Button
+                android:id="@+id/button_share"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/ic_share" />
+
+        </RelativeLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <com.flaviofaria.kenburnsview.KenBurnsView
+                android:id="@+id/img_picture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:scaleType="fitXY" />
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/com_wm_bg"
-                android:orientation="vertical">
+                android:background="@null">
 
-                <TextView
-                    android:id="@+id/txt_title"
-                    android:layout_gravity="center_horizontal"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:paddingRight="@dimen/dp_15"
-                    android:paddingTop="@dimen/dp_10"
-                    android:textSize="@dimen/sp_18"
-                    android:textColor="?attr/com_font_A"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerview_info"
-                    android:paddingTop="@dimen/dp_10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <!--简介-->
                 <LinearLayout
-                    android:id="@+id/ll_desc"
-                    android:paddingTop="@dimen/dp_10"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@null"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:paddingBottom="@dimen/dp_20">
 
-                    <TextView
-                        android:id="@+id/txt_desc"
+                    <View
+                        android:id="@+id/view_empty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:ellipsize="end"
-                        android:lineSpacingMultiplier="1.5"
-                        android:maxLines="3"
-                        android:padding="15dp"
-                        android:textColor="?attr/com_font_A"
-                        android:textSize="@dimen/sp_14" />
+                        android:background="@null" />
 
                     <LinearLayout
-                        android:id="@+id/ll_expand"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:background="@null"
-                        android:gravity="center"
-                        android:visibility="gone">
+                        android:layout_height="match_parent"
+                        android:background="?attr/com_wm_bg"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/img_expand"
+                        <TextView
+                            android:id="@+id/txt_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_expand" />
+                            android:layout_gravity="center_horizontal"
+                            android:paddingLeft="@dimen/dp_15"
+                            android:paddingRight="@dimen/dp_15"
+                            android:paddingTop="@dimen/dp_10"
+                            android:textColor="?attr/com_font_A"
+                            android:textSize="@dimen/sp_18"
+                            android:visibility="gone" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerview_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10" />
+                        <!--简介-->
+                        <LinearLayout
+                            android:id="@+id/ll_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/dp_10"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/txt_desc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:ellipsize="end"
+                                android:lineSpacingMultiplier="1.5"
+                                android:maxLines="3"
+                                android:padding="15dp"
+                                android:textColor="?attr/com_font_A"
+                                android:textSize="@dimen/sp_14" />
+
+                            <LinearLayout
+                                android:id="@+id/ll_expand"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/img_expand"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_expand" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_picture"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/dp_10"
+                            android:visibility="gone" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerview_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/dp_10" />
                     </LinearLayout>
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/ll_picture"
-                    android:paddingTop="@dimen/dp_10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerview_link"
-                    android:paddingTop="@dimen/dp_10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </android.support.v4.widget.NestedScrollView>
+            </android.support.v4.widget.NestedScrollView>
+        </FrameLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/img_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
-        android:src="@drawable/ic_back" />
-</FrameLayout>
+</LinearLayout>

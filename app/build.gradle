@@ -3,6 +3,14 @@ apply plugin: 'android-apt'
 apply plugin: 'realm-android'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'alias'
+            keyPassword '123456'
+            storeFile file('E:/VideoWorld_Android/appKeyStore.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -26,18 +34,23 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
+            signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     // retrofit
     // glide
     // okhttp
@@ -54,8 +67,6 @@ dependencies {
     // jpush
     // smarttablayout
     // infinitecycleviewpager
-
-
     compile project(path: ':bottom-navigation-bar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'

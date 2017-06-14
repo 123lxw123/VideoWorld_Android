@@ -2,7 +2,6 @@ package com.lxw.videoworld.app.ui;
 
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -10,6 +9,7 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,8 +21,11 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceInfoModel;
+import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.ValueUtil;
+import com.lxw.videoworld.framework.weixin.WXShareDialog;
+import com.lxw.videoworld.framework.widget.SourceLinkDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +33,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.lxw.videoworld.R.id.ll_desc;
 
-public class SourceDetailActivity extends AppCompatActivity {
+public class SourceDetailActivity extends BaseActivity {
 
     @BindView(R.id.img_picture)
     KenBurnsView imgPicture;
@@ -44,7 +46,7 @@ public class SourceDetailActivity extends AppCompatActivity {
     ImageView imgExpand;
     @BindView(R.id.ll_expand)
     LinearLayout llExpand;
-    @BindView(ll_desc)
+    @BindView(R.id.ll_desc)
     LinearLayout llDesc;
     @BindView(R.id.ll_picture)
     LinearLayout llPicture;
@@ -56,6 +58,14 @@ public class SourceDetailActivity extends AppCompatActivity {
     ImageView imgBack;
     @BindView(R.id.txt_title)
     TextView txtTitle;
+    @BindView(R.id.txt_detail)
+    TextView txtDetail;
+    @BindView(R.id.button_share)
+    Button buttonShare;
+    @BindView(R.id.fl_content)
+    LinearLayout flContent;
+    @BindView(R.id.view_empty)
+    View viewEmpty;
     private int width;
     private int height;
     private int picHeight;
@@ -71,6 +81,19 @@ public class SourceDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_source_detail);
         ButterKnife.bind(this);
         sourceDetailModel = (SourceDetailModel) getIntent().getSerializableExtra("sourceDetailModel");
+        SourceDetailModel s = new SourceDetailModel();
+        s.setArea("中国");
+        s.setImages("[http://tu.23juqing.com/d/file/html/gndy/jddy/2017-05-06/2a987f7e7535fad07085fe82fb73ae0f.jpg, http://tu.23juqing.com/d/file/html/gndy/jddy/2017-05-06/3037268c63df5cc756b4c99e013c259a.jpg, /0701pic/allimg/120626/0223062024-7.jpg]");
+        s.setCategory(Constant.CATEGORY_5);
+        s.setDate("20170101");
+        s.setImdbScore("7.6");
+        s.setImdbIntro("10 from 8 users");
+        s.setName("世界之外");
+        s.setTitle("世界之外BD1280高清");
+        s.setYear("2017");
+        s.setUrl("http://www.piaohua.com/html/juqing/2017/0506/31987.html");
+        s.setLinks("[ftp://t:t@piaohua888.com:12311/鸡飞狗跳HD高清国语中字[飘花www.piaohua.com].mkv]");
+        sourceDetailModel = s;
         if (sourceDetailModel != null) {
             initDatas();
             initViews();
@@ -78,8 +101,35 @@ public class SourceDetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        // 图片
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SourceDetailActivity.this.finish();
+            }
+        });
         images = ValueUtil.string2list(sourceDetailModel.getImages());
+
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String wechatTitle = "", wechatContent = "", imageUrl = "";
+                if (!TextUtils.isEmpty(sourceDetailModel.getTitle())) {
+                    wechatTitle = sourceDetailModel.getTitle();
+                }
+                if (!TextUtils.isEmpty(sourceDetailModel.getIntro())) {
+                    wechatContent = sourceDetailModel.getIntro();
+                    if (wechatContent.length() > 100) {
+                        wechatContent = wechatTitle.substring(0, 100) + "...";
+                    }
+                }
+                if (images != null && images.size() > 0) {
+                    imageUrl = images.get(0);
+                }
+                WXShareDialog dlg = new WXShareDialog(SourceDetailActivity.this, sourceDetailModel.getUrl(), wechatTitle, wechatContent, imageUrl);
+                dlg.show();
+            }
+        });
+        // 图片
         if (images != null && images.size() > 0) {
             if (!TextUtils.isEmpty(sourceDetailModel.getCategory()) && sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
                 picHeight = width * 3 / 4;
@@ -87,6 +137,7 @@ public class SourceDetailActivity extends AppCompatActivity {
                 picHeight = width * 4 / 3;
             }
             imgPicture.getLayoutParams().height = picHeight;
+            viewEmpty.getLayoutParams().height = picHeight;
             ImageManager.getInstance().loadImage(this, imgPicture, images.get(0));
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getTitle())) {
@@ -99,11 +150,6 @@ public class SourceDetailActivity extends AppCompatActivity {
             sourceInfoAdapter = new BaseQuickAdapter<SourceInfoModel, BaseViewHolder>(R.layout.item_source_info, sourceInfoModels) {
                 @Override
                 protected void convert(BaseViewHolder helper, SourceInfoModel item) {
-                    if (helper.getAdapterPosition() == 0) {
-                        helper.setVisible(R.id.space_line, false);
-                    } else {
-                        helper.setVisible(R.id.space_line, true);
-                    }
                     helper.setText(R.id.txt_key, item.getKey());
                     helper.setText(R.id.txt_value, item.getValue());
                 }
@@ -127,8 +173,10 @@ public class SourceDetailActivity extends AppCompatActivity {
         if (images != null && images.size() > 1) {
             for (int i = 1; i < images.size(); i++) {
                 ImageView imageView = new ImageView(this);
-                imageView.getLayoutParams().width = width;
-                imageView.getLayoutParams().height = picHeight;
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, picHeight);
+//                imageView.getLayoutParams().width = width;
+//                imageView.getLayoutParams().height = picHeight;
+                imageView.setLayoutParams(params);
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 ImageManager.getInstance().loadImage(this, imageView, images.get(i));
                 llPicture.addView(imageView);
@@ -140,24 +188,29 @@ public class SourceDetailActivity extends AppCompatActivity {
             sourceLinkAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_source_link, links) {
                 @Override
                 protected void convert(BaseViewHolder helper, String item) {
-                    if (helper.getAdapterPosition() == 0) {
-                        helper.setVisible(R.id.space_line, false);
-                    } else {
-                        helper.setVisible(R.id.space_line, true);
-                    }
                     helper.setText(R.id.txt_link, item);
                 }
             };
             sourceLinkAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
 
                 @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
+                    SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String)adapter.getData().get(position));
+                    dialog.show();
+
                 }
             });
             recyclerviewLink.setAdapter(sourceLinkAdapter);
             recyclerviewLink.setVisibility(View.VISIBLE);
         }
+        // 图片滑动效果
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+               imgPicture.scrollBy(0, (scrollY - oldScrollY) / 2);
+            }
+        });
     }
 
     private void initDatas() {
