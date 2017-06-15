@@ -24,7 +24,7 @@ import io.realm.RealmConfiguration;
 public class BaseApplication extends Application implements
         Thread.UncaughtExceptionHandler {
 
-
+    public static String uid;// 手机唯一标识
     public static Context appContext;// 全局Context
     public static int appStartCount;// app启动次数
     private final String APP_START_COUNT = "APP_START_COUNT";
@@ -35,6 +35,7 @@ public class BaseApplication extends Application implements
     public void onCreate() {
         super.onCreate();
 
+        uid = android.os.Build.SERIAL;
         appContext = getApplicationContext();
         // app启动次数
         appStartCount = SharePreferencesUtil.getIntSharePreferences(appContext, APP_START_COUNT, 0);
@@ -51,6 +52,8 @@ public class BaseApplication extends Application implements
         Constant.SOURCE_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
         // GridLayoutManager 每行显示列数
         Constant.GRIDLAYOUTMANAGER_SPANCOUNT = SharePreferencesUtil.getIntSharePreferences(appContext, Constant.KEY_GRIDLAYOUTMANAGER_SPANCOUNT, Constant.DEFAULT_GRIDLAYOUTMANAGER_SPANCOUNT);
+        // 切换搜索引擎
+        Constant.SEARCH_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
 
         /**
          * Hotfix2.0初始化
