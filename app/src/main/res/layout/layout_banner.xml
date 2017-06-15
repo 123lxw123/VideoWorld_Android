@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
+    <com.lxw.videoworld.framework.widget.MyHorizontalInfiniteCycleViewPager
         android:id="@+id/viewpager_banner"
         android:background="@null"
         android:layout_width="match_parent"

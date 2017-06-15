@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
@@ -33,6 +32,7 @@ import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
+import com.lxw.videoworld.framework.widget.MyHorizontalInfiniteCycleViewPager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class SourceTypeFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-    HorizontalInfiniteCycleViewPager viewpagerBanner;
+    MyHorizontalInfiniteCycleViewPager viewpagerBanner;
     /**
      * rootView是否初始化标志，防止回调函数在rootView为空的时候触发
      */
@@ -75,6 +75,7 @@ public class SourceTypeFragment extends Fragment {
     private String category;
     private String type;
     private boolean frag_refresh = true;
+    private boolean flag_init = true;// 首次加载
     private int page = 0;
     private int picWidth;
     private int picHeight;
@@ -129,20 +130,19 @@ public class SourceTypeFragment extends Fragment {
                     sourceAdapter.setEnableLoadMore(true);
                     refreshSourceType.setRefreshing(false);
                     // 加载数据
-                    getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "");
+                    getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "", true);
 
                 }
             });
             // banner
             View bannerLayout = inflater.inflate(R.layout.layout_banner, null);
-            viewpagerBanner = (HorizontalInfiniteCycleViewPager) bannerLayout.findViewById(R.id.viewpager_banner);
-            if(category.equals(Constant.CATEGORY_21)){
-                viewpagerBanner.getLayoutParams().height = width *(2 / 3) * (3 / 4) + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
-            }else{
-                viewpagerBanner.getLayoutParams().height = height / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+            viewpagerBanner = (MyHorizontalInfiniteCycleViewPager) bannerLayout.findViewById(R.id.viewpager_banner);
+            if (category.equals(Constant.CATEGORY_21)) {
+                viewpagerBanner.getLayoutParams().height = width * (2 / 3) * (3 / 4) + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+            } else {
+                viewpagerBanner.getLayoutParams().height = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             }
             viewpagerBanner.setScrollDuration(3000);
-//            viewpagerBanner.setInterpolator(...);
             viewpagerBanner.setMediumScaled(true);
             viewpagerBanner.setMaxPageScale(0.8F);
             viewpagerBanner.setMinPageScale(0.5F);
@@ -174,17 +174,21 @@ public class SourceTypeFragment extends Fragment {
                         helper.setText(R.id.txt_title, item.getTranslateName());
                     }
                     // 评分
-                    if (!TextUtils.isEmpty(item.getImdbScore())) {
+                    if (!TextUtils.isEmpty(item.getImdbScore()) && item.getImdbScore().length() ==3) {
                         helper.setText(R.id.txt_imdb, item.getImdbScore());
-                        helper.setVisible(R.id.txt_imdb, true);
+                        helper.setVisible(R.id.ll_score, true);
+                        helper.setVisible(R.id.ll_imdb, true);
                     } else {
-                        helper.setVisible(R.id.txt_imdb, false);
+                        helper.setVisible(R.id.ll_score, false);
+                        helper.setVisible(R.id.ll_imdb, false);
                     }
-                    if (!TextUtils.isEmpty(item.getDoubanScore())) {
+                    if (!TextUtils.isEmpty(item.getDoubanScore()) && item.getDoubanScore().length() ==3) {
                         helper.setText(R.id.txt_douban, item.getDoubanScore());
-                        helper.setVisible(R.id.txt_douban, true);
+                        helper.setVisible(R.id.ll_score, true);
+                        helper.setVisible(R.id.ll_douban, true);
                     } else {
-                        helper.setVisible(R.id.txt_douban, false);
+                        helper.setVisible(R.id.ll_score, false);
+                        helper.setVisible(R.id.ll_douban, false);
                     }
 
                 }
@@ -209,7 +213,7 @@ public class SourceTypeFragment extends Fragment {
                             // TODO
                             frag_refresh = false;
                             // 加载数据
-                            getList(sourceType, category, type, Constant.LIST_LIMIT * page + BANNER_LIMIT + "", Constant.LIST_LIMIT + "");
+                            getList(sourceType, category, type, Constant.LIST_LIMIT * page + BANNER_LIMIT + "", Constant.LIST_LIMIT + "", false);
                         }
 
                     }, 500);
@@ -230,8 +234,8 @@ public class SourceTypeFragment extends Fragment {
         return rootView;
     }
 
-    public void getList(String sourceType, String category, String type, String start, String limit) {
-        new HttpManager<SourceListModel>((BaseActivity) SourceTypeFragment.this.getActivity(), HttpHelper.getInstance().getList(sourceType, category, type, start, limit)) {
+    public void getList(String sourceType, String category, String type, String start, String limit, boolean flag_dialog) {
+        new HttpManager<SourceListModel>((BaseActivity) SourceTypeFragment.this.getActivity(), HttpHelper.getInstance().getList(sourceType, category, type, start, limit), flag_dialog , true) {
 
             @Override
             public void onSuccess(BaseResponse<SourceListModel> response) {
@@ -297,17 +301,11 @@ public class SourceTypeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (viewpagerBanner != null) {
-            viewpagerBanner.startAutoScroll(true);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (viewpagerBanner != null) {
-            viewpagerBanner.stopAutoScroll();
-        }
     }
 
     @Override
@@ -346,9 +344,10 @@ public class SourceTypeFragment extends Fragment {
     }
 
     protected void onFragmentVisibleChange(boolean isVisible) {
-        if (isVisible && !TextUtils.isEmpty(sourceType) && !TextUtils.isEmpty(category)) {
+        if (flag_init && isVisible && !TextUtils.isEmpty(sourceType) && !TextUtils.isEmpty(category)) {
             // 加载数据
-            getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "");
+            flag_init = false;
+            getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "", true);
         }
     }
 }

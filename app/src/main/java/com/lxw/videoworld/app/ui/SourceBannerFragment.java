@@ -34,7 +34,7 @@ import butterknife.Unbinder;
 
 public class SourceBannerFragment extends Fragment {
 
-//    @BindView(R.id.img_banner)
+    //    @BindView(R.id.img_banner)
 //    ImageView imgBanner;
     Unbinder unbinder;
     @BindView(R.id.img_picture)
@@ -47,6 +47,14 @@ public class SourceBannerFragment extends Fragment {
     FrameLayout flPicture;
     @BindView(R.id.txt_title)
     TextView txtTitle;
+    @BindView(R.id.ll_imdb)
+    LinearLayout llImdb;
+    @BindView(R.id.ll_douban)
+    LinearLayout llDouban;
+    @BindView(R.id.ll_score)
+    LinearLayout llScore;
+    @BindView(R.id.ll_banner)
+    LinearLayout llBanner;
     private View rootView;
     private String imgUrl;
     private SourceDetailModel item;
@@ -56,7 +64,7 @@ public class SourceBannerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        item = (SourceDetailModel)getArguments().getSerializable("item");
+        item = (SourceDetailModel) getArguments().getSerializable("item");
     }
 
     @Nullable
@@ -66,8 +74,8 @@ public class SourceBannerFragment extends Fragment {
             rootView = inflater.inflate(R.layout.item_source_banner, null);
             unbinder = ButterKnife.bind(this, rootView);
             WindowManager wm = this.getActivity().getWindowManager();
-            picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3 ;
-            picHeight = wm.getDefaultDisplay().getHeight() / 2 ;
+            picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3;
+            picHeight = wm.getDefaultDisplay().getHeight() / 2;
             if (!TextUtils.isEmpty(item.getCategory()) && item.getCategory().equals(Constant.CATEGORY_21)) {
                 picHeight = picWidth * 3 / 4;
             } else {
@@ -83,27 +91,32 @@ public class SourceBannerFragment extends Fragment {
             }
             // 标题
             txtTitle.setTextSize(18);
-            if(!TextUtils.isEmpty(item.getTitle())){
+            if (!TextUtils.isEmpty(item.getTitle())) {
                 txtTitle.setText(item.getTitle());
-            }else if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
+            } else if (!TextUtils.isEmpty(item.getName()) && StringUtil.isHasChinese(item.getName())) {
                 txtTitle.setText(item.getName());
             } else if (!TextUtils.isEmpty(item.getTranslateName())) {
                 txtTitle.setText(item.getTranslateName());
             }
             // 评分
-            if (!TextUtils.isEmpty(item.getImdbScore())) {
+            if (!TextUtils.isEmpty(item.getImdbScore()) && item.getImdbScore().length() ==3) {
                 txtImdb.setText(item.getImdbScore());
-                txtImdb.setVisibility(View.VISIBLE);
+                llScore.setVisibility(View.VISIBLE);
+                llImdb.setVisibility(View.VISIBLE);
             } else {
-                txtImdb.setVisibility(View.GONE);
+                llScore.setVisibility(View.GONE);
+                llImdb.setVisibility(View.GONE);
             }
-            if (!TextUtils.isEmpty(item.getDoubanScore())) {
-                txtDouban.setText(item.getDoubanScore());
-                txtDouban.setVisibility(View.VISIBLE);
-            } else {
-                txtDouban.setVisibility(View.GONE);
-            }
+            if (!TextUtils.isEmpty(item.getDoubanScore()) && item.getDoubanScore().length() ==3) {
 
+                txtDouban.setText(item.getDoubanScore());
+
+                llScore.setVisibility(View.VISIBLE);
+                llDouban.setVisibility(View.VISIBLE);
+            } else {
+                llScore.setVisibility(View.GONE);
+                llDouban.setVisibility(View.GONE);
+            }
             LinearLayout ll_banner = ((LinearLayout) rootView.findViewById(R.id.ll_banner));
             ll_banner.setOnClickListener(new View.OnClickListener() {
                 @Override

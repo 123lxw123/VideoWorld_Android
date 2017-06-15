@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,6 +67,11 @@ public class SourceDetailActivity extends BaseActivity {
     LinearLayout flContent;
     @BindView(R.id.view_empty)
     View viewEmpty;
+    @BindView(R.id.img_expand_close)
+    ImageView imgExpandClose;
+    @BindView(R.id.edit_empty)
+    EditText editEmpty;
+    private boolean flag_expand = false;// 简介展开收起标识
     private int width;
     private int height;
     private int picHeight;
@@ -81,19 +87,6 @@ public class SourceDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_source_detail);
         ButterKnife.bind(this);
         sourceDetailModel = (SourceDetailModel) getIntent().getSerializableExtra("sourceDetailModel");
-        SourceDetailModel s = new SourceDetailModel();
-        s.setArea("中国");
-        s.setImages("[http://tu.23juqing.com/d/file/html/gndy/jddy/2017-05-06/2a987f7e7535fad07085fe82fb73ae0f.jpg, http://tu.23juqing.com/d/file/html/gndy/jddy/2017-05-06/3037268c63df5cc756b4c99e013c259a.jpg, /0701pic/allimg/120626/0223062024-7.jpg]");
-        s.setCategory(Constant.CATEGORY_5);
-        s.setDate("20170101");
-        s.setImdbScore("7.6");
-        s.setImdbIntro("10 from 8 users");
-        s.setName("世界之外");
-        s.setTitle("世界之外BD1280高清");
-        s.setYear("2017");
-        s.setUrl("http://www.piaohua.com/html/juqing/2017/0506/31987.html");
-        s.setLinks("[ftp://t:t@piaohua888.com:12311/鸡飞狗跳HD高清国语中字[飘花www.piaohua.com].mkv]");
-        sourceDetailModel = s;
         if (sourceDetailModel != null) {
             initDatas();
             initViews();
@@ -118,8 +111,8 @@ public class SourceDetailActivity extends BaseActivity {
                 }
                 if (!TextUtils.isEmpty(sourceDetailModel.getIntro())) {
                     wechatContent = sourceDetailModel.getIntro();
-                    if (wechatContent.length() > 100) {
-                        wechatContent = wechatTitle.substring(0, 100) + "...";
+                    if (wechatContent.length() > 50) {
+                        wechatContent = wechatContent.substring(0, 50) + "...";
                     }
                 }
                 if (images != null && images.size() > 0) {
@@ -147,6 +140,7 @@ public class SourceDetailActivity extends BaseActivity {
 
         if (sourceInfoModels.size() > 0) {
             recyclerviewInfo.setLayoutManager(new LinearLayoutManager(this));
+            recyclerviewInfo.setNestedScrollingEnabled(false);
             sourceInfoAdapter = new BaseQuickAdapter<SourceInfoModel, BaseViewHolder>(R.layout.item_source_info, sourceInfoModels) {
                 @Override
                 protected void convert(BaseViewHolder helper, SourceInfoModel item) {
@@ -158,6 +152,24 @@ public class SourceDetailActivity extends BaseActivity {
             recyclerviewInfo.setVisibility(View.VISIBLE);
         }
 
+        // 简介展开收起点击事件
+        llExpand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 收起展开图片旋转
+                if (flag_expand) {// 收起
+                    imgExpand.setVisibility(View.VISIBLE);
+                    imgExpandClose.setVisibility(View.GONE);
+                    txtDesc.setMaxLines(3);
+                } else {// 展开
+                    imgExpand.setVisibility(View.GONE);
+                    imgExpandClose.setVisibility(View.VISIBLE);
+                    txtDesc.setMaxLines(Integer.MAX_VALUE);
+                }
+                txtDesc.setText(sourceDetailModel.getIntro());
+                flag_expand = !flag_expand;
+            }
+        });
         // 判断简介是否需要展开收起
         if (!TextUtils.isEmpty(sourceDetailModel.getIntro())) {
             Layout layout = new StaticLayout(sourceDetailModel.getIntro(), txtDesc.getPaint(),
@@ -184,6 +196,7 @@ public class SourceDetailActivity extends BaseActivity {
         }
         List<String> links = ValueUtil.string2list(sourceDetailModel.getLinks());
         if (links != null && links.size() > 0) {
+            recyclerviewLink.setNestedScrollingEnabled(false);
             recyclerviewLink.setLayoutManager(new LinearLayoutManager(this));
             sourceLinkAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_source_link, links) {
                 @Override
@@ -196,7 +209,7 @@ public class SourceDetailActivity extends BaseActivity {
                 @Override
                 public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
-                    SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String)adapter.getData().get(position));
+                    SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position));
                     dialog.show();
 
                 }
@@ -208,9 +221,15 @@ public class SourceDetailActivity extends BaseActivity {
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-               imgPicture.scrollBy(0, (scrollY - oldScrollY) / 2);
+                imgPicture.scrollBy(0, (scrollY - oldScrollY) / 2);
             }
         });
+
+        // 顶部获取焦点
+        editEmpty.requestFocus();
+        if(picHeight > 0){
+            scrollView.scrollBy(0, picHeight / 2);
+        }
     }
 
     private void initDatas() {

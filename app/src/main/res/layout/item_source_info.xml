@@ -14,8 +14,8 @@
         <TextView
             android:id="@+id/txt_key"
             android:layout_weight="2"
-            android:paddingTop="@dimen/dp_5"
-            android:paddingBottom="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/sp_14"
             android:textColor="?attr/com_font_A"
@@ -25,8 +25,8 @@
         <TextView
             android:id="@+id/txt_value"
             android:layout_weight="8"
-            android:paddingTop="@dimen/dp_5"
-            android:paddingBottom="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_8"
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/sp_14"
             android:textColor="?attr/com_font_A"

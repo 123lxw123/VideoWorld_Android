@@ -70,6 +70,12 @@
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/dp_20">
 
+                    <EditText
+                        android:id="@+id/edit_empty"
+                        android:layout_width="1px"
+                        android:layout_height="1px"
+                        android:visibility="visible" />
+
                     <View
                         android:id="@+id/view_empty"
                         android:layout_width="match_parent"
@@ -132,7 +138,14 @@
                                     android:id="@+id/img_expand"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_expand" />
+                                    android:src="@drawable/ic_expand_open" />
+
+                                <ImageView
+                                    android:id="@+id/img_expand_close"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_expand_close"
+                                    android:visibility="gone" />
                             </LinearLayout>
                         </LinearLayout>
 

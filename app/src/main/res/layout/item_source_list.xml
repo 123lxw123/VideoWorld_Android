@@ -16,33 +16,62 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/ll_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:background="?attr/color_bg_gray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/txt_imdb"
-                android:paddingLeft="@dimen/dp_5"
-                android:paddingRight="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
-                android:textColor="?attr/com_assist_A"
-                android:textSize="@dimen/sp_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp_3"
+            android:paddingBottom="@dimen/dp_3"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingLeft="@dimen/dp_5">
 
-            <TextView
-                android:id="@+id/txt_douban"
-                android:paddingLeft="@dimen/dp_5"
-                android:paddingRight="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
-                android:textColor="?attr/com_assist_A"
-                android:textSize="@dimen/sp_16"
+            <LinearLayout
+                android:id="@+id/ll_imdb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_imdb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/com_assist_A"
+                    android:textSize="@dimen/sp_12"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(IMDB)"
+                    android:textColor="?attr/com_assist_A"
+                    android:textSize="@dimen/sp_6" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_douban"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_douban"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/com_assist_A"
+                    android:textSize="@dimen/sp_12"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(豆  瓣)"
+                    android:textColor="?attr/com_assist_A"
+                    android:textSize="@dimen/sp_6" />
+
+            </LinearLayout>
         </LinearLayout>
+
     </FrameLayout>
     <TextView
         android:id="@+id/txt_title"
