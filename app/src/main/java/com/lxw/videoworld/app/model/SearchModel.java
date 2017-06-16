@@ -5,9 +5,8 @@ import java.io.Serializable;
 /**
  * Created by Zion on 2017/6/14.
  */
-public class SearchResultModel implements Serializable{
-    private String uid;
-    private String url;
+public class SearchModel implements Serializable {
+
     private String ciliLink;
     private String thunderLink;
     private String amounts;
@@ -15,23 +14,6 @@ public class SearchResultModel implements Serializable{
     private String date;
     private String size;
     private String hot;
-    private String time;
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getCiliLink() {
         return ciliLink;
@@ -89,11 +71,4 @@ public class SearchResultModel implements Serializable{
         this.hot = hot;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
 }

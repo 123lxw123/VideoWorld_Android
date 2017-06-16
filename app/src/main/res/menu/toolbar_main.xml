@@ -4,9 +4,8 @@
 
     <item
         android:id="@+id/action_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@drawable/ic_search"
         app:showAsAction="always"
-        android:icon="@drawable/ic_change_source"
         android:title="@string/menu_search"/>
 
     <item
@@ -20,11 +19,6 @@
         android:id="@+id/action_change_theme"
         android:icon="@drawable/ic_change_theme"
         android:title="@string/menu_change_theme"
-        app:showAsAction="never" />
-
-    <item
-    android:id="@+id/action_setting"
-    android:title="@string/menu_search"
-    app:showAsAction="never" />
+        app:showAsAction="always" />
 
 </menu>

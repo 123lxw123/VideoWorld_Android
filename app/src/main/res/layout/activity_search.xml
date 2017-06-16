@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/com_wm_bg"
+    tools:context="com.lxw.videoworld.app.ui.SearchActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toobar_search"
+        android:background="?attr/com_main_A"
+        app:popupTheme="@style/OverflowMenuStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_keyword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

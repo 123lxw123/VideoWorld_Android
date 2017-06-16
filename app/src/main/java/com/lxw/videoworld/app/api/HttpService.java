@@ -27,5 +27,9 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("search")
-    Observable<BaseResponse<SearchListModel>> getSearch(@Field("uid") String uid, @Field("url") String url);
+    Observable<BaseResponse<String>> getSearch(@Field("uid") String uid, @Field("url") String url, @Field("keyword") String keyword, @Field("searchType") String searchType);
+
+    @FormUrlEncoded
+    @POST("searchResult")
+    Observable<BaseResponse<SearchListModel>> getSearchResult(@Field("uid") String uid, @Field("url") String url);
 }

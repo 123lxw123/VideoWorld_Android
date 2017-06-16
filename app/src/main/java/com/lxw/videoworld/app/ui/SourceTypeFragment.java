@@ -174,7 +174,7 @@ public class SourceTypeFragment extends Fragment {
                         helper.setText(R.id.txt_title, item.getTranslateName());
                     }
                     // 评分
-                    if (!TextUtils.isEmpty(item.getImdbScore()) && item.getImdbScore().length() ==3) {
+                    if (!TextUtils.isEmpty(item.getImdbScore()) && item.getImdbScore().length() == 3) {
                         helper.setText(R.id.txt_imdb, item.getImdbScore());
                         helper.setVisible(R.id.ll_score, true);
                         helper.setVisible(R.id.ll_imdb, true);
@@ -182,7 +182,7 @@ public class SourceTypeFragment extends Fragment {
                         helper.setVisible(R.id.ll_score, false);
                         helper.setVisible(R.id.ll_imdb, false);
                     }
-                    if (!TextUtils.isEmpty(item.getDoubanScore()) && item.getDoubanScore().length() ==3) {
+                    if (!TextUtils.isEmpty(item.getDoubanScore()) && item.getDoubanScore().length() == 3) {
                         helper.setText(R.id.txt_douban, item.getDoubanScore());
                         helper.setVisible(R.id.ll_score, true);
                         helper.setVisible(R.id.ll_douban, true);
@@ -235,7 +235,7 @@ public class SourceTypeFragment extends Fragment {
     }
 
     public void getList(String sourceType, String category, String type, String start, String limit, boolean flag_dialog) {
-        new HttpManager<SourceListModel>((BaseActivity) SourceTypeFragment.this.getActivity(), HttpHelper.getInstance().getList(sourceType, category, type, start, limit), flag_dialog , true) {
+        new HttpManager<SourceListModel>((BaseActivity) SourceTypeFragment.this.getActivity(), HttpHelper.getInstance().getList(sourceType, category, type, start, limit), flag_dialog, true) {
 
             @Override
             public void onSuccess(BaseResponse<SourceListModel> response) {
@@ -310,13 +310,13 @@ public class SourceTypeFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        if (unbinder != null) {
-            try {
-                unbinder.unbind();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (unbinder != null) {
+//            try {
+//                unbinder.unbind();
+//            } catch (IllegalStateException e) {
+//                e.printStackTrace();
+//            }
+//        }
         super.onDestroyView();
     }
 

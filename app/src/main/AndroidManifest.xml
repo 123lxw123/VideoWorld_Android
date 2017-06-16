@@ -85,7 +85,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".app.ui.SourceDetailActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".app.ui.SourceDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".app.ui.SearchActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,13 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -47,6 +50,26 @@ public class MainActivity extends BaseActivity {
 
         tabs = new String[]{getString(R.string.txt_tab1), getString(R.string.txt_tab2), getString(R.string.txt_tab3), getString(R.string.txt_tab4), getString(R.string.txt_tab5)};
         toobarMain.inflateMenu(R.menu.toolbar_main);//设置右上角的填充菜单
+        toobarMain.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    // 主题切换
+                    case R.id.action_change_theme:
+                        MainActivity.this.finish();
+                        Intent intent = MainActivity.this.getIntent();
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        break;
+                    case R.id.action_search:
+                        Intent intent1 = new Intent(MainActivity.this, SearchActivity.class);
+                        startActivity(intent1);
+                        break;
+                }
+                return true;
+            }
+        });
 
         navigationbarMain.setBackgroundColor(getCustomColor(R.styleable.BaseColor_com_main_A));
         navigationbarMain
@@ -152,4 +175,5 @@ public class MainActivity extends BaseActivity {
         fragment.setArguments(bundle);
         fragments.add(fragment);
     }
+
 }

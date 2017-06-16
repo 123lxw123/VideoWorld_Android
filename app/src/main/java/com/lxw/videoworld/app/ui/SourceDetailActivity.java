@@ -183,16 +183,17 @@ public class SourceDetailActivity extends BaseActivity {
         }
 
         if (images != null && images.size() > 1) {
-            for (int i = 1; i < images.size(); i++) {
-                ImageView imageView = new ImageView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, picHeight);
+//            for (int i = 1; i < images.size(); i++) {
+            ImageView imageView = new ImageView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, picHeight);
 //                imageView.getLayoutParams().width = width;
 //                imageView.getLayoutParams().height = picHeight;
-                imageView.setLayoutParams(params);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                ImageManager.getInstance().loadImage(this, imageView, images.get(i));
-                llPicture.addView(imageView);
-            }
+            imageView.setLayoutParams(params);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            llPicture.addView(imageView);
+            ImageManager.getInstance().loadImage(this, imageView, images.get(1));
+//            }
+            llPicture.setVisibility(View.VISIBLE);
         }
         List<String> links = ValueUtil.string2list(sourceDetailModel.getLinks());
         if (links != null && links.size() > 0) {
@@ -227,7 +228,7 @@ public class SourceDetailActivity extends BaseActivity {
 
         // 顶部获取焦点
         editEmpty.requestFocus();
-        if(picHeight > 0){
+        if (picHeight > 0) {
             scrollView.scrollBy(0, picHeight / 2);
         }
     }

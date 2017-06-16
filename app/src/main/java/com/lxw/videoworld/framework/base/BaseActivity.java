@@ -70,6 +70,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        // 皮肤
+        switch (Constant.THEME_TYPE){
+            case Constant.THEME_TYPE_1:
+                setTheme(R.style.GoldAppTheme);
+                break;
+            case Constant.THEME_TYPE_2:
+                setTheme(R.style.RedAppTheme);
+                break;
+            case Constant.THEME_TYPE_3:
+                setTheme(R.style.BlueAppTheme);
+                break;
+        }
     }
 
     @Override

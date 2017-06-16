@@ -63,7 +63,7 @@ public class ValueUtil {
                 List<String> list = new ArrayList<>();
                 for(int i = 0; i < array.length; i++){
                     if(!TextUtils.isEmpty(array[i])){
-                        list.add(array[i]);
+                        list.add(array[i].trim());
                     }
                 }
                 return list;

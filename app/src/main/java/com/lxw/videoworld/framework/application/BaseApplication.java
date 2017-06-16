@@ -48,6 +48,8 @@ public class BaseApplication extends Application implements
         } catch (Exception e) {
             this.versionName = "1.0";
         }
+        // 皮肤
+        Constant.THEME_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
         // 切换影视来源
         Constant.SOURCE_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
         // GridLayoutManager 每行显示列数

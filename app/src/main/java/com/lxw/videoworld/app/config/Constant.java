@@ -11,7 +11,6 @@ public class Constant {
      * 网络请求
      */
     public static String SOURCE_TYPE;
-    public static final String API_VERSION = "v1/";
     public static final String KEY_SOURCE_TYPE = "SOURCE_TYPE";
     public static final String SOURCE_TYPE_1 = "1";// 飘花电影
     public static final String SOURCE_TYPE_2 = "2";// 猫扑电影
@@ -21,6 +20,14 @@ public class Constant {
     public static final String SEARCH_TYPE_1 = "1";// 种子搜索
     public static final String SEARCH_TYPE_2 = "2";// 屌丝搜索
     public static final String KEY_SEARCH_TYPE = "SEARCH_TYPE";
+
+    public static String THEME_TYPE;
+    public static final String THEME_TYPE_1 = "1";// glod
+    public static final String THEME_TYPE_2 = "2";// red
+    public static final String THEME_TYPE_3 = "3";// blue
+    public static final String KEY_THEME_TYPE = "THEME_TYPE";
+
+    public static final String API_VERSION = "v1/";
     public static final String BASE_URL = "http://172840g32p.iok.la:80/videoworld/" + Constant.API_VERSION;
 
     /** 是否debug模式 **/
