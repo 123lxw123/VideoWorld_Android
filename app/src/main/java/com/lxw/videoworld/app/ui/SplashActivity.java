@@ -77,26 +77,33 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onSuccess(BaseResponse<ConfigModel> response) {
-                final String imageUrl = response.getResult().getImage();
-                if (!TextUtils.isEmpty(imageUrl)) {
-                    if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
-                        return;
-                    } else {
-                        SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, SPLASH_PICTURE_LINK, imageUrl);
-                        // 缓存启动页图片
-                        Observable.create(new ObservableOnSubscribe<Integer>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                                ImageManager.getInstance().downloadImage(SplashActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG, true);
-                            }
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<Integer>() {
+                if(response.getResult() != null){
+                    // 保存热搜关键词
+                    if(!TextUtils.isEmpty(response.getResult().getKeyworld())){
+                        SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyworld());
+                    }
 
-                                    @Override
-                                    public void accept(Integer i) {
-                                    }
-                                });
+                    final String imageUrl = response.getResult().getImage();
+                    if (!TextUtils.isEmpty(imageUrl)) {
+                        if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
+                            return;
+                        } else {
+                            SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, SPLASH_PICTURE_LINK, imageUrl);
+                            // 缓存启动页图片
+                            Observable.create(new ObservableOnSubscribe<Integer>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                                    ImageManager.getInstance().downloadImage(SplashActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG, true);
+                                }
+                            }).subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Consumer<Integer>() {
+
+                                        @Override
+                                        public void accept(Integer i) {
+                                        }
+                                    });
+                        }
                     }
                 }
             }

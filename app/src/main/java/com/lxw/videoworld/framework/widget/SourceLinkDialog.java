@@ -39,7 +39,7 @@ public class SourceLinkDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(!TextUtils.isEmpty(link)){
-            setContentView(R.layout.layout_link_action);
+            setContentView(R.layout.dialog_link_action);
             LinearLayout ll_thunder = (LinearLayout) this.findViewById(R.id.ll_thunder);
             LinearLayout ll_copy_link = (LinearLayout) this.findViewById(R.id.ll_copy_link);
             LinearLayout ll_cancel = (LinearLayout) this.findViewById(R.id.ll_cancel);

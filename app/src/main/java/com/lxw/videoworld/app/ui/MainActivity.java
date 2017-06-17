@@ -16,6 +16,7 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.framework.base.BaseActivity;
+import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,20 @@ public class MainActivity extends BaseActivity {
                 switch (menuItem.getItemId()) {
                     // 主题切换
                     case R.id.action_change_theme:
+                        switch (Constant.THEME_TYPE){
+                            case Constant.THEME_TYPE_1:
+                                Constant.THEME_TYPE = Constant.THEME_TYPE_2;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
+                                break;
+                            case Constant.THEME_TYPE_2:
+                                Constant.THEME_TYPE = Constant.THEME_TYPE_3;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
+                                break;
+                            case Constant.THEME_TYPE_3:
+                                Constant.THEME_TYPE = Constant.THEME_TYPE_1;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
+                                break;
+                        }
                         MainActivity.this.finish();
                         Intent intent = MainActivity.this.getIntent();
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);

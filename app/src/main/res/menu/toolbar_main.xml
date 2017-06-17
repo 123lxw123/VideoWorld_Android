@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_change_theme"
+        android:icon="@drawable/ic_change_theme"
+        android:title="@string/menu_change_theme"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_change_source"
+        android:icon="@drawable/ic_change_source"
+        android:title="@string/menu_change_source"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         app:showAsAction="always"
         android:title="@string/menu_search"/>
-
-    <item
-        android:id="@+id/action_change_source"
-        android:icon="@drawable/ic_change_source"
-        android:title="@string/menu_change_source"
-        android:orderInCategory="100"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_change_theme"
-        android:icon="@drawable/ic_change_theme"
-        android:title="@string/menu_change_theme"
-        app:showAsAction="always" />
 
 </menu>

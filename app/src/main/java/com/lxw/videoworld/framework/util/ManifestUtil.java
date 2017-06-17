@@ -1,8 +1,10 @@
 package com.lxw.videoworld.framework.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.view.WindowManager;
 
 public class ManifestUtil {
 	
@@ -64,5 +66,17 @@ public class ManifestUtil {
 			return code;
 		}
 		return "A1";
+	}
+
+	public static int getScreenWidth(Activity activity){
+		WindowManager wm = activity.getWindowManager();
+		int width = wm.getDefaultDisplay().getWidth();
+		return width;
+	}
+
+	public static int getScreenHeight(Activity activity){
+		WindowManager wm = activity.getWindowManager();
+		int height = wm.getDefaultDisplay().getHeight();
+		return height;
 	}
 }

@@ -40,7 +40,7 @@ public abstract class HttpManager<T> {
     }
 
     public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable, boolean flag_dialog){
-        this(activity, observable, true, true);
+        this(activity, observable, flag_dialog, true);
     }
 
     public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable, boolean flag_dialog, boolean flag_toast){

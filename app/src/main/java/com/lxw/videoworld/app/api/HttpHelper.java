@@ -3,7 +3,9 @@ package com.lxw.videoworld.app.api;
 
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceListModel;
+import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.http.BaseResponse;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpHelper {
 
-    private static final int DEFAULT_TIMEOUT = 15;
+    public static final int DEFAULT_TIMEOUT = 15;
     private Retrofit retrofit;
     public static HttpService httpService;
     public static HttpHelper httpHelper = new HttpHelper();
@@ -52,5 +54,13 @@ public class HttpHelper {
 
     public Observable<BaseResponse<SourceListModel>> getList(String sourceType, String category, String type, String start, String limit){
         return httpService.getList(sourceType, category, type, start, limit);
+    }
+
+    public Observable<BaseResponse<String>> getSearch(String url, String keyword, String searchType){
+        return httpService.getSearch(BaseApplication.uid, url, keyword, searchType);
+    }
+
+    public Observable<BaseResponse<SearchResultModel>> getSearchResult(String url){
+        return httpService.getSearchResult(BaseApplication.uid, url);
     }
 }

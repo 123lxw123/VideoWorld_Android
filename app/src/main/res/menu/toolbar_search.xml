@@ -9,4 +9,10 @@
         app:showAsAction="always"
         android:title="@string/menu_search"/>
 
+    <item
+        android:id="@+id/action_change_source"
+        android:icon="@drawable/ic_change_source"
+        android:title="@string/menu_change_source"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
 </menu>

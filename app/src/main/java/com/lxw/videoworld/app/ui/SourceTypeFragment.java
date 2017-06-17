@@ -138,7 +138,7 @@ public class SourceTypeFragment extends Fragment {
             View bannerLayout = inflater.inflate(R.layout.layout_banner, null);
             viewpagerBanner = (MyHorizontalInfiniteCycleViewPager) bannerLayout.findViewById(R.id.viewpager_banner);
             if (category.equals(Constant.CATEGORY_21)) {
-                viewpagerBanner.getLayoutParams().height = width * (2 / 3) * (3 / 4) + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+                viewpagerBanner.getLayoutParams().height = width * (3 / 4) + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             } else {
                 viewpagerBanner.getLayoutParams().height = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             }
@@ -288,12 +288,7 @@ public class SourceTypeFragment extends Fragment {
 
             @Override
             public void onFailure(BaseResponse<SourceListModel> response) {
-                SourceTypeFragment.this.getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        sourceAdapter.loadMoreFail();
-                    }
-
-                });
+                sourceAdapter.loadMoreFail();
             }
         }.doRequest();
     }

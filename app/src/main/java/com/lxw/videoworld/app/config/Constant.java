@@ -20,6 +20,7 @@ public class Constant {
     public static final String SEARCH_TYPE_1 = "1";// 种子搜索
     public static final String SEARCH_TYPE_2 = "2";// 屌丝搜索
     public static final String KEY_SEARCH_TYPE = "SEARCH_TYPE";
+    public static final String KEY_SEARCH_HOTWORDS = "KEY_SEARCH_HOTWORDS";
 
     public static String THEME_TYPE;
     public static final String THEME_TYPE_1 = "1";// glod
@@ -139,4 +140,13 @@ public class Constant {
     public static final String TYPE_9 = "jingdianyouxifabu";// 经典游戏
     public static final String TYPE_10 = "remenyouxi";// 热门游戏
     public static final String TYPE_11 = "zuixinyouxifabu";// 最新游戏
+
+    //    搜索
+    public static final String BASE_ZHONGZI_SEARCH_1 = "http://www.zhongziso.com/list_ctime/keyword/page";// 时间排序
+    public static final String BASE_ZHONGZI_SEARCH_2 = "http://www.zhongziso.com/list_click/keyword/page";// 点击
+    public static final String BASE_ZHONGZI_SEARCH_3 = "http://www.zhongziso.com/list_length/keyword/page";// 大小
+    public static final String BASE_DIAOSI_SEARCH = "http://www.diaosisou.net/";// 屌丝搜索首页
+    public static final String BASE_DIAOSI_SEARCH_1 = "http://www.diaosisou.net/list/keyword/page/time_d";// 时间排序
+    public static final String BASE_DIAOSI_SEARCH_2 = "http://www.diaosisou.net/list/keyword/page/size_d";// 大小
+    public static final String BASE_DIAOSI_SEARCH_3 = "http://www.diaosisou.net/list/keyword/page/rala_d";// 相关度
 }

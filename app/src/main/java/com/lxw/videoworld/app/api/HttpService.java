@@ -2,7 +2,7 @@ package com.lxw.videoworld.app.api;
 
 
 import com.lxw.videoworld.app.model.ConfigModel;
-import com.lxw.videoworld.app.model.SearchListModel;
+import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.http.BaseResponse;
 
@@ -19,7 +19,7 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("config")
     Observable<BaseResponse<ConfigModel>> getConfig(@Field("id") String id);
-
+ 
     @FormUrlEncoded
     @POST("list")
     Observable<BaseResponse<SourceListModel>> getList(@Field("sourceType") String sourceType, @Field("category") String category,
@@ -31,5 +31,5 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("searchResult")
-    Observable<BaseResponse<SearchListModel>> getSearchResult(@Field("uid") String uid, @Field("url") String url);
+    Observable<BaseResponse<SearchResultModel>> getSearchResult(@Field("uid") String uid, @Field("url") String url);
 }

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:text="@string/weixin_share"
+            android:text="@string/txt_link"
             android:textSize="@dimen/sp_16"
             android:textColor="?attr/com_font_A"/>
     </LinearLayout>
