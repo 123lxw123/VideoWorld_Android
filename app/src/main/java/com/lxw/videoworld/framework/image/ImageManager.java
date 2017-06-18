@@ -80,6 +80,39 @@ public class ImageManager {
      * 常规加载图片
      *
      * @param context
+     * @param imageView 图片容器
+     * @param imgUrl    图片地址
+     */
+    public void loadImage(Context context, ImageView imageView, String imgUrl, boolean flag_cache) {
+        if (flag_loadImage) {
+            if(flag_cache){
+                Glide.with(context)
+                        .load(imgUrl)
+                        .error(R.drawable.img_loading_error)
+                        .crossFade()
+                        .priority(Priority.NORMAL) //下载的优先级
+                        //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                        //source:缓存源资源   result：缓存转换后的资源
+                        .diskCacheStrategy(DiskCacheStrategy.NONE) //缓存策略
+                        .into(imageView);
+            }else{
+                Glide.with(context)
+                        .load(imgUrl)
+                        .error(R.drawable.img_loading_error)
+                        .crossFade()
+                        .priority(Priority.NORMAL) //下载的优先级
+                        //all:缓存源资源和转换后的资源 none:不作任何磁盘缓存
+                        //source:缓存源资源   result：缓存转换后的资源
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE) //缓存策略
+                        .into(imageView);
+            }
+        }
+    }
+
+    /**
+     * 常规加载图片
+     *
+     * @param context
      * @param imageView  图片容器
      * @param imgUrl     图片地址
      * @param errorImgId 加载错误显示图片资源id
