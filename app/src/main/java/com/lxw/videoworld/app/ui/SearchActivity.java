@@ -128,6 +128,15 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     helper.setText(R.id.txt_hotword, item);
                 }
             };
+            // item 点击事件
+            hotwordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    // TODO
+                    keyword = (String)adapter.getData().get(position);
+                    doSearch();
+                }
+            });
             recyclerviewKeyword.setAdapter(hotwordAdapter);
             recyclerviewKeyword.setVisibility(View.VISIBLE);
         } else {
@@ -144,8 +153,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(getCustomColor(R.styleable.BaseColor_com_assist_A));
                     int index = title.indexOf(keyword);
                     builder.setSpan(colorSpan, index, index + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    helper.setText(R.id.txt_title, builder);
                 }
-                helper.setText(R.id.txt_title, item.getTitle());
                 helper.setText(R.id.txt_date, item.getDate());
                 helper.setText(R.id.txt_hot, item.getHot());
                 helper.setText(R.id.txt_size, item.getSize());
@@ -392,6 +401,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                 break;
             case R.id.img_change_source:
                 // 切换搜索引擎
+                ToastUtil.showMessage(getString(R.string.txt_change_search));
                 if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
                     Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_2;
                     SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
@@ -400,6 +410,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
                 }
                 searchType = Constant.STATUS_0;
+                changeTabColor();
                 doSearch();
                 break;
         }

@@ -49,7 +49,7 @@ public class SplashActivity extends BaseActivity {
     //加载启动页图片
     public void setSplashPicture() {
         //加载网络图片URL 启动页图片则加载app自带的默认图片
-        ImageManager.getInstance().loadImage(SplashActivity.this, imgPicture, Constant.PATH_SPLASH_PICTURE + Constant.PATH_SPLASH_PICTURE_PNG, R.drawable.img_default_splash_picture);
+        ImageManager.getInstance().loadImage(SplashActivity.this, imgPicture, Constant.PATH_SPLASH_PICTURE + Constant.PATH_SPLASH_PICTURE_PNG, R.drawable.img_default_splash_picture, false);
     }
 
     //跳转到主页
@@ -79,8 +79,8 @@ public class SplashActivity extends BaseActivity {
             public void onSuccess(BaseResponse<ConfigModel> response) {
                 if(response.getResult() != null){
                     // 保存热搜关键词
-                    if(!TextUtils.isEmpty(response.getResult().getKeyworld())){
-                        SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyworld());
+                    if(!TextUtils.isEmpty(response.getResult().getKeyword())){
+                        SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
                     }
 
                     final String imageUrl = response.getResult().getImage();

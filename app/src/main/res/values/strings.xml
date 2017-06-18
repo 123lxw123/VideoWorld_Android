@@ -69,7 +69,8 @@
     <string name="txt_search_empty_tips">请输入搜索内容</string>
     <string name="txt_search_timeout">搜索超时</string>
 
-    <string name="txt_change_source">资源库切换中</string>
+    <string name="txt_change_source">切换资源库中</string>
+    <string name="txt_change_search">切换搜索引擎中</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

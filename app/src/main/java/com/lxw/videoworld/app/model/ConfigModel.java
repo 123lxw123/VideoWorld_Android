@@ -12,7 +12,7 @@ public class ConfigModel implements Serializable{
     private String versionCode;
     private String forceVersionCode;
     private String link;
-    private String keyworld;
+    private String keyword;
     private String time;
 
     public String getId() {
@@ -47,12 +47,12 @@ public class ConfigModel implements Serializable{
         this.link = link;
     }
 
-    public String getKeyworld() {
-        return keyworld;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setKeyworld(String keyworld) {
-        this.keyworld = keyworld;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public String getNotice() {

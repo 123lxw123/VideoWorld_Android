@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/dp_15"
-    android:paddingRight="@dimen/dp_15"
     android:background="?attr/com_wm_bg"
     android:layout_marginTop="@dimen/dp_10"
     android:orientation="vertical">
@@ -17,7 +15,6 @@
         app:cardElevation="0px"
         app:cardMaxElevation="2px"
         app:cardUseCompatPadding="false"
-        android:padding="@dimen/dp_10"
         app:cardCornerRadius="@dimen/dp_15">
 
         <LinearLayout
@@ -32,15 +29,12 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:gravity="center"
-                android:paddingBottom="@dimen/dp_8"
-                android:paddingTop="@dimen/dp_8"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
                 android:textColor="?attr/com_font_A"
                 android:textSize="@dimen/sp_16" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="?attr/com_space_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,31 +43,27 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:gravity="center"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:background="?attr/com_space_line" />
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:paddingTop="@dimen/dp_8"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_10"
                         android:text="时间："
                         android:textColor="?attr/com_font_A"
                         android:textSize="@dimen/sp_12" />
 
                     <TextView
                         android:id="@+id/txt_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
@@ -84,31 +74,27 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:gravity="center"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:background="?attr/com_space_line" />
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:paddingTop="@dimen/dp_8"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_10"
                         android:text="热度："
                         android:textColor="?attr/com_font_A"
                         android:textSize="@dimen/sp_12" />
 
                     <TextView
                         android:id="@+id/txt_hot"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
@@ -119,31 +105,27 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:gravity="center"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:background="?attr/com_space_line" />
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:paddingTop="@dimen/dp_8"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_10"
                         android:text="大小："
                         android:textColor="?attr/com_font_A"
                         android:textSize="@dimen/sp_12" />
 
                     <TextView
                         android:id="@+id/txt_size"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
@@ -155,31 +137,27 @@
 
                 <LinearLayout
                     android:id="@+id/ll_amounts"
+                    android:gravity="center"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="match_parent"
-                        android:background="?attr/com_space_line" />
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:paddingTop="@dimen/dp_8"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_10"
                         android:text="文件数："
                         android:textColor="?attr/com_font_A"
                         android:textSize="@dimen/sp_12" />
 
                     <TextView
                         android:id="@+id/txt_amounts"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="center"
@@ -189,11 +167,6 @@
                         android:textSize="@dimen/sp_12" />
                 </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="?attr/com_space_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,16 +179,19 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:padding="@dimen/dp_10"
                     android:background="@null"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/dp_40"
-                        android:layout_height="@dimen/dp_40"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="@dimen/dp_25"
+                        android:layout_height="@dimen/dp_25"
                         android:src="@drawable/ic_cili" />
 
                     <TextView
+                        android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_15"
@@ -232,17 +208,20 @@
                     android:id="@+id/ll_thunder_link"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/dp_40"
-                        android:layout_height="@dimen/dp_40"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="@dimen/dp_25"
+                        android:layout_height="@dimen/dp_25"
                         android:src="@drawable/ic_thunder" />
 
                     <TextView
+                        android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_15"

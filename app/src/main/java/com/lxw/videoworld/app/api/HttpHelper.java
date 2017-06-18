@@ -8,10 +8,14 @@ import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.http.BaseResponse;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -33,8 +37,21 @@ public class HttpHelper {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        httpClientBuilder.addInterceptor(httpLoggingInterceptor);
         httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        httpClientBuilder.addInterceptor(httpLoggingInterceptor);
+        httpClientBuilder.addInterceptor(new Interceptor() {
+                                      @Override
+                                      public Response intercept(Interceptor.Chain chain) throws IOException {
+                                          Request original = chain.request();
+
+                                          Request request = original.newBuilder()
+                                                  .addHeader("Connection", "close")
+                                                  .method(original.method(), original.body())
+                                                  .build();
+
+                                          return chain.proceed(request);
+                                      }
+                                  });
         retrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
