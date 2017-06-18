@@ -148,12 +148,16 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             @Override
             protected void convert(BaseViewHolder helper, final SearchModel item) {
                 String title = item.getTitle();
-                if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(keyword) && title.contains(keyword)){
-                    SpannableStringBuilder builder = new SpannableStringBuilder(title);
-                    ForegroundColorSpan colorSpan = new ForegroundColorSpan(getCustomColor(R.styleable.BaseColor_com_assist_A));
-                    int index = title.indexOf(keyword);
-                    builder.setSpan(colorSpan, index, index + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    helper.setText(R.id.txt_title, builder);
+                if(!TextUtils.isEmpty(title)){
+                    if (!TextUtils.isEmpty(keyword) && title.contains(keyword)) {
+                        SpannableStringBuilder builder = new SpannableStringBuilder(title);
+                        ForegroundColorSpan colorSpan = new ForegroundColorSpan(getCustomColor(R.styleable.BaseColor_com_assist_A));
+                        int index = title.indexOf(keyword);
+                        builder.setSpan(colorSpan, index, index + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        helper.setText(R.id.txt_title, builder);
+                    }else{
+                        helper.setText(R.id.txt_title, title);
+                    }
                 }
                 helper.setText(R.id.txt_date, item.getDate());
                 helper.setText(R.id.txt_hot, item.getHot());
