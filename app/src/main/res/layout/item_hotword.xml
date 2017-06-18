@@ -6,11 +6,13 @@
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/txt_hotword"
+        android:gravity="center"
         android:textColor="?attr/com_font_A"
-        android:background="@drawable/bg_tab_select"
         android:textSize="@dimen/sp_16"
-        android:paddingRight="@dimen/dp_10"
-        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingBottom="@dimen/dp_3"
         android:singleLine="true"
         android:ellipsize="end"
         android:layout_width="wrap_content"

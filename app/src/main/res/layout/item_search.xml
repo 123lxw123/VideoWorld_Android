@@ -2,18 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingRight="@dimen/dp_15"
+    android:background="?attr/com_wm_bg"
     android:layout_marginTop="@dimen/dp_10"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="?attr/com_wm_bg"
+        app:cardElevation="0px"
+        app:cardMaxElevation="2px"
+        app:cardUseCompatPadding="false"
         android:padding="@dimen/dp_10"
-        app:cardCornerRadius="@dimen/dp_15"
-        app:cardElevation="@dimen/dp_15">
+        app:cardCornerRadius="@dimen/dp_15">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +37,7 @@
                 android:textColor="?attr/com_font_A"
                 android:textSize="@dimen/sp_16" />
 
-            <view
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="?attr/com_space_line" />
@@ -185,33 +190,35 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <view
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="?attr/com_space_line" />
 
             <LinearLayout
-                android:background="@null"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:id="@+id/ll_thunder_ciliLink"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_width="@dimen/dp_0"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:src="@drawable/ic_cili"
                         android:layout_width="@dimen/dp_40"
-                        android:layout_height="@dimen/dp_40" />
+                        android:layout_height="@dimen/dp_40"
+                        android:src="@drawable/ic_cili" />
+
                     <TextView
-                        android:layout_marginLeft="@dimen/dp_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_15"
                         android:background="@null"
                         android:gravity="center"
                         android:paddingBottom="@dimen/dp_8"
@@ -223,21 +230,22 @@
 
                 <LinearLayout
                     android:id="@+id/ll_thunder_link"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_width="@dimen/dp_0"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:src="@drawable/ic_thunder"
                         android:layout_width="@dimen/dp_40"
-                        android:layout_height="@dimen/dp_40" />
+                        android:layout_height="@dimen/dp_40"
+                        android:src="@drawable/ic_thunder" />
+
                     <TextView
-                        android:layout_marginLeft="@dimen/dp_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_15"
                         android:background="@null"
                         android:gravity="center"
                         android:paddingBottom="@dimen/dp_8"

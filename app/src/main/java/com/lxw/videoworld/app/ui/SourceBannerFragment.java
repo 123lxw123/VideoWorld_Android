@@ -77,7 +77,7 @@ public class SourceBannerFragment extends Fragment {
             picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3;
             picHeight = wm.getDefaultDisplay().getHeight() / 2;
             if (!TextUtils.isEmpty(item.getCategory()) && item.getCategory().equals(Constant.CATEGORY_21)) {
-                picHeight = picWidth * 3 / 4;
+                picHeight = wm.getDefaultDisplay().getWidth() * 1 / 2;
             } else {
                 picWidth = picHeight * 3 / 4;
             }

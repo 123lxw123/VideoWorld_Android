@@ -54,7 +54,9 @@ public abstract class HttpManager<T> {
         Observer<BaseResponse<T>> observer = new Observer<BaseResponse<T>>(){
             @Override
             public void onError(Throwable error) {
-                activity.hideProgressBar();
+                if(flag_dialog){
+                    activity.hideProgressBar();
+                }
                 LoggerHelper.info("HttpManager-onError-->>",error.getMessage());
                 String message = "";
                 BaseResponse<T> errorResponse = new BaseResponse<T>();
@@ -85,7 +87,9 @@ public abstract class HttpManager<T> {
 
             @Override
             public void onComplete() {
-                activity.hideProgressBar();
+                if(flag_dialog){
+                    activity.hideProgressBar();
+                }
             }
 
             @Override
@@ -99,7 +103,9 @@ public abstract class HttpManager<T> {
             @Override
             public void onNext(BaseResponse<T> response) {
                 LoggerHelper.info("HttpManager-onNext-->>",response.toString());
-                activity.hideProgressBar();
+                if(flag_dialog){
+                    activity.hideProgressBar();
+                }
                 if(response != null){
                     if(response.getCode() == Constant.CODE_SUCCESS){// 服务器返回正确结果
                         onSuccess(response);

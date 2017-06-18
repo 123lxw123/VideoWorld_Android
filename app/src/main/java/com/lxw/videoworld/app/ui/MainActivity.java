@@ -17,6 +17,7 @@ import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
+import com.lxw.videoworld.framework.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,29 @@ public class MainActivity extends BaseActivity {
                     case R.id.action_search:
                         Intent intent1 = new Intent(MainActivity.this, SearchActivity.class);
                         startActivity(intent1);
+                        break;
+
+                    case R.id.action_change_source:
+                        switch (Constant.SOURCE_TYPE){
+                            case Constant.SOURCE_TYPE_1:
+                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_2;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_2);
+                                break;
+                            case Constant.SOURCE_TYPE_2:
+                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_3;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_3);
+                                break;
+                            case Constant.SOURCE_TYPE_3:
+                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_1;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
+                                break;
+                        }
+                        ToastUtil.showMessage(getString(R.string.txt_change_source));
+                        MainActivity.this.finish();
+                        Intent intent2 = MainActivity.this.getIntent();
+                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent2);
+                        overridePendingTransition(0, 0);
                         break;
                 }
                 return true;
@@ -152,7 +176,7 @@ public class MainActivity extends BaseActivity {
             case Constant.SOURCE_TYPE_1:
                 createSourceCategoryFragment(Constant.TAB_1);
                 createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_11, null);
-                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_13, null);
+                createSourceCategoryFragment(Constant.TAB_3);
                 createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_12, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;

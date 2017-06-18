@@ -40,27 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 修改 状态栏、导航栏的颜色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //设置状态栏颜色
-            window.setStatusBarColor(getCustomColor(R.styleable.BaseColor_com_main_A));
-            //设置导航栏颜色
-            window.setNavigationBarColor(getCustomColor(R.styleable.BaseColor_com_main_A));
-            ViewGroup contentView = ((ViewGroup) findViewById(android.R.id.content));
-            View childAt = contentView.getChildAt(0);
-            if (childAt != null) {
-                childAt.setFitsSystemWindows(true);
-            }
-//            contentView.setPadding(0, getStatusBarHeight(this), 0, 0);
-        }
-
         //添加activity到activity栈
         ActivityStack.getInstance().addActivity(this);
 
@@ -81,6 +60,27 @@ public abstract class BaseActivity extends AppCompatActivity {
             case Constant.THEME_TYPE_3:
                 setTheme(R.style.BlueAppTheme);
                 break;
+        }
+
+        // 修改 状态栏、导航栏的颜色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //设置状态栏颜色
+            window.setStatusBarColor(getCustomColor(R.styleable.BaseColor_com_main_A));
+            //设置导航栏颜色
+            window.setNavigationBarColor(getCustomColor(R.styleable.BaseColor_com_main_A));
+            ViewGroup contentView = ((ViewGroup) findViewById(android.R.id.content));
+            View childAt = contentView.getChildAt(0);
+            if (childAt != null) {
+                childAt.setFitsSystemWindows(true);
+            }
+//            contentView.setPadding(0, getStatusBarHeight(this), 0, 0);
         }
     }
 

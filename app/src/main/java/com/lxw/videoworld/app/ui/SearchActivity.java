@@ -1,5 +1,6 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,9 +8,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -43,8 +49,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @BindView(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.serachview)
-    SearchView serachview;
+    @BindView(R.id.searchview)
+    SearchView searchview;
     @BindView(R.id.img_change_source)
     ImageView imgChangeSource;
     @BindView(R.id.recyclerview_keyword)
@@ -62,6 +68,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     TextView txtTab2;
     @BindView(R.id.txt_tab3)
     TextView txtTab3;
+    @BindView(R.id.ll_head)
+    LinearLayout llHead;
     private List<String> hotwords = new ArrayList<>();
     private BaseQuickAdapter<String, BaseViewHolder> hotwordAdapter;
     private List<SearchModel> searchModels = new ArrayList<>();
@@ -76,9 +84,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         public void handleMessage(Message msg) {
             if (msg.what == IMG_SEARCH) {
                 getSearch();
-            }else if (msg.what == IMG_SEARCH_RESULT) {
+            } else if (msg.what == IMG_SEARCH_RESULT) {
                 getSearchResult();
-            }else if (msg.what == IMG_SEARCH_TIMEOUT) {
+            } else if (msg.what == IMG_SEARCH_TIMEOUT) {
                 ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_timeout));
             }
         }
@@ -95,7 +103,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private void initViews() {
         imgBack.setOnClickListener(this);
         imgChangeSource.setOnClickListener(this);
-        serachview.setOnQueryTextListener(this);//为搜索框设置监听事件
+        searchview.setOnQueryTextListener(this);//为搜索框设置监听事件
         // 搜索结果排序
         txtTab1.setOnClickListener(this);
         txtTab2.setOnClickListener(this);
@@ -110,8 +118,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         changeTabColor();
         // 热搜关键词
         String str = SharePreferencesUtil.getStringSharePreferences(this, Constant.KEY_SEARCH_HOTWORDS, "");
+//        hotwords = ValueUtil.string2list("[大话西游,美国队长3,卧虎藏龙2,我的特工爷爷,伦敦落陷,奇幻森林,火锅英雄,欢乐颂全集]");
         hotwords = ValueUtil.string2list(str);
-        if(hotwords != null && hotwords.size() > 0){
+        if (hotwords != null && hotwords.size() > 0) {
             recyclerviewKeyword.setLayoutManager(new GridLayoutManager(this, 4));
             hotwordAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_hotword, hotwords) {
                 @Override
@@ -121,7 +130,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             };
             recyclerviewKeyword.setAdapter(hotwordAdapter);
             recyclerviewKeyword.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             recyclerviewKeyword.setVisibility(View.GONE);
         }
         // 搜索结果
@@ -129,21 +138,21 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         searchAdapter = new BaseQuickAdapter<SearchModel, BaseViewHolder>(R.layout.item_search, searchModels) {
             @Override
             protected void convert(BaseViewHolder helper, final SearchModel item) {
+                String title = item.getTitle();
+                if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(keyword) && title.contains(keyword)){
+                    SpannableStringBuilder builder = new SpannableStringBuilder(title);
+                    ForegroundColorSpan colorSpan = new ForegroundColorSpan(getCustomColor(R.styleable.BaseColor_com_assist_A));
+                    int index = title.indexOf(keyword);
+                    builder.setSpan(colorSpan, index, index + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                helper.setText(R.id.txt_title, item.getTitle());
                 helper.setText(R.id.txt_date, item.getDate());
                 helper.setText(R.id.txt_hot, item.getHot());
                 helper.setText(R.id.txt_size, item.getSize());
-                helper.setOnClickListener(R.id.ll_thunder_ciliLink, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // TODO
-                        SourceLinkDialog dialog = new SourceLinkDialog(SearchActivity.this, (String) item.getCiliLink());
-                        dialog.show();
-                    }
-                });
-                if(Constant.SEARCH_TYPE_1.equals(Constant.SEARCH_TYPE_1)){
+                if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
                     helper.setVisible(R.id.ll_amounts, false);
                     helper.setVisible(R.id.ll_thunder_link, false);
-                }else if(Constant.SEARCH_TYPE_1.equals(Constant.SEARCH_TYPE_2)){
+                } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
                     helper.setText(R.id.txt_amounts, item.getAmounts());
                     helper.setVisible(R.id.ll_amounts, true);
                     helper.setOnClickListener(R.id.ll_thunder_link, new View.OnClickListener() {
@@ -156,6 +165,15 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     });
                     helper.setVisible(R.id.ll_thunder_link, true);
                 }
+
+                helper.setOnClickListener(R.id.ll_thunder_ciliLink, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO
+                        SourceLinkDialog dialog = new SourceLinkDialog(SearchActivity.this, (String) item.getCiliLink());
+                        dialog.show();
+                    }
+                });
             }
         };
         // item 点击事件
@@ -173,7 +191,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     @Override
                     public void run() {
                         flag_loadmore = true;
-                        page++;
                         doSearch();
                     }
 
@@ -192,7 +209,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             timer = null;
         }
         if (!TextUtils.isEmpty(keyword)) {
-            new HttpManager<String>(SearchActivity.this, HttpHelper.getInstance().getSearch(getSearchUrl(), keyword, Constant.SEARCH_TYPE)) {
+            closeKeyboard();
+            showProgressBar();
+            new HttpManager<String>(SearchActivity.this, HttpHelper.getInstance().getSearch(getSearchUrl(), keyword, Constant.SEARCH_TYPE), false) {
 
                 @Override
                 public void onSuccess(BaseResponse<String> response) {
@@ -201,12 +220,16 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     }
                     timer.schedule(new TimerTask() {
                         private int count = 0;
+
                         @Override
                         public void run() {
-                            if(count < HttpHelper.DEFAULT_TIMEOUT){
+                            if (count < HttpHelper.DEFAULT_TIMEOUT) {
                                 count++;
                                 mHandler.sendEmptyMessage(IMG_SEARCH_RESULT);
-                            }else{
+                            } else {
+                                // 超时
+                                hideProgressBar();
+                                flag_loadmore = false;
                                 timer.cancel();
                                 timer = null;
                                 mHandler.sendEmptyMessage(IMG_SEARCH_TIMEOUT);
@@ -217,18 +240,21 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
                 @Override
                 public void onFailure(BaseResponse<String> response) {
+                    hideProgressBar();
+                    flag_loadmore = false;
                 }
             }.doRequest();
         } else {
-            ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_empty_tips));
+//            ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_empty_tips));
         }
     }
 
     private void getSearchResult() {
-        new HttpManager<SearchResultModel>(SearchActivity.this, HttpHelper.getInstance().getSearchResult(getSearchUrl())) {
+        new HttpManager<SearchResultModel>(SearchActivity.this, HttpHelper.getInstance().getSearchResult(getSearchUrl()), false) {
 
             @Override
             public void onSuccess(BaseResponse<SearchResultModel> response) {
+                hideProgressBar();
                 if (timer != null) {
                     timer.cancel();
                     timer = null;
@@ -236,7 +262,20 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                 if (response.getResult() != null) {
                     String list = response.getResult().getList();
                     SearchListModel searchListModel = GsonUtil.json2Bean(list, SearchListModel.class);
+                    if (searchListModel != null && searchListModel.getList() != null) {
+                        if (flag_loadmore) {
+                            searchModels.addAll(searchListModel.getList());
+                            searchAdapter.addData(searchListModel.getList());
+                            searchAdapter.loadMoreComplete();
+                        } else {
+                            searchModels.clear();
+                            searchModels.addAll(searchListModel.getList());
+                            searchAdapter.setNewData(searchListModel.getList());
+                        }
+                        page++;
+                    }
                 }
+                flag_loadmore = false;
             }
 
             @Override
@@ -249,7 +288,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     // 获取搜索的 Url
     public String getSearchUrl() {
         String searchUrl = "";
-        if (Constant.SOURCE_TYPE.equals(Constant.SEARCH_TYPE_1)) {
+        if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
             switch (searchType) {
                 case Constant.STATUS_0:
                     searchUrl = Constant.BASE_ZHONGZI_SEARCH_1.replace("keyword", keyword).replace("page", page + "");
@@ -261,7 +300,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     searchUrl = Constant.BASE_ZHONGZI_SEARCH_3.replace("keyword", keyword).replace("page", page + "");
                     break;
             }
-        } else if (Constant.SOURCE_TYPE.equals(Constant.SEARCH_TYPE_2)) {
+        } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
             switch (searchType) {
                 case Constant.STATUS_0:
                     searchUrl = Constant.BASE_DIAOSI_SEARCH_1.replace("keyword", keyword).replace("page", page + "");
@@ -275,6 +314,14 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             }
         }
         return searchUrl;
+    }
+
+    private void closeKeyboard() {
+        View view = getWindow().peekDecorView();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public void changeTabColor() {
@@ -312,10 +359,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     }
 
     public void doSearch() {
-        if(!flag_loadmore){
+        if (!flag_loadmore) {
             page = 1;
         }
-        flag_loadmore = false;
 
         if (mHandler.hasMessages(IMG_SEARCH)) {
             mHandler.removeMessages(IMG_SEARCH);
@@ -345,9 +391,24 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                 doSearch();
                 break;
             case R.id.img_change_source:
-
+                // 切换搜索引擎
+                if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
+                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_2;
+                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
+                } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
+                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_1;
+                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
+                }
+                searchType = Constant.STATUS_0;
+                doSearch();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        searchview.setFocusable(false);
     }
 
     @Override
