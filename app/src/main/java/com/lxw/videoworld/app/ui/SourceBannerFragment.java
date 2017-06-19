@@ -136,13 +136,13 @@ public class SourceBannerFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        if (unbinder != null) {
-            try {
-                unbinder.unbind();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (unbinder != null) {
+//            try {
+//                unbinder.unbind();
+//            } catch (IllegalStateException e) {
+//                e.printStackTrace();
+//            }
+//        }
         super.onDestroyView();
     }
 }

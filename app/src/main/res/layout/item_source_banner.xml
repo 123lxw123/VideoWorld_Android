@@ -15,6 +15,7 @@
 
         <ImageView
             android:id="@+id/img_picture"
+            android:background="?attr/com_wm_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY" />

@@ -134,14 +134,16 @@ public class SourceTypeFragment extends Fragment {
 
                 }
             });
-            // banner
-            View bannerLayout = inflater.inflate(R.layout.layout_banner, null);
-            viewpagerBanner = (MyHorizontalInfiniteCycleViewPager) bannerLayout.findViewById(R.id.viewpager_banner);
+//            // banner
+            viewpagerBanner =  new MyHorizontalInfiniteCycleViewPager(getActivity());
+            viewpagerBanner.setId(View.generateViewId());
+            int bannerHeight;
             if (category.equals(Constant.CATEGORY_21)) {
-                viewpagerBanner.getLayoutParams().height = width / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+                bannerHeight = width / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             } else {
-                viewpagerBanner.getLayoutParams().height = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
+                bannerHeight = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             }
+            viewpagerBanner.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , bannerHeight));
             viewpagerBanner.setScrollDuration(3000);
             viewpagerBanner.setMediumScaled(true);
             viewpagerBanner.setMaxPageScale(0.8F);
