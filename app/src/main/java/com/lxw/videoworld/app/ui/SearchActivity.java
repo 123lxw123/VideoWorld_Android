@@ -61,7 +61,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private final int IMG_SEARCH = 1000;
     private final int IMG_SEARCH_RESULT = 1001;
     private final int IMG_SEARCH_TIMEOUT = 1002;// 搜索超时
-    private final int INTERVAL = 500; //输入时间间隔为300毫秒
+    private final int INTERVAL = 1000; //输入时间间隔为1000毫秒
     @BindView(R.id.txt_tab1)
     TextView txtTab1;
     @BindView(R.id.txt_tab2)
