@@ -91,7 +91,6 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".app.ui.SearchActivity"
-            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
     </application>
 

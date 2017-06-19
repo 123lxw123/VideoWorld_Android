@@ -288,6 +288,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                         page++;
                     }
                 }
+                searchview.clearFocus();
                 flag_loadmore = false;
             }
 
@@ -423,7 +424,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     @Override
     protected void onResume() {
         super.onResume();
-        searchview.setFocusable(false);
     }
 
     @Override
