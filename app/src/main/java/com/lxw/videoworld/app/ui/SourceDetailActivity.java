@@ -182,7 +182,7 @@ public class SourceDetailActivity extends BaseActivity {
             llDesc.setVisibility(View.VISIBLE);
         }
 
-        if (images != null && images.size() > 1) {
+        if (images != null && images.size() > 1 && images.get(1).contains("http")) {
 //            for (int i = 1; i < images.size(); i++) {
             ImageView imageView = new ImageView(this);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, picHeight);

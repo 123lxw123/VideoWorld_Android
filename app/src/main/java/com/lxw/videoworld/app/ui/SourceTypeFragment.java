@@ -121,6 +121,7 @@ public class SourceTypeFragment extends Fragment {
             }
 
             // 下拉刷新
+            refreshSourceType.setColorSchemeColors(((BaseActivity)getActivity()).getCustomColor(R.styleable.BaseColor_com_main_A));
             refreshSourceType.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
