@@ -24,6 +24,42 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keep public class * extends android.app.Fragment
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class * extends android.support.v4.**
+-keep public class com.android.vending.licensing.ILicensingService
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+
 
 # retrofit
 -dontwarn javax.annotation.**
@@ -32,6 +68,11 @@
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+
+# Gson specific classes
+-keep class com.google.gson.** { *; }
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
 
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
@@ -47,11 +88,11 @@
    *;
 }
 #基线包使用，生成mapping.txt
--printmapping mapping.txt
+#-printmapping mapping.txt
 #生成的mapping.txt在app/buidl/outputs/mapping/release路径下，移动到/app路径下
 
 #修复后的项目使用，保证混淆结果一致
-#-applymapping mapping.txt
+-applymapping mapping.txt
 
 #hotfix
 -keep class com.taobao.sophix.**{*;}
@@ -64,3 +105,18 @@
 -keep class cn.jpush.** { *; }
 -dontwarn cn.jiguang.**
 -keep class cn.jiguang.** { *; }
+
+# model
+-keep class com.lxw.videoworld.app.model.** {*;}
+
+-dontwarn sun.misc.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
