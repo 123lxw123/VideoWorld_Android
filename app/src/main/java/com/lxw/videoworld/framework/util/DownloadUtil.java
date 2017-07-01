@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
+import java.io.File;
+
 /**
  * Created by lxw9047 on 2017/6/1.
  */
@@ -21,12 +23,17 @@ public class DownloadUtil {
     private Context mContext;
     //下载的ID
     private long downloadId;
+
+    private String filePath;
+    private String fileName;
+
     public  DownloadUtil(Context context){
         this.mContext = context;
     }
 
     //下载apk
-    public void downloadAPK(String url, String name) {
+    public void downloadAPK(String url, String fileName) {
+        this.fileName = fileName;
 
         //创建下载任务
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
@@ -35,12 +42,22 @@ public class DownloadUtil {
 
         //在通知栏中显示，默认就是显示的
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-        request.setTitle("新版本Apk");
-        request.setDescription("Apk Downloading");
+        request.setTitle("新版本更新");
+        request.setDescription("正在下载更新...");
         request.setVisibleInDownloadsUi(true);
+        File file = null;
+        filePath = mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath();
+        if (FileUtil.isFileExists(filePath + fileName)) {
+            file = new File(filePath + fileName);
+            file.delete();
+        } else {
+            if (!FileUtil.isFileExists(filePath)) {
+                new File(filePath).mkdirs();
+            }
+        }
 
         //设置下载的路径
-        request.setDestinationInExternalPublicDir(Environment.getExternalStorageDirectory().getAbsolutePath() , name);
+        request.setDestinationInExternalFilesDir(mContext, Environment.DIRECTORY_DOWNLOADS, fileName);
 
         //获取DownloadManager
         downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
@@ -125,7 +142,8 @@ public class DownloadUtil {
     //下载到本地后执行安装
     private void installAPK() {
         //获取下载文件的Uri
-        Uri downloadFileUri = downloadManager.getUriForDownloadedFile(downloadId);
+        Uri downloadFileUri = Uri.fromFile(new File(filePath, fileName));
+//        Uri downloadFileUri = downloadManager.getUriForDownloadedFile(downloadId);
         if (downloadFileUri != null) {
             Intent intent= new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(downloadFileUri, "application/vnd.android.package-archive");

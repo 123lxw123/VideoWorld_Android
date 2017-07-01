@@ -32,7 +32,7 @@ public class SplashActivity extends BaseActivity {
     @BindView(R.id.img_picture)
     KenBurnsView imgPicture;
 
-    private final String SPLASH_PICTURE_LINK = "SPLASH_PICTURE_LINK";
+    public static final String SPLASH_PICTURE_LINK = "SPLASH_PICTURE_LINK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(BaseResponse<ConfigModel> response) {
                 if(response.getResult() != null){
+                    Constant.configModel = response.getResult();
                     // 保存热搜关键词
                     if(!TextUtils.isEmpty(response.getResult().getKeyword())){
                         SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());

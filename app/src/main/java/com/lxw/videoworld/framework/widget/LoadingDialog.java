@@ -15,12 +15,14 @@ import com.lxw.videoworld.framework.http.HttpManager;
  */
 
 public class LoadingDialog extends Dialog {
+    private HttpManager httpManager;
     public LoadingDialog(@NonNull Context context) {
         this(context, null);
     }
 
     public LoadingDialog(@NonNull Context context, final HttpManager httpManager) {
         super(context, R.style.TransDialog);
+        this.httpManager = httpManager;
         this.setCanceledOnTouchOutside(false);
         this.setCancelable(false);
         OnKeyListener keylistener = new OnKeyListener(){
@@ -44,5 +46,13 @@ public class LoadingDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_loading);
+    }
+
+    public HttpManager getHttpManager() {
+        return httpManager;
+    }
+
+    public void setHttpManager(HttpManager httpManager) {
+        this.httpManager = httpManager;
     }
 }

@@ -72,6 +72,11 @@
     <string name="txt_change_source">切换资源库中</string>
     <string name="txt_change_search">切换搜索引擎中</string>
 
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="update">新版本更新</string>
+    <string name="update_file_name">VideoWorld.apk</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

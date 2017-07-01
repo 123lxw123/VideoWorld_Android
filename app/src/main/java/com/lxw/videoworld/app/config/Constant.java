@@ -2,11 +2,15 @@ package com.lxw.videoworld.app.config;
 
 import android.os.Environment;
 
+import com.lxw.videoworld.app.model.ConfigModel;
+
 /**
  * Created by lxw9047 on 2016/10/12.
  */
 
 public class Constant {
+
+    public static ConfigModel configModel;
     /**
      * 网络请求
      */

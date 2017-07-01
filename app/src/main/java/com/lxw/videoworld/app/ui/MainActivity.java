@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,10 +15,18 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
+import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
+import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.framework.http.HttpManager;
+import com.lxw.videoworld.framework.image.ImageManager;
+import com.lxw.videoworld.framework.util.DownloadUtil;
+import com.lxw.videoworld.framework.util.ManifestUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
+import com.lxw.videoworld.framework.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +35,14 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.lxw.videoworld.app.ui.SplashActivity.SPLASH_PICTURE_LINK;
 
 public class MainActivity extends BaseActivity {
 
@@ -36,6 +53,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.toobar_main)
     Toolbar toobarMain;
     private boolean flag_exit = false;
+    private boolean flag_back = true;
     private QuickFragmentPageAdapter pagerAdapter;
     private List<Fragment> fragments = new ArrayList<>();
     private String[] tabs;
@@ -46,6 +64,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initViews();
+        getConfig();
     }
 
     private void initViews() {
@@ -143,7 +162,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && flag_back) {
             exitByDoubleClick();
         }
         return false;
@@ -213,6 +232,87 @@ public class MainActivity extends BaseActivity {
         bundle.putString("type", type);
         fragment.setArguments(bundle);
         fragments.add(fragment);
+    }
+
+    public void getConfig() {
+        final String url = SharePreferencesUtil.getStringSharePreferences(this, SplashActivity.SPLASH_PICTURE_LINK, null);
+        new HttpManager<ConfigModel>(MainActivity.this, HttpHelper.getInstance().getConfig("1"), false, false) {
+
+            @Override
+            public void onSuccess(BaseResponse<ConfigModel> response) {
+                if(response.getResult() != null){
+                    // 保存热搜关键词
+                    if(!TextUtils.isEmpty(response.getResult().getKeyword())){
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
+                    }
+
+                    final String imageUrl = response.getResult().getImage();
+                    if (!TextUtils.isEmpty(imageUrl)) {
+                        if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
+                            return;
+                        } else {
+                            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, SPLASH_PICTURE_LINK, imageUrl);
+                            // 缓存启动页图片
+                            Observable.create(new ObservableOnSubscribe<Integer>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                                    ImageManager.getInstance().downloadImage(MainActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG, true);
+                                }
+                            }).subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Consumer<Integer>() {
+
+                                        @Override
+                                        public void accept(Integer i) {
+                                        }
+                                    });
+                        }
+                    }
+                    // 更新升级
+                    try{
+                        final int lacalVersionCode = Integer.valueOf(ManifestUtil.getApkVersionCode(MainActivity.this));
+                        final int versionCode = Integer.valueOf(response.getResult().getVersionCode());
+                        final int forceVersionCode = Integer.valueOf(response.getResult().getForceVersionCode());
+                        final String notice = response.getResult().getNotice();
+                        final String link = response.getResult().getLink();
+                        // 有更新
+                        if(lacalVersionCode < versionCode && !TextUtils.isEmpty(link)){
+                            // 强制更新,拦截返回虚拟键
+                            if(lacalVersionCode < forceVersionCode){
+                                flag_back = false;
+                            }
+                            CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R.string.update), notice){
+                                @Override
+                                public void ok() {
+                                    super.ok();
+                                    new DownloadUtil(MainActivity.this).downloadAPK(link, getString(R.string.update_file_name));
+                                }
+
+                                @Override
+                                public void cancel() {
+                                    super.cancel();
+                                    // 强制更新
+                                    if(lacalVersionCode < forceVersionCode){
+                                        MainActivity.this.finish();
+                                    }
+                                }
+                            };
+                            // 屏蔽返回键
+                            hideProgressBar();
+                            customDialog.show();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ConfigModel> response) {
+
+            }
+        }.doRequest();
     }
 
 }

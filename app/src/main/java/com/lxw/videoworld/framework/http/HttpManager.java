@@ -96,6 +96,7 @@ public abstract class HttpManager<T> {
             public void onSubscribe(Disposable d) {
                 disposable = d;
                 if(flag_dialog){
+                    activity.getProgressBar().setHttpManager(HttpManager.this);
                     activity.showProgressBar();
                 }
             }

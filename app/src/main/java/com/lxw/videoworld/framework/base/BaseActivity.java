@@ -82,6 +82,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
 //            contentView.setPadding(0, getStatusBarHeight(this), 0, 0);
         }
+
+        progressBar = new LoadingDialog(BaseActivity.this);
     }
 
     @Override
@@ -167,4 +169,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public LoadingDialog getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(LoadingDialog progressBar) {
+        this.progressBar = progressBar;
+    }
 }
