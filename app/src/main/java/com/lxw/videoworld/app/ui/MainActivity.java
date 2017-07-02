@@ -241,6 +241,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onSuccess(BaseResponse<ConfigModel> response) {
                 if(response.getResult() != null){
+                    Constant.configModel = response.getResult();
                     // 保存热搜关键词
                     if(!TextUtils.isEmpty(response.getResult().getKeyword())){
                         SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
@@ -273,7 +274,7 @@ public class MainActivity extends BaseActivity {
                         final int lacalVersionCode = Integer.valueOf(ManifestUtil.getApkVersionCode(MainActivity.this));
                         final int versionCode = Integer.valueOf(response.getResult().getVersionCode());
                         final int forceVersionCode = Integer.valueOf(response.getResult().getForceVersionCode());
-                        final String notice = response.getResult().getNotice();
+                        final String message = response.getResult().getMessage();
                         final String link = response.getResult().getLink();
                         // 有更新
                         if(lacalVersionCode < versionCode && !TextUtils.isEmpty(link)){
@@ -281,7 +282,7 @@ public class MainActivity extends BaseActivity {
                             if(lacalVersionCode < forceVersionCode){
                                 flag_back = false;
                             }
-                            CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R.string.update), notice){
+                            CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R.string.update), message){
                                 @Override
                                 public void ok() {
                                     super.ok();

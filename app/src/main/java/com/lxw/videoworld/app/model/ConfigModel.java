@@ -13,6 +13,11 @@ public class ConfigModel implements Serializable{
     private String forceVersionCode;
     private String link;
     private String keyword;
+    private String message;
+    private String intro;
+    private String email;
+    private String QQ1;
+    private String QQ2;
     private String time;
 
     public String getId() {
@@ -77,5 +82,45 @@ public class ConfigModel implements Serializable{
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getQQ1() {
+        return QQ1;
+    }
+
+    public void setQQ1(String QQ1) {
+        this.QQ1 = QQ1;
+    }
+
+    public String getQQ2() {
+        return QQ2;
+    }
+
+    public void setQQ2(String QQ2) {
+        this.QQ2 = QQ2;
     }
 }
