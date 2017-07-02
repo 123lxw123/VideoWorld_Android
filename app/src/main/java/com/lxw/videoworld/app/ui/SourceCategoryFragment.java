@@ -63,18 +63,6 @@ public class SourceCategoryFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onDestroyView() {
-//        if (unbinder != null) {
-//            try {
-//                unbinder.unbind();
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        super.onDestroyView();
-    }
-
     public FragmentPagerItems createFragmentPagerItems() {
         FragmentPagerItems fragmentPagerItems = null;
         switch (Constant.SOURCE_TYPE) {

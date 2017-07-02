@@ -76,7 +76,7 @@ public class SourceBannerFragment extends Fragment {
             WindowManager wm = this.getActivity().getWindowManager();
             picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3;
             picHeight = wm.getDefaultDisplay().getHeight() / 2;
-            if (!TextUtils.isEmpty(item.getCategory()) && item.getCategory().equals(Constant.CATEGORY_21)) {
+            if (!TextUtils.isEmpty(item.getCategory()) && (item.getCategory().equals(Constant.CATEGORY_21) || item.getCategory().equals(Constant.CATEGORY_19))) {
                 picHeight = wm.getDefaultDisplay().getWidth() * 1 / 2;
             } else {
                 picWidth = picHeight * 3 / 4;
@@ -134,15 +134,4 @@ public class SourceBannerFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onDestroyView() {
-//        if (unbinder != null) {
-//            try {
-//                unbinder.unbind();
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        super.onDestroyView();
-    }
 }

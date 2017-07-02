@@ -114,7 +114,7 @@ public class SourceTypeFragment extends Fragment {
             int height = wm.getDefaultDisplay().getHeight();
             picWidth = (width - ValueUtil.dip2px(getActivity(), recyclerviewSourceType.getPaddingLeft() + recyclerviewSourceType.getPaddingRight()) -
                     ValueUtil.dip2px(getActivity(), (Constant.GRIDLAYOUTMANAGER_SPANCOUNT - 1) * 10)) / Constant.GRIDLAYOUTMANAGER_SPANCOUNT;
-            if (!category.equals(Constant.CATEGORY_21)) {
+            if (!category.equals(Constant.CATEGORY_21) && !category.equals(Constant.CATEGORY_19)) {
                 picHeight = picWidth * 4 / 3;
             } else {
                 picHeight = picWidth * 3 / 4;
@@ -139,7 +139,7 @@ public class SourceTypeFragment extends Fragment {
             viewpagerBanner =  new MyHorizontalInfiniteCycleViewPager(getActivity());
             viewpagerBanner.setId(View.generateViewId());
             int bannerHeight;
-            if (category.equals(Constant.CATEGORY_21)) {
+            if (category.equals(Constant.CATEGORY_21) || category.equals(Constant.CATEGORY_19)) {
                 bannerHeight = width / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             } else {
                 bannerHeight = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
@@ -151,6 +151,10 @@ public class SourceTypeFragment extends Fragment {
             viewpagerBanner.setMinPageScale(0.5F);
             viewpagerBanner.setCenterPageScaleOffset(30.0F);
             viewpagerBanner.setMinPageScaleOffset(5.0F);
+            viewpagerBanner.setFocusable(true);
+            viewpagerBanner.setFocusableInTouchMode(true);
+            viewpagerBanner.setClickable(false);
+            viewpagerBanner.requestFocus();
 //            viewpagerBanner.setOnInfiniteCyclePageTransformListener(...);
             recyclerviewSourceType.setLayoutManager(new GridLayoutManager(SourceTypeFragment.this.getActivity(), Constant.GRIDLAYOUTMANAGER_SPANCOUNT));
             // 列表适配器
@@ -304,18 +308,6 @@ public class SourceTypeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public void onDestroyView() {
-//        if (unbinder != null) {
-//            try {
-//                unbinder.unbind();
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        super.onDestroyView();
     }
 
     private void initVariable() {

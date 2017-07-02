@@ -124,7 +124,7 @@ public class SourceDetailActivity extends BaseActivity {
         });
         // 图片
         if (images != null && images.size() > 0) {
-            if (!TextUtils.isEmpty(sourceDetailModel.getCategory()) && sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
+            if (!TextUtils.isEmpty(sourceDetailModel.getCategory()) && (sourceDetailModel.getCategory().equals(Constant.CATEGORY_21) || sourceDetailModel.getCategory().equals(Constant.CATEGORY_19))) {
                 picHeight = width * 3 / 4;
             } else {
                 picHeight = width * 4 / 3;

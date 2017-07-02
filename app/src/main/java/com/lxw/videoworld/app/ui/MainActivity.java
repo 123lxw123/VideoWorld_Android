@@ -285,6 +285,7 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public void ok() {
                                     super.ok();
+                                    flag_back = true;
                                     new DownloadUtil(MainActivity.this).downloadAPK(link, getString(R.string.update_file_name));
                                 }
 
