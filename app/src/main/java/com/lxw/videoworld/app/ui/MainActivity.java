@@ -1,14 +1,21 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -35,6 +42,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -52,6 +60,26 @@ public class MainActivity extends BaseActivity {
     BottomNavigationBar navigationbarMain;
     @BindView(R.id.toobar_main)
     Toolbar toobarMain;
+    @BindView(R.id.txt_version)
+    TextView txtVersion;
+    @BindView(R.id.txt_QQ1)
+    TextView txtQQ1;
+    @BindView(R.id.txt_QQ2)
+    TextView txtQQ2;
+    @BindView(R.id.txt_feedback)
+    TextView txtFeedback;
+    @BindView(R.id.txt_about)
+    TextView txtAbout;
+    @BindView(R.id.txt_about_content)
+    TextView txtAboutContent;
+    @BindView(R.id.txt_notice)
+    TextView txtNotice;
+    @BindView(R.id.img_close)
+    ImageView imgClose;
+    @BindView(R.id.ll_notice)
+    LinearLayout llNotice;
+    @BindView(R.id.drawerlayout)
+    DrawerLayout drawerlayout;
     private boolean flag_exit = false;
     private boolean flag_back = true;
     private QuickFragmentPageAdapter pagerAdapter;
@@ -64,7 +92,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initViews();
-        getConfig();
+        getConfig(false);
     }
 
     private void initViews() {
@@ -77,7 +105,7 @@ public class MainActivity extends BaseActivity {
                 switch (menuItem.getItemId()) {
                     // 主题切换
                     case R.id.action_change_theme:
-                        switch (Constant.THEME_TYPE){
+                        switch (Constant.THEME_TYPE) {
                             case Constant.THEME_TYPE_1:
                                 Constant.THEME_TYPE = Constant.THEME_TYPE_2;
                                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
@@ -103,7 +131,7 @@ public class MainActivity extends BaseActivity {
                         break;
 
                     case R.id.action_change_source:
-                        switch (Constant.SOURCE_TYPE){
+                        switch (Constant.SOURCE_TYPE) {
                             case Constant.SOURCE_TYPE_1:
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_2;
                                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_2);
@@ -126,6 +154,16 @@ public class MainActivity extends BaseActivity {
                         break;
                 }
                 return true;
+            }
+        });
+        toobarMain.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerlayout.isDrawerOpen(drawerlayout)){
+                    drawerlayout.closeDrawers();
+                }else{
+                    drawerlayout.openDrawer(drawerlayout);
+                }
             }
         });
 
@@ -191,7 +229,7 @@ public class MainActivity extends BaseActivity {
 
     public void createFragment() {
         fragments.clear();
-        switch (Constant.SOURCE_TYPE){
+        switch (Constant.SOURCE_TYPE) {
             case Constant.SOURCE_TYPE_1:
                 createSourceCategoryFragment(Constant.TAB_1);
                 createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_11, null);
@@ -216,7 +254,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void createSourceCategoryFragment(String tab){
+    public void createSourceCategoryFragment(String tab) {
         SourceCategoryFragment fragment = new SourceCategoryFragment();
         Bundle bundle = new Bundle();
         bundle.putString("tab", tab);
@@ -224,7 +262,7 @@ public class MainActivity extends BaseActivity {
         fragments.add(fragment);
     }
 
-    public void createSourceTypeFragment(String sourceType, String category, String type){
+    public void createSourceTypeFragment(String sourceType, String category, String type) {
         SourceTypeFragment fragment = new SourceTypeFragment();
         Bundle bundle = new Bundle();
         bundle.putString("sourceType", sourceType);
@@ -234,16 +272,16 @@ public class MainActivity extends BaseActivity {
         fragments.add(fragment);
     }
 
-    public void getConfig() {
+    public void getConfig(final boolean flag_dialog) {
         final String url = SharePreferencesUtil.getStringSharePreferences(this, SplashActivity.SPLASH_PICTURE_LINK, null);
-        new HttpManager<ConfigModel>(MainActivity.this, HttpHelper.getInstance().getConfig("1"), false, false) {
+        new HttpManager<ConfigModel>(MainActivity.this, HttpHelper.getInstance().getConfig("1"), flag_dialog, false) {
 
             @Override
             public void onSuccess(BaseResponse<ConfigModel> response) {
-                if(response.getResult() != null){
+                if (response.getResult() != null) {
                     Constant.configModel = response.getResult();
                     // 保存热搜关键词
-                    if(!TextUtils.isEmpty(response.getResult().getKeyword())){
+                    if (!TextUtils.isEmpty(response.getResult().getKeyword())) {
                         SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
                     }
 
@@ -269,20 +307,49 @@ public class MainActivity extends BaseActivity {
                                     });
                         }
                     }
+
+                    // 侧滑菜单
+                    String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
+                    if (!TextUtils.isEmpty(versionName)) {
+                        txtVersion.setText(versionName);
+                        txtVersion.setVisibility(View.VISIBLE);
+                    }
+                    if (!TextUtils.isEmpty(response.getResult().getQQ1())) {
+                        txtQQ1.setText(response.getResult().getQQ1());
+                        txtQQ1.setVisibility(View.VISIBLE);
+                    }
+                    if (!TextUtils.isEmpty(response.getResult().getQQ2())) {
+                        txtQQ2.setText(response.getResult().getQQ2());
+                        txtQQ2.setVisibility(View.VISIBLE);
+                    }
+                    if (!TextUtils.isEmpty(response.getResult().getIntro())) {
+                        txtAbout.setText(response.getResult().getIntro());
+                    }
+
+                    // 公告
+                    if (!TextUtils.isEmpty(response.getResult().getNotice())) {
+                        String localNotice = SharePreferencesUtil.getStringSharePreferences(MainActivity.this, Constant.KEY_NOTICE, "");
+                        if(TextUtils.isEmpty(localNotice) || localNotice.equals(response.getResult().getNotice())){
+                            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_NOTICE, response.getResult().getNotice());
+                            txtNotice.setText(response.getResult().getNotice());
+                            llNotice.setVisibility(View.VISIBLE);
+                        }
+                    }
+
                     // 更新升级
-                    try{
+                    try {
                         final int lacalVersionCode = Integer.valueOf(ManifestUtil.getApkVersionCode(MainActivity.this));
                         final int versionCode = Integer.valueOf(response.getResult().getVersionCode());
                         final int forceVersionCode = Integer.valueOf(response.getResult().getForceVersionCode());
                         final String message = response.getResult().getMessage();
                         final String link = response.getResult().getLink();
                         // 有更新
-                        if(lacalVersionCode < versionCode && !TextUtils.isEmpty(link)){
+                        if (lacalVersionCode < versionCode && !TextUtils.isEmpty(link)) {
                             // 强制更新,拦截返回虚拟键
-                            if(lacalVersionCode < forceVersionCode){
+                            if (lacalVersionCode < forceVersionCode) {
                                 flag_back = false;
                             }
-                            CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R.string.update), message){
+                            CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R.string.update), message) {
                                 @Override
                                 public void ok() {
                                     super.ok();
@@ -294,7 +361,7 @@ public class MainActivity extends BaseActivity {
                                 public void cancel() {
                                     super.cancel();
                                     // 强制更新
-                                    if(lacalVersionCode < forceVersionCode){
+                                    if (lacalVersionCode < forceVersionCode) {
                                         MainActivity.this.finish();
                                     }
                                 }
@@ -302,8 +369,11 @@ public class MainActivity extends BaseActivity {
                             // 屏蔽返回键
                             hideProgressBar();
                             customDialog.show();
+                        } else if (flag_dialog) {
+                            // 提示已经是最新版本
+                            ToastUtil.showMessage(MainActivity.this, getString(R.string.no_update_tips));
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -315,6 +385,70 @@ public class MainActivity extends BaseActivity {
 
             }
         }.doRequest();
+    }
+
+    @OnClick({R.id.txt_version, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R.id.txt_about})
+    public void setTextViewOnClick(TextView tv) {
+        switch (tv.getId()) {
+            case R.id.txt_version:
+                getConfig(true);
+                if (drawerlayout.isDrawerOpen(drawerlayout)){
+                    drawerlayout.closeDrawers();
+                }
+                break;
+
+            case R.id.txt_QQ1:
+                // 复制群号
+                if (Constant.configModel != null && !TextUtils.isEmpty(Constant.configModel.getQQ1())) {
+                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService(
+                            Context.CLIPBOARD_SERVICE);
+                    clip.setText(Constant.configModel.getQQ1());
+                    if (drawerlayout.isDrawerOpen(drawerlayout)){
+                        drawerlayout.closeDrawers();
+                    }
+                    ToastUtil.showMessage("已复制群号");
+                }
+                break;
+            case R.id.txt_QQ2:
+                // 复制群号
+                if (Constant.configModel != null && !TextUtils.isEmpty(Constant.configModel.getQQ2())) {
+                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService(
+                            Context.CLIPBOARD_SERVICE);
+                    clip.setText(Constant.configModel.getQQ2());
+                    if (drawerlayout.isDrawerOpen(drawerlayout)){
+                        drawerlayout.closeDrawers();
+                    }
+                    ToastUtil.showMessage("已复制群号");
+
+                }
+                break;
+            case R.id.txt_feedback:
+                // 反馈
+                if (drawerlayout.isDrawerOpen(drawerlayout)){
+                    drawerlayout.closeDrawers();
+                }
+                Intent intent = new Intent(MainActivity.this, FeedbackActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.txt_about:
+                // 关于
+                if (txtAboutContent.getVisibility() == View.GONE) {
+                    txtAboutContent.setVisibility(View.VISIBLE);
+                } else {
+                    txtAboutContent.setVisibility(View.GONE);
+                }
+                break;
+        }
+
+    }
+
+    @OnClick({R.id.img_close})
+    public void setImageViewOnClick(ImageView imageView){
+        switch (imageView.getId()){
+            case R.id.img_close:
+                llNotice.setVisibility(View.GONE);
+                break;
+        }
     }
 
 }

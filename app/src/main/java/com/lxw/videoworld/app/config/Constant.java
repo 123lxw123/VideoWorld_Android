@@ -26,6 +26,8 @@ public class Constant {
     public static final String KEY_SEARCH_TYPE = "SEARCH_TYPE";
     public static final String KEY_SEARCH_HOTWORDS = "KEY_SEARCH_HOTWORDS";
 
+    public static final String KEY_NOTICE = "KEY_NOTICE";
+
     public static String THEME_TYPE;
     public static final String THEME_TYPE_1 = "1";// glod
     public static final String THEME_TYPE_2 = "2";// red

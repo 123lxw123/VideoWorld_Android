@@ -67,6 +67,7 @@ dependencies {
     // smarttablayout
     // infinitecycleviewpager
     compile project(path: ':bottom-navigation-bar')
+    compile project(path: ':infinitecycleviewpager')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -98,5 +99,4 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
-    compile project(path: ':infinitecycleviewpager')
 }

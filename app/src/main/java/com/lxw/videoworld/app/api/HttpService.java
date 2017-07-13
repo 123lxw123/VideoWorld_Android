@@ -2,6 +2,7 @@ package com.lxw.videoworld.app.api;
 
 
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.model.FeedbackModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.http.BaseResponse;
@@ -32,4 +33,8 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("searchResult")
     Observable<BaseResponse<SearchResultModel>> getSearchResult(@Field("uid") String uid, @Field("url") String url);
+
+    @FormUrlEncoded
+    @POST("feedback")
+    Observable<BaseResponse<FeedbackModel>> addFeedback(@Field("uid") String uid, @Field("feedback") String feedback);
 }
