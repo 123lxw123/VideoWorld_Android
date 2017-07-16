@@ -180,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp_10"
-                    android:background="@null"
+                    android:background="@drawable/selector_item_bg"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_10"
                     android:layout_weight="1"
-                    android:background="@null"
+                    android:background="@drawable/selector_item_bg"
                     android:gravity="center"
                     android:orientation="horizontal">
 
