@@ -21,6 +21,9 @@
     <attr name="com_font_B" format="color" />
     <attr name="com_font_C" format="color" />
     <attr name="com_font_D" format="color" />
+    <attr name="drawable_main_A" format="reference" />
+    <attr name="drawable_main_B" format="reference" />
+    <attr name="drawable_font_C" format="reference" />
     <attr name="com_dialog_bg" format="color" />
     <!--基本色 END-->
     </declare-styleable>

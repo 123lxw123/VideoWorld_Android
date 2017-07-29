@@ -16,8 +16,7 @@
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawerlayout"
-        android:layout_gravity = "start"
-        android:layout_width="@dimen/dp_280"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
@@ -30,10 +29,12 @@
                 android:background="@color/color_FFE791"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50">
+                android:layout_height="@dimen/dp_40"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txt_notice"
+                    android:layout_weight="1"
                     android:singleLine="true"
                     android:ellipsize="marquee"
                     android:layout_gravity="center_vertical"
@@ -42,16 +43,16 @@
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="?attr/com_font_A"
                     android:textSize="@dimen/sp_16"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content" />
 
                 <ImageView
                     android:id="@+id/img_close"
                     android:src="@drawable/ic_close"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
                     android:layout_gravity="center_vertical"
-                    android:layout_width="@dimen/dp_25"
-                    android:layout_height="@dimen/dp_25" />
+                    android:layout_width="@dimen/dp_15"
+                    android:layout_height="@dimen/dp_15" />
 
             </LinearLayout>
 
@@ -71,10 +72,12 @@
         <LinearLayout
             android:orientation="vertical"
             android:background="?attr/com_wm_bg"
-            android:layout_width="match_parent"
+            android:layout_gravity="start"
+            android:layout_width="@dimen/dp_280"
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/txt_version"
+                android:background="@drawable/selector_item_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_15"
                 android:textColor="?attr/com_font_A"
@@ -85,6 +88,7 @@
 
             <TextView
                 android:id="@+id/txt_QQ1"
+                android:background="@drawable/selector_item_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_15"
                 android:textColor="?attr/com_font_A"
@@ -95,6 +99,7 @@
 
             <TextView
                 android:id="@+id/txt_QQ2"
+                android:background="@drawable/selector_item_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_15"
                 android:textColor="?attr/com_font_A"
@@ -105,25 +110,25 @@
 
             <TextView
                 android:id="@+id/txt_feedback"
+                android:background="@drawable/selector_item_bg"
                 android:text="@string/txt_feedback"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_15"
                 android:textColor="?attr/com_font_A"
                 android:textSize="@dimen/sp_16"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:visibility="gone"/>
+                android:layout_height="@dimen/dp_50"/>
 
             <TextView
                 android:id="@+id/txt_about"
+                android:background="@drawable/selector_item_bg"
                 android:text="@string/txt_about"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp_15"
                 android:textColor="?attr/com_font_A"
                 android:textSize="@dimen/sp_16"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:visibility="gone"/>
+                android:layout_height="@dimen/dp_50"/>
 
             <TextView
                 android:id="@+id/txt_about_content"

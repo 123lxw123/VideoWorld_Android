@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -159,10 +161,10 @@ public class MainActivity extends BaseActivity {
         toobarMain.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerlayout.isDrawerOpen(drawerlayout)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
                     drawerlayout.closeDrawers();
                 }else{
-                    drawerlayout.openDrawer(drawerlayout);
+                    drawerlayout.openDrawer(GravityCompat.START);
                 }
             }
         });
@@ -196,6 +198,12 @@ public class MainActivity extends BaseActivity {
         createFragment();
         pagerAdapter = new QuickFragmentPageAdapter(getSupportFragmentManager(), fragments, tabs);
         viewpagerMain.setAdapter(pagerAdapter);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerlayout,
+                toobarMain,
+                R.string.txt_copy_link, R.string.txt_copy_link);
+        drawerlayout.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     @Override
@@ -311,25 +319,25 @@ public class MainActivity extends BaseActivity {
                     // 侧滑菜单
                     String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
                     if (!TextUtils.isEmpty(versionName)) {
-                        txtVersion.setText(versionName);
+                        txtVersion.setText(String.format(getString(R.string.txt_version), versionName));
                         txtVersion.setVisibility(View.VISIBLE);
                     }
                     if (!TextUtils.isEmpty(response.getResult().getQQ1())) {
-                        txtQQ1.setText(response.getResult().getQQ1());
+                        txtQQ1.setText(String.format(getString(R.string.txt_QQ1), response.getResult().getQQ1()));
                         txtQQ1.setVisibility(View.VISIBLE);
                     }
                     if (!TextUtils.isEmpty(response.getResult().getQQ2())) {
-                        txtQQ2.setText(response.getResult().getQQ2());
+                        txtQQ2.setText(String.format(getString(R.string.txt_QQ2), response.getResult().getQQ2()));
                         txtQQ2.setVisibility(View.VISIBLE);
                     }
                     if (!TextUtils.isEmpty(response.getResult().getIntro())) {
-                        txtAbout.setText(response.getResult().getIntro());
+                        txtAboutContent.setText(response.getResult().getIntro());
                     }
 
                     // 公告
                     if (!TextUtils.isEmpty(response.getResult().getNotice())) {
                         String localNotice = SharePreferencesUtil.getStringSharePreferences(MainActivity.this, Constant.KEY_NOTICE, "");
-                        if(TextUtils.isEmpty(localNotice) || localNotice.equals(response.getResult().getNotice())){
+                        if(TextUtils.isEmpty(localNotice) || !localNotice.equals(response.getResult().getNotice())){
                             SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_NOTICE, response.getResult().getNotice());
                             txtNotice.setText(response.getResult().getNotice());
                             llNotice.setVisibility(View.VISIBLE);
@@ -392,7 +400,7 @@ public class MainActivity extends BaseActivity {
         switch (tv.getId()) {
             case R.id.txt_version:
                 getConfig(true);
-                if (drawerlayout.isDrawerOpen(drawerlayout)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
                     drawerlayout.closeDrawers();
                 }
                 break;
@@ -403,7 +411,7 @@ public class MainActivity extends BaseActivity {
                     ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService(
                             Context.CLIPBOARD_SERVICE);
                     clip.setText(Constant.configModel.getQQ1());
-                    if (drawerlayout.isDrawerOpen(drawerlayout)){
+                    if (drawerlayout.isDrawerOpen(GravityCompat.START)){
                         drawerlayout.closeDrawers();
                     }
                     ToastUtil.showMessage("已复制群号");
@@ -415,7 +423,7 @@ public class MainActivity extends BaseActivity {
                     ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService(
                             Context.CLIPBOARD_SERVICE);
                     clip.setText(Constant.configModel.getQQ2());
-                    if (drawerlayout.isDrawerOpen(drawerlayout)){
+                    if (drawerlayout.isDrawerOpen(GravityCompat.START)){
                         drawerlayout.closeDrawers();
                     }
                     ToastUtil.showMessage("已复制群号");
@@ -424,7 +432,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.txt_feedback:
                 // 反馈
-                if (drawerlayout.isDrawerOpen(drawerlayout)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
                     drawerlayout.closeDrawers();
                 }
                 Intent intent = new Intent(MainActivity.this, FeedbackActivity.class);

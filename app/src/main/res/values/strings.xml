@@ -75,12 +75,12 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="update">新版本更新</string>
-    <string name="no_update_tips">新版本更新</string>
+    <string name="no_update_tips">当前已是最新版本</string>
     <string name="update_file_name">VideoWorld.apk</string>
 
     <string name="txt_version">版本   %1$s</string>
     <string name="txt_QQ1">和谐群   %1$s</string>
-    <string name="txt_QQ12">福利群   %1$s</string>
+    <string name="txt_QQ2">福利群   %1$s</string>
     <string name="txt_feedback">反馈</string>
     <string name="txt_feedback_tips">意见、建议、吐槽...畅所欲言</string>
     <string name="txt_no_feedback_tips">请先输入您的反馈内容</string>
