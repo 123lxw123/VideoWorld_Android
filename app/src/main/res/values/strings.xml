@@ -82,6 +82,7 @@
     <string name="txt_QQ1">和谐群   %1$s</string>
     <string name="txt_QQ2">福利群   %1$s</string>
     <string name="txt_feedback">反馈</string>
+    <string name="txt_feedback_commit">提交</string>
     <string name="txt_feedback_tips">意见、建议、吐槽...畅所欲言</string>
     <string name="txt_no_feedback_tips">请先输入您的反馈内容</string>
     <string name="txt_feedback_success_tips">感谢您的反馈</string>

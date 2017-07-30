@@ -20,6 +20,24 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 读取日历 -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <!-- 读联系人权限 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 写联系人权限 -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <!-- 拨号权限 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 读短信权限 -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <!-- 精准位置信息GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 仅网络定位的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 读取上网记录权限 -->
+    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+    <!-- 读取通话记录 -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <!-- 读短信权限 -->
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:name=".framework.application.BaseApplication"

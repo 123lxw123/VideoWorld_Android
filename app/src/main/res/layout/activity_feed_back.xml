@@ -50,6 +50,9 @@
     <Button
         android:id="@+id/btn_feedback"
         android:background="@drawable/selector_btn_bg"
+        android:text="@string/txt_feedback_commit"
+        android:textColor="@color/color_FFFFFF"
+        android:textSize="@dimen/sp_18"
         android:layout_marginTop="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"

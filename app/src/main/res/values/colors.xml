@@ -82,16 +82,6 @@
     <color name="color_3385FF">#3385FF</color>
     <color name="color_FFE791">#FFE791</color>
 
-    <drawable name="drawable_E8E8E8">#E8E8E8</drawable>
-    <drawable name="drawable_main_A_gold">#34373c</drawable>
-    <drawable name="drawable_main_B_gold">#9f34373c</drawable>
-    <drawable name="drawable_font_C_gold">#cccddc</drawable>
-    <drawable name="drawable_main_A_blue">#517bdf</drawable>
-    <drawable name="drawable_main_B_blue">#9f517bdf</drawable>
-    <drawable name="drawable_font_C_blue">#cccddc</drawable>
-    <drawable name="drawable_main_A_red">#d43535</drawable>
-    <drawable name="drawable_main_B_red">#9fd43535</drawable>
-    <drawable name="drawable_font_C_red">#d8cece</drawable>
-
+    <drawable name="drawable_white">#ffffff</drawable>
 
 </resources>

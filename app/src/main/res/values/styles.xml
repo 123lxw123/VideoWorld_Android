@@ -42,9 +42,6 @@
         <item name="com_font_B">@color/com_font_B_red</item>
         <item name="com_font_C">@color/com_font_C_red</item>
         <item name="com_font_D">@color/com_font_D_red</item>
-        <item name="drawable_font_C">@drawable/drawable_font_C_red</item>
-        <item name="drawable_main_A">@drawable/drawable_main_A_red</item>
-        <item name="drawable_main_B">@drawable/drawable_main_B_red</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_red</item>
         <item name="color_progress">@color/color_BBE6DE_red</item>
         <item name="color_progress_background">@color/color_16B998_red</item>
@@ -63,9 +60,6 @@
         <item name="com_font_B">@color/com_font_B_blue</item>
         <item name="com_font_C">@color/com_font_C_blue</item>
         <item name="com_font_D">@color/com_font_D_blue</item>
-        <item name="drawable_font_C">@drawable/drawable_font_C_blue</item>
-        <item name="drawable_main_A">@drawable/drawable_main_A_blue</item>
-        <item name="drawable_main_B">@drawable/drawable_main_B_blue</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_blue</item>
         <item name="color_progress">@color/color_BBE6DE_blue</item>
         <item name="color_progress_background">@color/color_16B998_blue</item>
@@ -84,9 +78,6 @@
         <item name="com_font_B">@color/com_font_B_gold</item>
         <item name="com_font_C">@color/com_font_C_gold</item>
         <item name="com_font_D">@color/com_font_D_gold</item>
-        <item name="drawable_font_C">@drawable/drawable_font_C_gold</item>
-        <item name="drawable_main_A">@drawable/drawable_main_A_gold</item>
-        <item name="drawable_main_B">@drawable/drawable_main_B_gold</item>
         <item name="com_dialog_bg">@color/com_dialog_bg_gold</item>
         <item name="color_progress">@color/color_BBE6DE_gold</item>
         <item name="color_progress_background">@color/color_16B998_gold</item>
