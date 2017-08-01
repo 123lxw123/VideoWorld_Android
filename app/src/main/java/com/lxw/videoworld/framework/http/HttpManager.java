@@ -1,6 +1,7 @@
 package com.lxw.videoworld.framework.http;
 
 
+import android.content.Context;
 import android.net.ParseException;
 
 import com.google.gson.JsonParseException;
@@ -29,22 +30,22 @@ import retrofit2.HttpException;
  */
 
 public abstract class HttpManager<T> {
-    private BaseActivity activity;
+    private Context context;
     private Observable<BaseResponse<T>> observable;
     private boolean flag_dialog;
     private boolean flag_toast;
     private Disposable disposable;
 
-    public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable){
-        this(activity, observable, true);
+    public HttpManager(Context context, Observable<BaseResponse<T>> observable){
+        this(context, observable, true);
     }
 
-    public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable, boolean flag_dialog){
-        this(activity, observable, flag_dialog, true);
+    public HttpManager(Context context, Observable<BaseResponse<T>> observable, boolean flag_dialog){
+        this(context, observable, flag_dialog, true);
     }
 
-    public HttpManager(BaseActivity activity, Observable<BaseResponse<T>> observable, boolean flag_dialog, boolean flag_toast){
-        this.activity = activity;
+    public HttpManager(Context context, Observable<BaseResponse<T>> observable, boolean flag_dialog, boolean flag_toast){
+        this.context = context;
         this.observable = observable;
         this.flag_dialog = flag_dialog;
         this.flag_toast = flag_toast;
@@ -55,7 +56,7 @@ public abstract class HttpManager<T> {
             @Override
             public void onError(Throwable error) {
                 if(flag_dialog){
-                    activity.hideProgressBar();
+                    ((BaseActivity)context).hideProgressBar();
                 }
                 LoggerHelper.info("HttpManager-onError-->>",error.getMessage());
                 String message = "";
@@ -88,7 +89,7 @@ public abstract class HttpManager<T> {
             @Override
             public void onComplete() {
                 if(flag_dialog){
-                    activity.hideProgressBar();
+                    ((BaseActivity)context).hideProgressBar();
                 }
             }
 
@@ -96,8 +97,8 @@ public abstract class HttpManager<T> {
             public void onSubscribe(Disposable d) {
                 disposable = d;
                 if(flag_dialog){
-                    activity.getProgressBar().setHttpManager(HttpManager.this);
-                    activity.showProgressBar();
+                    ((BaseActivity)context).getProgressBar().setHttpManager(HttpManager.this);
+                    ((BaseActivity)context).showProgressBar();
                 }
             }
 
@@ -105,7 +106,7 @@ public abstract class HttpManager<T> {
             public void onNext(BaseResponse<T> response) {
                 LoggerHelper.info("HttpManager-onNext-->>",response.toString());
                 if(flag_dialog){
-                    activity.hideProgressBar();
+                    ((BaseActivity)context).hideProgressBar();
                 }
                 if(response != null){
                     if(response.getCode() == Constant.CODE_SUCCESS){// 服务器返回正确结果
@@ -136,7 +137,7 @@ public abstract class HttpManager<T> {
     public void cancel(){
         if(disposable != null){
             disposable.dispose();
-            activity.hideProgressBar();
+            ((BaseActivity)context).hideProgressBar();
         }
     }
 

@@ -43,7 +43,6 @@ public class SplashActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSplashPicture();
         jumpToNext();
-        downloadSplashPicture();
     }
 
     //加载启动页图片
@@ -72,47 +71,6 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void downloadSplashPicture() {
-        final String url = SharePreferencesUtil.getStringSharePreferences(this, SPLASH_PICTURE_LINK, null);
-        new HttpManager<ConfigModel>(SplashActivity.this, HttpHelper.getInstance().getConfig("1"), false, false) {
-
-            @Override
-            public void onSuccess(BaseResponse<ConfigModel> response) {
-                if(response.getResult() != null){
-                    Constant.configModel = response.getResult();
-                    // 保存热搜关键词
-                    if(!TextUtils.isEmpty(response.getResult().getKeyword())){
-                        SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
-                    }
-
-                    final String imageUrl = response.getResult().getImage();
-                    if (!TextUtils.isEmpty(imageUrl)) {
-                        if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
-                            return;
-                        } else {
-                            SharePreferencesUtil.setStringSharePreferences(SplashActivity.this, SPLASH_PICTURE_LINK, imageUrl);
-                            // 缓存启动页图片
-                            Observable.create(new ObservableOnSubscribe<Integer>() {
-                                @Override
-                                public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                                    ImageManager.getInstance().downloadImage(SplashActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG, true);
-                                }
-                            }).subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Consumer<Integer>() {
-
-                                        @Override
-                                        public void accept(Integer i) {
-                                        }
-                                    });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(BaseResponse<ConfigModel> response) {
-
-            }
-        }.doRequest();
+        
     }
 }

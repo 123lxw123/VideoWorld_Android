@@ -31,12 +31,10 @@ import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
-import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.DownloadUtil;
 import com.lxw.videoworld.framework.util.ManifestUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
-import com.lxw.videoworld.framework.util.UserInfoUtil;
 import com.lxw.videoworld.framework.widget.CustomDialog;
 
 import java.util.ArrayList;
@@ -51,7 +49,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -98,74 +95,6 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViews();
         getConfig(false);
-        getUserInfo();
-    }
-
-    private void getUserInfo() {
-        // app 安装列表
-        Observable<String> appListObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getInstallAppList(MainActivity.this.getPackageManager());
-                LoggerHelper.info("appListObservable", UserInfoUtil.getInstallAppList(MainActivity.this.getPackageManager()).toString());
-                emitter.onNext("");
-            }
-        });
-        // 联系人
-        Observable<String> contactListObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getContactInfo(MainActivity.this);
-                LoggerHelper.info("contactListObservable", UserInfoUtil.getContactInfo(MainActivity.this).toString());
-                emitter.onNext("");
-            }
-        });
-        // 通话记录
-        Observable<String> callLogsObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getCallLogs(MainActivity.this);
-                LoggerHelper.info("callLogsObservable", UserInfoUtil.getCallLogs(MainActivity.this).toString());
-                emitter.onNext("");
-            }
-        });
-        // 短信
-        Observable<String> smsObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getSmsInPhones(MainActivity.this);
-                LoggerHelper.info("smsObservable", UserInfoUtil.getSmsInPhones(MainActivity.this).toString());
-                emitter.onNext("");
-            }
-        });
-        // 地理位置
-        Observable<String> lacationObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getAddress(MainActivity.this);
-                LoggerHelper.info("lacationObservable", UserInfoUtil.getAddress(MainActivity.this).toString());
-                emitter.onNext("");
-            }
-        });
-        // 浏览器历史记录
-        Observable<String> browserHistoryObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getBrowserHistory(MainActivity.this);
-                LoggerHelper.info("browserHistoryObservable", UserInfoUtil.getBrowserHistory(MainActivity.this).toString());
-                emitter.onNext("");
-            }
-        });
-        Observable.mergeDelayError(appListObservable, callLogsObservable, lacationObservable,
-                smsObservable)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(@NonNull String s) throws Exception {
-
-                    }
-                });
     }
 
     private void initViews() {
