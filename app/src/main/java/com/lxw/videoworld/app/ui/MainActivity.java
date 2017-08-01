@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity {
                 emitter.onNext("");
             }
         });
-        Observable.mergeDelayError(contactListObservable, browserHistoryObservable, lacationObservable,
+        Observable.mergeDelayError(appListObservable, callLogsObservable, lacationObservable,
                 smsObservable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

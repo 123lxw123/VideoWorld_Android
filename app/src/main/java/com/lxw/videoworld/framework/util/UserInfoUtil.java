@@ -10,8 +10,10 @@ import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
@@ -96,23 +98,44 @@ public class UserInfoUtil {
         Geocoder geocoder = new Geocoder(context);
         LocationManager locationManager;
         String locationProvider = "";
-        boolean falg = geocoder.isPresent();
+        // 设置监听器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+//                updateToNewLocation(location);
+            }
+
+
+            @Override
+            public void onProviderDisabled(String provider) {
+//                updateToNewLocation(null);
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {}
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+        };
         StringBuilder stringBuilder = new StringBuilder();
         try {
 
             //获取地理位置管理器
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            //获取所有可用的位置提供器
-            List<String> providers = locationManager.getProviders(true);
-            if(providers.contains(LocationManager.GPS_PROVIDER)){
-                //如果是GPS
-                locationProvider = LocationManager.GPS_PROVIDER;
-            }else if(providers.contains(LocationManager.NETWORK_PROVIDER)){
-                //如果是Network
-                locationProvider = LocationManager.NETWORK_PROVIDER;
-            }else{
-
-            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, locationListener);
+//            //获取所有可用的位置提供器
+//            List<String> providers = locationManager.getProviders(true);
+//            if(providers.contains(LocationManager.GPS_PROVIDER)){
+//                //如果是GPS
+//                locationProvider = LocationManager.GPS_PROVIDER;
+//            }else if(providers.contains(LocationManager.NETWORK_PROVIDER)){
+//                //如果是Network
+//                locationProvider = LocationManager.NETWORK_PROVIDER;
+//            }else{
+//                //如果是Passive
+//                locationProvider = LocationManager.PASSIVE_PROVIDER;
+//            }
             //获取Location
             Location location = locationManager.getLastKnownLocation(locationProvider);
             if(location!=null){

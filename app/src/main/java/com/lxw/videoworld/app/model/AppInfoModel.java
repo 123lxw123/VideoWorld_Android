@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Zion on 2017/7/30.
  */
 
-public class AppInfoModel implements Serializable{
+public class AppInfoModel implements Serializable {
     private Drawable image;
     private String appName;
 
@@ -16,6 +16,7 @@ public class AppInfoModel implements Serializable{
         this.image = image;
         this.appName = appName;
     }
+
     public AppInfoModel() {
 
     }
@@ -34,5 +35,13 @@ public class AppInfoModel implements Serializable{
 
     public void setAppName(String appName) {
         this.appName = appName;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "image=" + image +
+                ", appName='" + appName + '\'' +
+                '}';
     }
 }
