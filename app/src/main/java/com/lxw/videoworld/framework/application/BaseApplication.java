@@ -55,7 +55,7 @@ public class BaseApplication extends Application implements
         // GridLayoutManager 每行显示列数
         Constant.GRIDLAYOUTMANAGER_SPANCOUNT = SharePreferencesUtil.getIntSharePreferences(appContext, Constant.KEY_GRIDLAYOUTMANAGER_SPANCOUNT, Constant.DEFAULT_GRIDLAYOUTMANAGER_SPANCOUNT);
         // 切换搜索引擎
-        Constant.SEARCH_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
+        Constant.SEARCH_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
 
         /**
          * Hotfix2.0初始化

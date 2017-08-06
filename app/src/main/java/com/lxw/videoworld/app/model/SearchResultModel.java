@@ -10,7 +10,7 @@ public class SearchResultModel implements Serializable {
     private String url;
     private String keyword;
     private String list;
-    private String time;
+    private long time;
 
     public String getUid() {
         return uid;
@@ -44,11 +44,11 @@ public class SearchResultModel implements Serializable {
         this.list = list;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

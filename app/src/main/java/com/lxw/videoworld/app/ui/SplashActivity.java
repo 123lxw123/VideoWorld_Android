@@ -2,18 +2,12 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.lxw.videoworld.R;
-import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
-import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.framework.http.BaseResponse;
-import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
-import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -21,11 +15,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class SplashActivity extends BaseActivity {
 
@@ -70,7 +61,4 @@ public class SplashActivity extends BaseActivity {
                 });
     }
 
-    public void downloadSplashPicture() {
-        
-    }
 }

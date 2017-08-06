@@ -33,9 +33,9 @@
     <!-- 仅网络定位的权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 读取上网记录权限 -->
-    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />
     <!-- 读取通话记录 -->
-    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <!-- 读短信权限 -->
     <uses-permission android:name="android.permission.READ_SMS" />
 
@@ -110,7 +110,10 @@
         <activity
             android:name=".app.ui.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".app.ui.FeedbackActivity"></activity>
+        <activity android:name=".app.ui.FeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".app.ui.CommonWebActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

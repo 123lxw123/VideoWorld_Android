@@ -27,10 +27,12 @@ import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
+import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.DownloadUtil;
 import com.lxw.videoworld.framework.util.ManifestUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
@@ -39,12 +41,15 @@ import com.lxw.videoworld.framework.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -95,6 +100,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViews();
         getConfig(false);
+        JPushInterface.setAliasAndTags(MainActivity.this.getApplicationContext(), BaseApplication.uid, null, mAliasCallback);
     }
 
     private void initViews() {
@@ -463,4 +469,25 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs;
+            String TAG = "Jpush";
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    LoggerHelper.debug(TAG, logs);
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    LoggerHelper.debug(TAG, logs);
+                    break;
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    LoggerHelper.debug(TAG, logs);
+                    break;
+            }
+        }
+    };
 }

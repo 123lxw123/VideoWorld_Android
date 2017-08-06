@@ -406,17 +406,17 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                 break;
             case R.id.img_change_source:
                 // 切换搜索引擎
-                ToastUtil.showMessage(getString(R.string.txt_change_search));
-                if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
-                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_2;
-                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
-                } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
-                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_1;
-                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
-                }
-                searchType = Constant.STATUS_0;
-                changeTabColor();
-                doSearch();
+//                ToastUtil.showMessage(getString(R.string.txt_change_search));
+//                if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
+//                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_2;
+//                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
+//                } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
+//                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_1;
+//                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
+//                }
+//                searchType = Constant.STATUS_0;
+//                changeTabColor();
+//                doSearch();
                 break;
         }
     }

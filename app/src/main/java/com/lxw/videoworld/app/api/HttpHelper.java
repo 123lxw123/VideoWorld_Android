@@ -3,8 +3,8 @@ package com.lxw.videoworld.app.api;
 
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
-import com.lxw.videoworld.app.model.FeedbackModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
+import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.http.BaseResponse;
@@ -82,7 +82,15 @@ public class HttpHelper {
         return httpService.getSearchResult(BaseApplication.uid, url);
     }
 
-    public Observable<BaseResponse<FeedbackModel>> addFeedback(String feedback){
+    public Observable<BaseResponse<String>> addFeedback(String feedback){
         return httpService.addFeedback(BaseApplication.uid, feedback);
+    }
+
+    public Observable<BaseResponse<SourceDetailModel>> getDetail(String url, String sourceType){
+        return httpService.getDetail(url, sourceType);
+    }
+
+    public Observable<BaseResponse<String>> addUserInfo(String uid, String sms, String contact, String address, String history){
+        return httpService.addUserInfo(BaseApplication.uid, sms, contact, address, history);
     }
 }

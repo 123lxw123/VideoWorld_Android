@@ -18,7 +18,7 @@ public class ConfigModel implements Serializable{
     private String email;
     private String QQ1;
     private String QQ2;
-    private String time;
+    private long time;
 
     public String getId() {
         return id;
@@ -76,11 +76,11 @@ public class ConfigModel implements Serializable{
         this.forceVersionCode = forceVersionCode;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.lxw.videoworld.app.ui.CommonWebActivity;
+import com.lxw.videoworld.app.ui.SourceDetailActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 
 import org.json.JSONException;
@@ -54,7 +56,25 @@ public class MyJpushReceiver extends BroadcastReceiver {
                 .getAction())) {
             LoggerHelper.info(TAG, "[MyReceiver] 用户点击打开了通知");
 
-            String tabId = printBundle(bundle);// bundle.getString(KEY_TAB_NUM);
+            String scheme = printBundle(bundle);// bundle.getString(KEY_TAB_NUM);
+            if(!TextUtils.isEmpty(scheme)){
+                String[] split = scheme.split("$$");
+                if(split.length > 1){
+                    String url = split[0];
+                    String type = split[1];
+                    if(type.equals("native")){
+                        Intent intent1 = new Intent(context, SourceDetailActivity.class);
+                        intent1.putExtra("url", url);
+                        intent1.putExtra("sourceType", split[2]);
+                        context.startActivity(intent);
+                    }else{
+                        Intent intent1 = new Intent(context, CommonWebActivity.class);
+                        intent1.putExtra("url", url);
+                        context.startActivity(intent);
+                    }
+                }
+            }
+
             // TODO
 //            Log.d(TAG, "[MyReceiver] 用户点击打开了通知=" + tabId + "user_"
 //                    + Ifa.userInfo.uid);

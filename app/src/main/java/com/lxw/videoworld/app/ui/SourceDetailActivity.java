@@ -1,5 +1,6 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,10 +20,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceInfoModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
+import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.weixin.WXShareDialog;
@@ -81,15 +85,52 @@ public class SourceDetailActivity extends BaseActivity {
     private BaseQuickAdapter<SourceInfoModel, BaseViewHolder> sourceInfoAdapter;
     private BaseQuickAdapter<String, BaseViewHolder> sourceLinkAdapter;
 
+    private String url;
+    private String sourceType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_source_detail);
         ButterKnife.bind(this);
-        sourceDetailModel = (SourceDetailModel) getIntent().getSerializableExtra("sourceDetailModel");
-        if (sourceDetailModel != null) {
-            initDatas();
-            initViews();
+        url = getIntent().getStringExtra("url");
+        sourceType = getIntent().getStringExtra("sourceType");
+        if(!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)){
+            getSourceDetail();
+        }else {
+            sourceDetailModel = (SourceDetailModel) getIntent().getSerializableExtra("sourceDetailModel");
+            if (sourceDetailModel != null) {
+                initDatas();
+                initViews();
+            }
+        }
+    }
+
+    private void getSourceDetail() {
+        new HttpManager<SourceDetailModel>(SourceDetailActivity.this, HttpHelper.getInstance().getDetail(url, sourceType)) {
+
+            @Override
+            public void onSuccess(BaseResponse<SourceDetailModel> response) {
+                sourceDetailModel = response.getResult();
+                if (sourceDetailModel != null) {
+                    initDatas();
+                    initViews();
+                }
+            }
+
+            @Override
+            public void onFailure(BaseResponse<SourceDetailModel> response) {
+
+            }
+        }.doRequest();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        url = getIntent().getStringExtra("url");
+        sourceType = getIntent().getStringExtra("sourceType");
+        if(!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)){
+            getSourceDetail();
         }
     }
 

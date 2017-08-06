@@ -14,6 +14,7 @@ public class SearchModel implements Serializable {
     private String date;
     private String size;
     private String hot;
+    private long time;
 
     public String getCiliLink() {
         return ciliLink;
@@ -71,4 +72,11 @@ public class SearchModel implements Serializable {
         this.hot = hot;
     }
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
 }
