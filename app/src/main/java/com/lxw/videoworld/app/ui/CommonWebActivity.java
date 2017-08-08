@@ -2,19 +2,22 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.framework.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CommonWebActivity extends AppCompatActivity {
+public class CommonWebActivity extends BaseActivity {
 
     @BindView(R.id.img_back)
     ImageView imgBack;
@@ -44,6 +47,19 @@ public class CommonWebActivity extends AppCompatActivity {
                 CommonWebActivity.this.finish();
             }
         });
+
+        // 不使用缓存
+        webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webview.setWebChromeClient(new WebChromeClient());
+        webview.setWebViewClient(new WebViewClient());
+        WebSettings settings = webview.getSettings();
+        settings.setJavaScriptEnabled(true);
+        // 自适应屏幕
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        // 隐藏scrollbar
+        webview.setVerticalScrollBarEnabled(false);
+        webview.setHorizontalScrollBarEnabled(false);
     }
 
     @Override

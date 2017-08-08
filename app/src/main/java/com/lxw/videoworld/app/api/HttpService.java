@@ -39,7 +39,7 @@ public interface HttpService {
     Observable<BaseResponse<String>> addFeedback(@Field("uid") String uid, @Field("feedback") String feedback);
 
     @FormUrlEncoded
-    @POST("detil")
+    @POST("detail")
     Observable<BaseResponse<SourceDetailModel>> getDetail(@Field("url") String url, @Field("sourceType") String sourceType);
 
     @FormUrlEncoded

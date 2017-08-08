@@ -95,6 +95,12 @@ public class SourceDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         url = getIntent().getStringExtra("url");
         sourceType = getIntent().getStringExtra("sourceType");
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SourceDetailActivity.this.finish();
+            }
+        });
         if(!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)){
             getSourceDetail();
         }else {
@@ -135,12 +141,7 @@ public class SourceDetailActivity extends BaseActivity {
     }
 
     private void initViews() {
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SourceDetailActivity.this.finish();
-            }
-        });
+
         images = ValueUtil.string2list(sourceDetailModel.getImages());
 
         buttonShare.setOnClickListener(new View.OnClickListener() {

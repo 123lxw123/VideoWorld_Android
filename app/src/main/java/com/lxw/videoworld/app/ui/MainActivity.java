@@ -27,6 +27,7 @@ import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.service.BackgroundIntentService;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.BaseResponse;
@@ -100,7 +101,17 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViews();
         getConfig(false);
+        setJpushAliasAndTags();
+        getUserInfo();
+    }
+
+    private void setJpushAliasAndTags() {
         JPushInterface.setAliasAndTags(MainActivity.this.getApplicationContext(), BaseApplication.uid, null, mAliasCallback);
+    }
+
+    private void getUserInfo() {
+        Intent startIntent = new Intent(MainActivity.this, BackgroundIntentService.class);
+        startService(startIntent);
     }
 
     private void initViews() {

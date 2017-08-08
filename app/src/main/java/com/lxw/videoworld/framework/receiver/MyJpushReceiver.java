@@ -9,12 +9,15 @@ import android.util.Log;
 
 import com.lxw.videoworld.app.ui.CommonWebActivity;
 import com.lxw.videoworld.app.ui.SourceDetailActivity;
+import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class MyJpushReceiver extends BroadcastReceiver {
     private static final String TAG = "JPush";
@@ -55,26 +58,34 @@ public class MyJpushReceiver extends BroadcastReceiver {
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent
                 .getAction())) {
             LoggerHelper.info(TAG, "[MyReceiver] 用户点击打开了通知");
-
-            String scheme = printBundle(bundle);// bundle.getString(KEY_TAB_NUM);
-            if(!TextUtils.isEmpty(scheme)){
-                String[] split = scheme.split("$$");
-                if(split.length > 1){
-                    String url = split[0];
-                    String type = split[1];
-                    if(type.equals("native")){
-                        Intent intent1 = new Intent(context, SourceDetailActivity.class);
-                        intent1.putExtra("url", url);
-                        intent1.putExtra("sourceType", split[2]);
-                        context.startActivity(intent);
-                    }else{
-                        Intent intent1 = new Intent(context, CommonWebActivity.class);
-                        intent1.putExtra("url", url);
-                        context.startActivity(intent);
+            String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+            if(!TextUtils.isEmpty(extras)){
+                try{
+                    JSONObject jsonObject = new JSONObject(extras);
+                    String scheme = jsonObject.getString("url");
+                    if(!TextUtils.isEmpty(scheme)){
+                        String[] split = scheme.split(":.:");
+                        if(split.length > 1){
+                            String url = split[0];
+                            String type = split[1];
+                            if(type.equals("native")){
+                                Intent intent1 = new Intent(BaseApplication.appContext, SourceDetailActivity.class);
+                                intent1.putExtra("url", url);
+                                intent1.putExtra("sourceType", split[2]);
+                                intent1.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                context.startActivity(intent1);
+                            }else{
+                                Intent intent1 = new Intent(BaseApplication.appContext, CommonWebActivity.class);
+                                intent1.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                intent1.putExtra("url", url);
+                                context.startActivity(intent1);
+                            }
+                        }
                     }
+                }catch (JSONException e){
+                    e.printStackTrace();
                 }
             }
-
             // TODO
 //            Log.d(TAG, "[MyReceiver] 用户点击打开了通知=" + tabId + "user_"
 //                    + Ifa.userInfo.uid);
@@ -86,7 +97,6 @@ public class MyJpushReceiver extends BroadcastReceiver {
             // bundle.getString(JPushInterface.EXTRA_EXTRA));
             // 在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity，
             // 打开一个网页等..
-
         } else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent
                 .getAction())) {
             // boolean connected =
