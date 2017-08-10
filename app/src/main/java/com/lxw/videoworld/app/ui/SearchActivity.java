@@ -104,13 +104,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         imgBack.setOnClickListener(this);
         imgChangeSource.setOnClickListener(this);
         searchview.setOnQueryTextListener(this);//为搜索框设置监听事件
-        searchview.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyword = searchview.getQuery().toString();
-                doSearch();
-            }
-        });
         // 搜索结果排序
         txtTab1.setOnClickListener(this);
         txtTab2.setOnClickListener(this);
@@ -376,8 +369,12 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        keyword = newText;
-        doSearch();
+        if(!TextUtils.isEmpty(newText) && newText.trim().length() > 0){
+            if(keyword == null || !keyword.trim().equals(newText.trim())){
+                keyword = newText;
+                doSearch();
+            }
+        }
         return false;
     }
 
