@@ -2,6 +2,7 @@ package com.lxw.videoworld.framework.widget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -47,9 +48,15 @@ public class SourceLinkDialog extends AlertDialog {
                 @Override
                 public void onClick(View view) {
                     SourceLinkDialog.this.dismiss();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    context.startActivity(intent);
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                        intent.addCategory("android.intent.category.DEFAULT");
+                        context.startActivity(intent);
+                    }catch (ActivityNotFoundException e){
+                        e.printStackTrace();
+                        ToastUtil.showMessage("您还没安装手机迅雷");
+                    }
+
                 }
             });
             ll_copy_link.setOnClickListener(new View.OnClickListener() {

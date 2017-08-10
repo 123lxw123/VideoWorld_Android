@@ -61,7 +61,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private final int IMG_SEARCH = 1000;
     private final int IMG_SEARCH_RESULT = 1001;
     private final int IMG_SEARCH_TIMEOUT = 1002;// 搜索超时
-    private final int INTERVAL = 1000; //输入时间间隔为1000毫秒
+    private final int INTERVAL = 2000; //输入时间间隔为1000毫秒
     @BindView(R.id.txt_tab1)
     TextView txtTab1;
     @BindView(R.id.txt_tab2)
@@ -104,6 +104,13 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         imgBack.setOnClickListener(this);
         imgChangeSource.setOnClickListener(this);
         searchview.setOnQueryTextListener(this);//为搜索框设置监听事件
+        searchview.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                keyword = searchview.getQuery().toString();
+                doSearch();
+            }
+        });
         // 搜索结果排序
         txtTab1.setOnClickListener(this);
         txtTab2.setOnClickListener(this);
@@ -133,7 +140,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     // TODO
-                    keyword = (String)adapter.getData().get(position);
+                    keyword = (String) adapter.getData().get(position);
+                    searchview.setQuery(keyword, false);
                     doSearch();
                 }
             });
@@ -148,14 +156,14 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             @Override
             protected void convert(BaseViewHolder helper, final SearchModel item) {
                 String title = item.getTitle();
-                if(!TextUtils.isEmpty(title)){
+                if (!TextUtils.isEmpty(title)) {
                     if (!TextUtils.isEmpty(keyword) && title.contains(keyword)) {
                         SpannableStringBuilder builder = new SpannableStringBuilder(title);
                         ForegroundColorSpan colorSpan = new ForegroundColorSpan(getCustomColor(R.styleable.BaseColor_com_assist_A));
                         int index = title.indexOf(keyword);
                         builder.setSpan(colorSpan, index, index + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         helper.setText(R.id.txt_title, builder);
-                    }else{
+                    } else {
                         helper.setText(R.id.txt_title, title);
                     }
                 }
@@ -207,7 +215,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                         doSearch();
                     }
 
-                }, 500);
+                }, 0);
             }
         }, recyclerviewResult);
         searchAdapter.setLoadMoreView(new EmptyLoadMoreView());
@@ -221,7 +229,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             timer.cancel();
             timer = null;
         }
-        if (!TextUtils.isEmpty(keyword)) {
+        if (!TextUtils.isEmpty(keyword) && keyword.trim().length() > 0) {
+            keyword = keyword.trim();
             closeKeyboard();
             showProgressBar();
             new HttpManager<String>(SearchActivity.this, HttpHelper.getInstance().getSearch(getSearchUrl(), keyword, Constant.SEARCH_TYPE), false) {

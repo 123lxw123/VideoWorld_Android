@@ -8,7 +8,6 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toobar_main"
         app:title="@string/app_name"
-        app:logo="@mipmap/ic_launcher"
         android:background="?attr/com_main_A"
         app:popupTheme="@style/OverflowMenuStyle"
         android:layout_width="match_parent"
