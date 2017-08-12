@@ -62,7 +62,7 @@ public class BackgroundIntentService extends IntentService{
 
                     final String imageUrl = response.getResult().getImage();
                     if (!TextUtils.isEmpty(imageUrl)) {
-                        if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
+                        if (!TextUtils.isEmpty(url) && url.equals(imageUrl)) {
                             return;
                         } else {
                             SharePreferencesUtil.setStringSharePreferences(BackgroundIntentService.this, SPLASH_PICTURE_LINK, imageUrl);

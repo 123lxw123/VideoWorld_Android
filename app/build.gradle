@@ -17,8 +17,8 @@ android {
         applicationId "com.lxw.videoworld"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 100
-        versionName "1.0.0"
+        versionCode 321
+        versionName "3.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。

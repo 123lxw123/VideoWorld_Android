@@ -32,7 +32,6 @@ import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
-import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.DownloadUtil;
 import com.lxw.videoworld.framework.util.ManifestUtil;
@@ -51,14 +50,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-
-import static com.lxw.videoworld.app.ui.SplashActivity.SPLASH_PICTURE_LINK;
 
 public class MainActivity extends BaseActivity {
 
@@ -70,6 +61,8 @@ public class MainActivity extends BaseActivity {
     Toolbar toobarMain;
     @BindView(R.id.txt_version)
     TextView txtVersion;
+    @BindView(R.id.txt_github)
+    TextView txtGitHub;
     @BindView(R.id.txt_QQ1)
     TextView txtQQ1;
     @BindView(R.id.txt_QQ2)
@@ -314,29 +307,6 @@ public class MainActivity extends BaseActivity {
                         SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
                     }
 
-                    final String imageUrl = response.getResult().getImage();
-                    if (!TextUtils.isEmpty(imageUrl)) {
-                        if (!TextUtils.isEmpty(url) && !url.equals(imageUrl)) {
-                            return;
-                        } else {
-                            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, SPLASH_PICTURE_LINK, imageUrl);
-                            // 缓存启动页图片
-                            Observable.create(new ObservableOnSubscribe<Integer>() {
-                                @Override
-                                public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                                    ImageManager.getInstance().downloadImage(MainActivity.this, imageUrl, Constant.PATH_SPLASH_PICTURE, Constant.PATH_SPLASH_PICTURE_PNG, true);
-                                }
-                            }).subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Consumer<Integer>() {
-
-                                        @Override
-                                        public void accept(Integer i) {
-                                        }
-                                    });
-                        }
-                    }
-
                     // 侧滑菜单
                     String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
                     if (!TextUtils.isEmpty(versionName)) {
@@ -416,7 +386,7 @@ public class MainActivity extends BaseActivity {
         }.doRequest();
     }
 
-    @OnClick({R.id.txt_version, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R.id.txt_about})
+    @OnClick({R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R.id.txt_about})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
             case R.id.txt_version:
@@ -426,6 +396,14 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
 
+            case R.id.txt_github:
+                Intent intent = new Intent(MainActivity.this, CommonWebActivity.class);
+                intent.putExtra("url", "https://github.com/123lxw123");
+                startActivity(intent);
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                    drawerlayout.closeDrawers();
+                }
+                break;
             case R.id.txt_QQ1:
                 // 复制群号
                 if (Constant.configModel != null && !TextUtils.isEmpty(Constant.configModel.getQQ1())) {
@@ -456,8 +434,8 @@ public class MainActivity extends BaseActivity {
                 if (drawerlayout.isDrawerOpen(GravityCompat.START)){
                     drawerlayout.closeDrawers();
                 }
-                Intent intent = new Intent(MainActivity.this, FeedbackActivity.class);
-                startActivity(intent);
+                Intent intent1 = new Intent(MainActivity.this, FeedbackActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.txt_about:
                 // 关于
