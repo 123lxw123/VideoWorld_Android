@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.service.BackgroundIntentService;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
@@ -32,6 +33,7 @@ public class SplashActivity extends BaseActivity {
         StatusBarUtil.hideNavigationBar(this);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        getConfig();
         setSplashPicture();
         jumpToNext();
     }
@@ -59,6 +61,11 @@ public class SplashActivity extends BaseActivity {
                         finish();
                     }
                 });
+    }
+
+    private void getConfig() {
+        Intent startIntent = new Intent(SplashActivity.this, BackgroundIntentService.class);
+        startService(startIntent);
     }
 
 }

@@ -9,10 +9,12 @@ import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.http.BaseResponse;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -53,6 +55,10 @@ public class HttpHelper {
                                           return chain.proceed(request);
                                       }
                                   });
+        // 设置网络请求缓存
+        File cacheFile = new File(BaseApplication.getappContext().getCacheDir(), "response");
+        Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
+        httpClientBuilder.cache(cache);
         retrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())

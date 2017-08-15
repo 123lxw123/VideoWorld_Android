@@ -44,7 +44,7 @@ public class BackgroundIntentService extends IntentService{
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         getConfig();
-        getUserInfo();
+//        getUserInfo();
     }
 
     public void getConfig(){

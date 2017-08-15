@@ -27,7 +27,6 @@ import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.ConfigModel;
-import com.lxw.videoworld.app.service.BackgroundIntentService;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.BaseResponse;
@@ -50,6 +49,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+
+import static com.lxw.videoworld.app.config.Constant.configModel;
 
 public class MainActivity extends BaseActivity {
 
@@ -93,23 +94,23 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initViews();
-        getConfig(false);
+        if(Constant.configModel != null){
+            setConfig(Constant.configModel, false);
+        }else{
+            getConfig(false);
+        }
         setJpushAliasAndTags();
-        getUserInfo();
     }
 
     private void setJpushAliasAndTags() {
-        JPushInterface.setAliasAndTags(MainActivity.this.getApplicationContext(), BaseApplication.uid, null, mAliasCallback);
-    }
-
-    private void getUserInfo() {
-        Intent startIntent = new Intent(MainActivity.this, BackgroundIntentService.class);
-        startService(startIntent);
+        JPushInterface.setAliasAndTags(MainActivity.this.getApplicationContext(), BaseApplication
+                .uid, null, mAliasCallback);
     }
 
     private void initViews() {
 
-        tabs = new String[]{getString(R.string.txt_tab1), getString(R.string.txt_tab2), getString(R.string.txt_tab3), getString(R.string.txt_tab4), getString(R.string.txt_tab5)};
+        tabs = new String[]{getString(R.string.txt_tab1), getString(R.string.txt_tab2), getString
+                (R.string.txt_tab3), getString(R.string.txt_tab4), getString(R.string.txt_tab5)};
         toobarMain.inflateMenu(R.menu.toolbar_main);//设置右上角的填充菜单
         toobarMain.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -120,20 +121,24 @@ public class MainActivity extends BaseActivity {
                         switch (Constant.THEME_TYPE) {
                             case Constant.THEME_TYPE_1:
                                 Constant.THEME_TYPE = Constant.THEME_TYPE_2;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
                                 break;
                             case Constant.THEME_TYPE_2:
                                 Constant.THEME_TYPE = Constant.THEME_TYPE_3;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
                                 break;
                             case Constant.THEME_TYPE_3:
                                 Constant.THEME_TYPE = Constant.THEME_TYPE_1;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
                                 break;
                         }
                         MainActivity.this.finish();
                         Intent intent = MainActivity.this.getIntent();
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                                .FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         break;
@@ -146,21 +151,25 @@ public class MainActivity extends BaseActivity {
                         switch (Constant.SOURCE_TYPE) {
                             case Constant.SOURCE_TYPE_1:
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_2;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_2);
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_2);
                                 break;
                             case Constant.SOURCE_TYPE_2:
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_3;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_3);
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_3);
                                 break;
                             case Constant.SOURCE_TYPE_3:
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_1;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
                                 break;
                         }
                         ToastUtil.showMessage(getString(R.string.txt_change_source));
                         MainActivity.this.finish();
                         Intent intent2 = MainActivity.this.getIntent();
-                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                                .FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent2);
                         overridePendingTransition(0, 0);
                         break;
@@ -171,24 +180,24 @@ public class MainActivity extends BaseActivity {
         toobarMain.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
-                }else{
+                } else {
                     drawerlayout.openDrawer(GravityCompat.START);
                 }
             }
         });
 
         navigationbarMain.setBackgroundColor(getCustomColor(R.styleable.BaseColor_com_main_A));
-        navigationbarMain
-                .setMode(BottomNavigationBar.MODE_FIXED);
+        navigationbarMain.setMode(BottomNavigationBar.MODE_FIXED);
 
-        navigationbarMain.addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_1, getString(R.string.txt_tab1)))
-                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_2, getString(R.string.txt_tab2)))
-                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_3, getString(R.string.txt_tab3)))
-                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_4, getString(R.string.txt_tab4)))
-                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_5, getString(R.string.txt_tab5)))
-                .initialise();
+        navigationbarMain.addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_1,
+                getString(R.string.txt_tab1))).addItem(new BottomNavigationItem(R.drawable
+                .ic_tab_unselect_2, getString(R.string.txt_tab2))).addItem(new
+                BottomNavigationItem(R.drawable.ic_tab_unselect_3, getString(R.string.txt_tab3)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_4, getString(R
+                        .string.txt_tab4))).addItem(new BottomNavigationItem(R.drawable
+                .ic_tab_unselect_5, getString(R.string.txt_tab5))).initialise();
 
         navigationbarMain.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
@@ -209,8 +218,7 @@ public class MainActivity extends BaseActivity {
         pagerAdapter = new QuickFragmentPageAdapter(getSupportFragmentManager(), fragments, tabs);
         viewpagerMain.setAdapter(pagerAdapter);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerlayout,
-                toobarMain,
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerlayout, toobarMain,
                 R.string.txt_copy_link, R.string.txt_copy_link);
         drawerlayout.setDrawerListener(toggle);
         toggle.syncState();
@@ -228,9 +236,9 @@ public class MainActivity extends BaseActivity {
      * 双击退出程序
      */
     private void exitByDoubleClick() {
-        if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
             drawerlayout.closeDrawers();
-        }else{
+        } else {
             Timer tExit = null;
             if (!flag_exit) {
                 flag_exit = true;
@@ -295,87 +303,14 @@ public class MainActivity extends BaseActivity {
     }
 
     public void getConfig(final boolean flag_dialog) {
-        final String url = SharePreferencesUtil.getStringSharePreferences(this, SplashActivity.SPLASH_PICTURE_LINK, null);
-        new HttpManager<ConfigModel>(MainActivity.this, HttpHelper.getInstance().getConfig("1"), flag_dialog, false) {
+        new HttpManager<ConfigModel>(MainActivity.this, HttpHelper.getInstance().getConfig("1"),
+                flag_dialog, false) {
 
             @Override
             public void onSuccess(BaseResponse<ConfigModel> response) {
                 if (response.getResult() != null) {
-                    Constant.configModel = response.getResult();
-                    // 保存热搜关键词
-                    if (!TextUtils.isEmpty(response.getResult().getKeyword())) {
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
-                    }
-
-                    // 侧滑菜单
-                    String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
-                    if (!TextUtils.isEmpty(versionName)) {
-                        txtVersion.setText(String.format(getString(R.string.txt_version), versionName));
-                        txtVersion.setVisibility(View.VISIBLE);
-                    }
-                    if (!TextUtils.isEmpty(response.getResult().getQQ1())) {
-                        txtQQ1.setText(String.format(getString(R.string.txt_QQ1), response.getResult().getQQ1()));
-                        txtQQ1.setVisibility(View.VISIBLE);
-                    }
-                    if (!TextUtils.isEmpty(response.getResult().getQQ2())) {
-                        txtQQ2.setText(String.format(getString(R.string.txt_QQ2), response.getResult().getQQ2()));
-                        txtQQ2.setVisibility(View.VISIBLE);
-                    }
-                    if (!TextUtils.isEmpty(response.getResult().getIntro())) {
-                        txtAboutContent.setText(response.getResult().getIntro());
-                    }
-
-                    // 公告
-                    if (!TextUtils.isEmpty(response.getResult().getNotice())) {
-                        String localNotice = SharePreferencesUtil.getStringSharePreferences(MainActivity.this, Constant.KEY_NOTICE, "");
-                        if(TextUtils.isEmpty(localNotice) || !localNotice.equals(response.getResult().getNotice())){
-                            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant.KEY_NOTICE, response.getResult().getNotice());
-                            txtNotice.setText(response.getResult().getNotice());
-                            llNotice.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    // 更新升级
-                    try {
-                        final int lacalVersionCode = Integer.valueOf(ManifestUtil.getApkVersionCode(MainActivity.this));
-                        final int versionCode = Integer.valueOf(response.getResult().getVersionCode());
-                        final int forceVersionCode = Integer.valueOf(response.getResult().getForceVersionCode());
-                        final String message = response.getResult().getMessage();
-                        final String link = response.getResult().getLink();
-                        // 有更新
-                        if (lacalVersionCode < versionCode && !TextUtils.isEmpty(link)) {
-                            // 强制更新,拦截返回虚拟键
-                            if (lacalVersionCode < forceVersionCode) {
-                                flag_back = false;
-                            }
-                            CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R.string.update), message) {
-                                @Override
-                                public void ok() {
-                                    super.ok();
-                                    flag_back = true;
-                                    new DownloadUtil(MainActivity.this).downloadAPK(link, getString(R.string.update_file_name));
-                                }
-
-                                @Override
-                                public void cancel() {
-                                    super.cancel();
-                                    // 强制更新
-                                    if (lacalVersionCode < forceVersionCode) {
-                                        MainActivity.this.finish();
-                                    }
-                                }
-                            };
-                            // 屏蔽返回键
-                            hideProgressBar();
-                            customDialog.show();
-                        } else if (flag_dialog) {
-                            // 提示已经是最新版本
-                            ToastUtil.showMessage(MainActivity.this, getString(R.string.no_update_tips));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    configModel = response.getResult();
+                    setConfig(configModel, flag_dialog);
                 }
             }
 
@@ -386,12 +321,97 @@ public class MainActivity extends BaseActivity {
         }.doRequest();
     }
 
-    @OnClick({R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R.id.txt_about})
+    public void setConfig(ConfigModel configModel, boolean flag_dialog) {
+
+        // 保存热搜关键词
+        if (!TextUtils.isEmpty(configModel.getKeyword())) {
+            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant
+                    .KEY_SEARCH_HOTWORDS, configModel.getKeyword());
+        }
+
+        // 侧滑菜单
+        String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
+        if (!TextUtils.isEmpty(versionName)) {
+            txtVersion.setText(String.format(getString(R.string.txt_version), versionName));
+            txtVersion.setVisibility(View.VISIBLE);
+        }
+        if (!TextUtils.isEmpty(configModel.getQQ1())) {
+            txtQQ1.setText(String.format(getString(R.string.txt_QQ1), configModel.getQQ1()));
+            txtQQ1.setVisibility(View.VISIBLE);
+        }
+        if (!TextUtils.isEmpty(configModel.getQQ2())) {
+            txtQQ2.setText(String.format(getString(R.string.txt_QQ2), configModel.getQQ2()));
+            txtQQ2.setVisibility(View.VISIBLE);
+        }
+        if (!TextUtils.isEmpty(configModel.getIntro())) {
+            txtAboutContent.setText(configModel.getIntro());
+        }
+
+        // 公告
+        if (!TextUtils.isEmpty(configModel.getNotice())) {
+            String localNotice = SharePreferencesUtil.getStringSharePreferences(MainActivity
+                    .this, Constant.KEY_NOTICE, "");
+            if (TextUtils.isEmpty(localNotice) || !localNotice.equals(configModel.getNotice())) {
+                SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant
+                        .KEY_NOTICE, configModel.getNotice());
+                txtNotice.setText(configModel.getNotice());
+                llNotice.setVisibility(View.VISIBLE);
+            }
+        }
+
+        // 更新升级
+        try {
+            final int lacalVersionCode = Integer.valueOf(ManifestUtil.getApkVersionCode
+                    (MainActivity.this));
+            final int versionCode = Integer.valueOf(configModel.getVersionCode());
+            final int forceVersionCode = Integer.valueOf(configModel.getForceVersionCode());
+            final String message = configModel.getMessage();
+            final String link = configModel.getLink();
+            // 有更新
+            if (lacalVersionCode < versionCode && !TextUtils.isEmpty(link)) {
+                // 强制更新,拦截返回虚拟键
+                if (lacalVersionCode < forceVersionCode) {
+                    flag_back = false;
+                }
+                CustomDialog customDialog = new CustomDialog(MainActivity.this, getString(R
+                        .string.update), message) {
+                    @Override
+                    public void ok() {
+                        super.ok();
+                        flag_back = true;
+                        new DownloadUtil(MainActivity.this).downloadAPK(link, getString(R.string
+                                .update_file_name));
+                    }
+
+                    @Override
+                    public void cancel() {
+                        super.cancel();
+                        // 强制更新
+                        if (lacalVersionCode < forceVersionCode) {
+                            MainActivity.this.finish();
+                        }
+                    }
+                };
+                // 屏蔽返回键
+                hideProgressBar();
+                customDialog.show();
+            } else if (flag_dialog) {
+                // 提示已经是最新版本
+                ToastUtil.showMessage(MainActivity.this, getString(R.string.no_update_tips));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @OnClick({R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R
+            .id.txt_about})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
             case R.id.txt_version:
                 getConfig(true);
-                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
                 }
                 break;
@@ -400,17 +420,18 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(MainActivity.this, CommonWebActivity.class);
                 intent.putExtra("url", "https://github.com/123lxw123");
                 startActivity(intent);
-                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
                 }
                 break;
             case R.id.txt_QQ1:
                 // 复制群号
-                if (Constant.configModel != null && !TextUtils.isEmpty(Constant.configModel.getQQ1())) {
-                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService(
-                            Context.CLIPBOARD_SERVICE);
-                    clip.setText(Constant.configModel.getQQ1());
-                    if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                if (configModel != null && !TextUtils.isEmpty(configModel
+                        .getQQ1())) {
+                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService
+                            (Context.CLIPBOARD_SERVICE);
+                    clip.setText(configModel.getQQ1());
+                    if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                         drawerlayout.closeDrawers();
                     }
                     ToastUtil.showMessage("已复制群号");
@@ -418,11 +439,12 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.txt_QQ2:
                 // 复制群号
-                if (Constant.configModel != null && !TextUtils.isEmpty(Constant.configModel.getQQ2())) {
-                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService(
-                            Context.CLIPBOARD_SERVICE);
-                    clip.setText(Constant.configModel.getQQ2());
-                    if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                if (configModel != null && !TextUtils.isEmpty(configModel
+                        .getQQ2())) {
+                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService
+                            (Context.CLIPBOARD_SERVICE);
+                    clip.setText(configModel.getQQ2());
+                    if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                         drawerlayout.closeDrawers();
                     }
                     ToastUtil.showMessage("已复制群号");
@@ -431,7 +453,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.txt_feedback:
                 // 反馈
-                if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
                 }
                 Intent intent1 = new Intent(MainActivity.this, FeedbackActivity.class);
@@ -450,8 +472,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick({R.id.img_close})
-    public void setImageViewOnClick(ImageView imageView){
-        switch (imageView.getId()){
+    public void setImageViewOnClick(ImageView imageView) {
+        switch (imageView.getId()) {
             case R.id.img_close:
                 llNotice.setVisibility(View.GONE);
                 break;
