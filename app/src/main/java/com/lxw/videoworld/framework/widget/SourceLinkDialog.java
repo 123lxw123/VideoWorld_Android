@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.framework.util.ToastUtil;
+import com.xunlei.downloadlib.XLTaskHelper;
+
+import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_PICTURE;
 
 //分享的dialog
 public class SourceLinkDialog extends AlertDialog {
@@ -30,6 +33,7 @@ public class SourceLinkDialog extends AlertDialog {
     public SourceLinkDialog(Activity context) {
         super(context);
     }
+
     public SourceLinkDialog(Activity context, String link) {
         super(context);
         this.context = context;
@@ -39,8 +43,9 @@ public class SourceLinkDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!TextUtils.isEmpty(link)){
+        if (!TextUtils.isEmpty(link)) {
             setContentView(R.layout.dialog_link_action);
+            LinearLayout ll_play_video = (LinearLayout) this.findViewById(R.id.ll_play_video);
             LinearLayout ll_thunder = (LinearLayout) this.findViewById(R.id.ll_thunder);
             LinearLayout ll_copy_link = (LinearLayout) this.findViewById(R.id.ll_copy_link);
             LinearLayout ll_cancel = (LinearLayout) this.findViewById(R.id.ll_cancel);
@@ -49,10 +54,29 @@ public class SourceLinkDialog extends AlertDialog {
                 public void onClick(View view) {
                     SourceLinkDialog.this.dismiss();
                     try {
+                        if (link.startsWith("magnet:?")) {
+                            XLTaskHelper.instance().addMagentTask(link, PATH_OFFLINE_PICTURE,
+                                    XLTaskHelper.instance().getFileName(link));
+                        }else {
+                            XLTaskHelper.instance().addThunderTask(link, PATH_OFFLINE_PICTURE,
+                                    XLTaskHelper.instance().getFileName(link));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ToastUtil.showMessage("播放失败");
+                    }
+
+                }
+            });
+            ll_thunder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SourceLinkDialog.this.dismiss();
+                    try {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                         intent.addCategory("android.intent.category.DEFAULT");
                         context.startActivity(intent);
-                    }catch (ActivityNotFoundException e){
+                    } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                         ToastUtil.showMessage("您还没安装手机迅雷");
                     }

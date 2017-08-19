@@ -102,4 +102,7 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile 'com.shuyu:gsyVideoPlayer-java:2.0.4'
+    compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.4'
+    compile project(path: ':thunder')
 }
