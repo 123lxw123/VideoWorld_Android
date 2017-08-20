@@ -11,6 +11,7 @@ import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -34,8 +35,22 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         getConfig();
+        createFolder();
         setSplashPicture();
         jumpToNext();
+    }
+
+    private void createFolder() {
+        File folder1 = new File(Constant.PATH_SPLASH_PICTURE);
+        File folder2 = new File(Constant.PATH_OFFLINE_DOWNLOAD);
+        if(!folder1.exists())
+        { //如果该文件夹不存在，则进行创建
+            folder1.mkdirs();//创建文件夹
+        }
+        if(!folder2.exists())
+        { //如果该文件夹不存在，则进行创建
+            folder2.mkdirs();//创建文件夹
+        }
     }
 
     //加载启动页图片

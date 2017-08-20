@@ -14,8 +14,6 @@ import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
 
 import cn.jpush.android.api.JPushInterface;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Created by lxw9047 on 2016/10/12.
@@ -81,9 +79,9 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
                 Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
 
         //初始化 realm 数据库
-        Realm.init(this);
-        RealmConfiguration configuration = new RealmConfiguration.Builder().build();
-        Realm.setDefaultConfiguration(configuration);
+//        Realm.init(this);
+//        RealmConfiguration configuration = new RealmConfiguration.Builder().build();
+//        Realm.setDefaultConfiguration(configuration);
         // Jpush 初始化
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);

@@ -20,7 +20,7 @@ import java.io.File;
 public class FileUtil {
     public static boolean isFileExists(String path) {
         try {
-            if (!TextUtils.isEmpty(Constant.PATH__SD_CARD)) {
+            if (!TextUtils.isEmpty(Constant.PATH_SD_CARD)) {
                 File file = new File(path);
                 if (file.exists()) {
                     return true;

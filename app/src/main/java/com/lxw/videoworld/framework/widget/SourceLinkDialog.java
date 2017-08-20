@@ -14,10 +14,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.ui.PlayVideoActivity;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.xunlei.downloadlib.XLTaskHelper;
 
-import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_PICTURE;
+import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 
 //分享的dialog
 public class SourceLinkDialog extends AlertDialog {
@@ -49,18 +50,24 @@ public class SourceLinkDialog extends AlertDialog {
             LinearLayout ll_thunder = (LinearLayout) this.findViewById(R.id.ll_thunder);
             LinearLayout ll_copy_link = (LinearLayout) this.findViewById(R.id.ll_copy_link);
             LinearLayout ll_cancel = (LinearLayout) this.findViewById(R.id.ll_cancel);
-            ll_thunder.setOnClickListener(new View.OnClickListener() {
+            ll_play_video.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     SourceLinkDialog.this.dismiss();
                     try {
+
                         if (link.startsWith("magnet:?")) {
-                            XLTaskHelper.instance().addMagentTask(link, PATH_OFFLINE_PICTURE,
+                            XLTaskHelper.instance().addMagentTask(link, PATH_OFFLINE_DOWNLOAD,
                                     XLTaskHelper.instance().getFileName(link));
                         }else {
-                            XLTaskHelper.instance().addThunderTask(link, PATH_OFFLINE_PICTURE,
+                            XLTaskHelper.instance().addThunderTask(link, PATH_OFFLINE_DOWNLOAD,
                                     XLTaskHelper.instance().getFileName(link));
                         }
+                        String url = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
+                                XLTaskHelper.instance().getFileName(link));
+                        Intent intent = new Intent(context, PlayVideoActivity.class);
+                        intent.putExtra("url", url);
+                        context.startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
                         ToastUtil.showMessage("播放失败");

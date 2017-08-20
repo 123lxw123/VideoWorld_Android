@@ -43,13 +43,13 @@ public class Constant {
     public static boolean isAllowScreenRoate = false;
 
     /** 内置SD卡路径**/
-    public static String PATH__SD_CARD = Environment.getExternalStorageDirectory().toString() + "/";
+    public static String PATH_SD_CARD = Environment.getExternalStorageDirectory().toString() + "/";
     /** APP文件夹路径**/
-    public static String PATH_APP = PATH__SD_CARD + "VideoWorld/";
+    public static String PATH_APP = PATH_SD_CARD + "VideoWorld/";
     /** 保存图片文件夹路径**/
     public static String PATH_SAVE_PICTURE = PATH_APP + "pictures/";
     /** 离线图片文件夹路径**/
-    public static String PATH_OFFLINE_PICTURE = PATH_APP + "download/";
+    public static String PATH_OFFLINE_DOWNLOAD = PATH_APP + "download/";
     /** 启动页图片文件夹路径**/
     public static String PATH_SPLASH_PICTURE = PATH_APP + "splash/";
     /** 启动页图片路径**/

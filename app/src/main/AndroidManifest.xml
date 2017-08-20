@@ -109,6 +109,9 @@
         <activity android:name=".app.ui.CommonWebActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
+        <activity android:name=".app.ui.PlayVideoActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".app.service.BackgroundIntentService"/>
     </application>

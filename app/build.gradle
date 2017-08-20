@@ -7,14 +7,14 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
-    signingConfigs {
-        config {
-            keyAlias 'alias'
-            keyPassword '123456'
-            storeFile file('/Users/lixiongwen/Documents/Android_Project/VideoWorld_Android/appKeyStore.jks')
-            storePassword '123456'
-        }
-    }
+//    signingConfigs {
+//        config {
+//            keyAlias 'alias'
+//            keyPassword '123456'
+//            storeFile file('/Users/lixiongwen/Documents/Android_Project/VideoWorld_Android/appKeyStore.jks')
+//            storePassword '123456'
+//        }
+//    }
 
     defaultConfig {
         applicationId "com.lxw.videoworld"
@@ -25,7 +25,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'armeabi'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         manifestPlaceholders = [
@@ -38,12 +38,12 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
     }
 }
