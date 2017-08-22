@@ -12,6 +12,7 @@ import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.taobao.sophix.PatchStatus;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
+import com.xunlei.downloadlib.XLTaskHelper;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -77,7 +78,8 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         // 切换搜索引擎
         Constant.SEARCH_TYPE = SharePreferencesUtil.getStringSharePreferences(appContext,
                 Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
-
+        // 初始化迅雷下载
+        XLTaskHelper.init(getApplicationContext());
         //初始化 realm 数据库
 //        Realm.init(this);
 //        RealmConfiguration configuration = new RealmConfiguration.Builder().build();

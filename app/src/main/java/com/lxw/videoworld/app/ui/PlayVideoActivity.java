@@ -6,21 +6,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.transition.Transition;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.lxw.videoworld.R;
-import com.lxw.videoworld.app.model.SwitchVideoModel;
+import com.lxw.videoworld.framework.base.BaseActivity;
+import com.lxw.videoworld.framework.util.StatusBarUtil;
+import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.widget.OnTransitionListener;
-import com.lxw.videoworld.framework.widget.SampleVideo;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,13 +26,13 @@ import butterknife.ButterKnife;
 /**
  * 单独的视频播放页面
  */
-public class PlayVideoActivity extends AppCompatActivity {
+public class PlayVideoActivity extends BaseActivity {
 
     public final static String IMG_TRANSITION = "IMG_TRANSITION";
     public final static String TRANSITION = "TRANSITION";
 
     @BindView(R.id.video_player)
-    SampleVideo videoPlayer;
+    StandardGSYVideoPlayer videoPlayer;
 
     OrientationUtils orientationUtils;
 
@@ -46,23 +44,20 @@ public class PlayVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtil.hideStatusBar(this);
         setContentView(R.layout.activity_play_video);
         ButterKnife.bind(this);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         url = getIntent().getStringExtra("url");
-        if(!TextUtils.isEmpty(url)){
-            init();
+        if(TextUtils.isEmpty(url)){
+            url = "";
+            ToastUtil.showMessage("无效链接");
         }
+        init();
     }
 
     private void init() {
-        String name = "清晰";
-        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, url);
-
-        List<SwitchVideoModel> list = new ArrayList<>();
-        list.add(switchVideoModel);
-
-        videoPlayer.setUp(list, false, "");
+        videoPlayer.setUp(url, false, "");
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -71,8 +66,8 @@ public class PlayVideoActivity extends AppCompatActivity {
         videoPlayer.setThumbImageView(imageView);
 
         //增加title
-        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-        videoPlayer.getTitleTextView().setText("测试视频");
+//        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+//        videoPlayer.getTitleTextView().setText("测试视频");
         //videoPlayer.setShowPauseCover(false);
 
         //videoPlayer.setSpeed(2f);

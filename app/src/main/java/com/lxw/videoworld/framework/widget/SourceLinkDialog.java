@@ -66,7 +66,7 @@ public class SourceLinkDialog extends AlertDialog {
                         String url = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                                 XLTaskHelper.instance().getFileName(link));
                         Intent intent = new Intent(context, PlayVideoActivity.class);
-                        intent.putExtra("url", url);
+                        intent.putExtra("url",  url);
                         context.startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();

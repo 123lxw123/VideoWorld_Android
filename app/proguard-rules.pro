@@ -46,6 +46,10 @@
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
+-keep class tv.danmaku.ijk.** { *; }
+-dontwarn tv.danmaku.ijk.**
+-keep class com.shuyu.gsyvideoplayer.** { *; }
+-dontwarn com.shuyu.gsyvideoplayer.**
 
 -keepclassmembers class * extends android.app.Activity {
    public void *(android.view.View);

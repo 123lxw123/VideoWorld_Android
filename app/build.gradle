@@ -25,7 +25,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi'
+            abiFilters 'armeabi','armeabi-v7a'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         manifestPlaceholders = [
@@ -103,6 +103,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.shuyu:gsyVideoPlayer-java:2.0.4'
-    compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.4'
     compile project(path: ':thunder')
 }
