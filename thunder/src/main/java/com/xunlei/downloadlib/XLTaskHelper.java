@@ -242,6 +242,14 @@ public class XLTaskHelper {
     }
 
     /**
+     * 停止任务 文件保留
+     * @param taskId
+     */
+    public synchronized void startTask(long taskId, boolean z) {
+        XLDownloadManager.getInstance().startTask(taskId, z);
+    }
+
+    /**
      * 获取任务详情， 包含当前状态，下载进度，下载速度，文件大小
      * mDownloadSize:已下载大小  mDownloadSpeed:下载速度 mFileSize:文件总大小 mTaskStatus:当前状态，0连接中1下载中 2下载完成 3失败 mAdditionalResDCDNSpeed DCDN加速 速度
      * @param taskId

