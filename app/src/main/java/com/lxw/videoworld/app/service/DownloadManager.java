@@ -4,18 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
-import com.lxw.videoworld.framework.log.LoggerHelper;
-import com.lxw.videoworld.framework.util.GsonUtil;
+import com.lxw.videoworld.framework.util.ToastUtil;
 import com.xunlei.downloadlib.XLTaskHelper;
-import com.xunlei.downloadlib.parameter.TorrentInfo;
+import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 
@@ -32,13 +35,40 @@ public class DownloadManager {
         try {
             if (link.startsWith("magnet:?")) {
                 taskId = XLTaskHelper.instance().addMagentTask(link, PATH_OFFLINE_DOWNLOAD, null);
-                Observable.just(taskId).delay(10, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
+                getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>(){
+                    Disposable mD = null;
+
                     @Override
-                    public void accept(@NonNull Long aLong) throws Exception {
-                        TorrentInfo info = XLTaskHelper.instance().getTorrentInfo(PATH_OFFLINE_DOWNLOAD + XLTaskHelper.instance().getFileName(link));
-                        LoggerHelper.info("DownloadManager", GsonUtil.bean2json(info));
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mD = d;
+                    }
+
+                    @Override
+                    public void onNext(XLTaskInfo xlTaskInfo) {
+                        switch (String.valueOf(xlTaskInfo.mTaskId)) {
+                            case "0":
+                                ToastUtil.showMessage("资源已在下载队列中");
+                                mD.dispose();
+                                break;
+                            case "1":
+                                break;
+                            case "2":
+
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
+
             }else {
                 taskId = XLTaskHelper.instance().addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null);
                 if(isPlayVideo){
@@ -58,5 +88,18 @@ public class DownloadManager {
             taskIds.add(taskId);
         }
         return taskId;
+    }
+
+    public static Observable getDownloadObservable(final long taskId){
+        return Observable.interval(0, 5, TimeUnit.SECONDS)
+                .map(new Function<Long, XLTaskInfo>() {
+
+                    @Override
+                    public XLTaskInfo apply(@NonNull Long aLong) throws Exception {
+                        return XLTaskHelper.instance().getTaskInfo(taskId) ;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

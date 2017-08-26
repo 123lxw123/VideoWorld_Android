@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 读取日历 -->
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <!--<uses-permission android:name="android.permission.READ_CALENDAR" />-->
      读联系人权限
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- 写联系人权限 -->
