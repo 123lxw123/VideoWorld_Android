@@ -32,7 +32,8 @@
         android:background="@drawable/selector_item_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="15dp">
+        android:paddingLeft="15dp"
+        android:visibility="gone">
 
         <ImageView
             android:scaleType="centerInside"

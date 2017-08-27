@@ -6,4 +6,5 @@ public class TorrentInfo {
     public boolean mIsMultiFiles;
     public String mMultiFileBaseFolder;
     public TorrentFileInfo[] mSubFileInfo;
+    public String torrentPath;
 }

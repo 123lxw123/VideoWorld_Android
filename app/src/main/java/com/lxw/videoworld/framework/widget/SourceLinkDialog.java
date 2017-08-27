@@ -22,6 +22,7 @@ public class SourceLinkDialog extends AlertDialog {
 
     private Activity context;
     private String link;
+    private boolean isPlayVideo;
     // 取消按钮
 
     public SourceLinkDialog(Activity context, int theme) {
@@ -32,10 +33,11 @@ public class SourceLinkDialog extends AlertDialog {
         super(context);
     }
 
-    public SourceLinkDialog(Activity context, String link) {
+    public SourceLinkDialog(Activity context, String link, boolean isPlayVideo) {
         super(context);
         this.context = context;
         this.link = link;
+        this.isPlayVideo = isPlayVideo;
     }
 
     @Override
@@ -43,17 +45,20 @@ public class SourceLinkDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
         if (!TextUtils.isEmpty(link)) {
             setContentView(R.layout.dialog_link_action);
-            LinearLayout ll_play_video = (LinearLayout) this.findViewById(R.id.ll_play_video);
             LinearLayout ll_thunder = (LinearLayout) this.findViewById(R.id.ll_thunder);
             LinearLayout ll_copy_link = (LinearLayout) this.findViewById(R.id.ll_copy_link);
             LinearLayout ll_cancel = (LinearLayout) this.findViewById(R.id.ll_cancel);
-            ll_play_video.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    SourceLinkDialog.this.dismiss();
-                    DownloadManager.download(context, link, true);
-                }
-            });
+            if(isPlayVideo){
+                LinearLayout ll_play_video = (LinearLayout) this.findViewById(R.id.ll_play_video);
+                ll_play_video.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SourceLinkDialog.this.dismiss();
+                        DownloadManager.addNormalTask(context, link, true);
+                    }
+                });
+                ll_play_video.setVisibility(View.VISIBLE);
+            }
             ll_thunder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

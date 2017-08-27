@@ -73,6 +73,7 @@
     <string name="txt_change_search">切换搜索引擎中</string>
 
     <string name="ok">确定</string>
+    <string name="all">全部</string>
     <string name="cancel">取消</string>
     <string name="update">新版本更新</string>
     <string name="no_update_tips">当前已是最新版本</string>

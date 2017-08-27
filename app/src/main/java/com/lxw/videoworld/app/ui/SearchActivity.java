@@ -173,7 +173,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                         @Override
                         public void onClick(View v) {
                             // TODO
-                            SourceLinkDialog dialog = new SourceLinkDialog(SearchActivity.this, (String) item.getThunderLink());
+                            SourceLinkDialog dialog = new SourceLinkDialog(SearchActivity.this, (String) item.getThunderLink(), true);
                             dialog.show();
                         }
                     });
@@ -184,7 +184,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     @Override
                     public void onClick(View v) {
                         // TODO
-                        SourceLinkDialog dialog = new SourceLinkDialog(SearchActivity.this, (String) item.getCiliLink());
+                        SourceLinkDialog dialog = new SourceLinkDialog(SearchActivity.this, (String) item.getCiliLink(), true);
                         dialog.show();
                     }
                 });

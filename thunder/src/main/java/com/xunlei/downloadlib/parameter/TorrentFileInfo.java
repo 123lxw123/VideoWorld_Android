@@ -8,4 +8,5 @@ public class TorrentFileInfo {
     public String mSubPath;
     public String playUrl;
     public String hash;
+    public boolean checked = true;
 }

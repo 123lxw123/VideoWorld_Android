@@ -252,9 +252,13 @@ public class SourceDetailActivity extends BaseActivity {
                 @Override
                 public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
-                    SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position));
-                    dialog.show();
-
+                    if(sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)){
+                        SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position), false);
+                        dialog.show();
+                    }else {
+                        SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position), true);
+                        dialog.show();
+                    }
                 }
             });
             recyclerviewLink.setAdapter(sourceLinkAdapter);
