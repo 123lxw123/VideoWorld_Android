@@ -2,6 +2,7 @@ package com.lxw.videoworld.app.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
@@ -23,6 +24,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -38,6 +40,10 @@ public class DownloadManager {
     public static List<Long> taskIds;
     public static final String TAG = "DownloadManager";
 
+    public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo) {
+        return addNormalTask(context, link, isPlayVideo, null, null);
+    }
+
     /**
      * 所有的下载都走这个方法，有它判断调用迅雷对应的Api
      * @param context
@@ -45,122 +51,17 @@ public class DownloadManager {
      * @param isPlayVideo
      * @return
      */
-    public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo) {
-        long taskId;
+    public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+        long taskId = -1;
         try {
             if (link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent")) {
                 if(link.startsWith("magnet:?")){
-                    taskId = XLTaskHelper.instance().addMagentTask(link, PATH_OFFLINE_DOWNLOAD, null);
+                    taskId = addMagentTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
                 }else {
-                    taskId = XLTaskHelper.instance().addMagentTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null);
+                    taskId = addMagentTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
                 }
-                getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
-                    Disposable mD = null;
-                    LoadingDialog loadingDialog = new LoadingDialog(context);
-
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        mD = d;
-                    }
-
-                    @Override
-                    public void onNext(XLTaskInfo xlTaskInfo) {
-                        switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
-                            case "0":
-                                LoggerHelper.info(TAG, "STATUS_0");
-                                ToastUtil.showMessage("资源已在下载队列中");
-                                mD.dispose();
-                                break;
-                            case "1":
-                                LoggerHelper.info(TAG, "STATUS_1");
-                                if(!loadingDialog.isShowing()){
-                                    loadingDialog.show();
-                                }
-                                break;
-                            case "2":
-                                LoggerHelper.info(TAG, "STATUS_2");
-                                if(loadingDialog.isShowing()){
-                                    loadingDialog.dismiss();
-                                }
-                                mD.dispose();
-                                String torrentPath = PATH_OFFLINE_DOWNLOAD + XLTaskHelper.instance().getFileName(link);
-                                TorrentInfo torrentInfo = XLTaskHelper.instance().getTorrentInfo(torrentPath);
-                                torrentInfo.torrentPath = torrentPath;
-                                DownloadTorrentDialog dialog = new DownloadTorrentDialog(context, torrentInfo, isPlayVideo);
-                                dialog.show();
-                                break;
-                            case "3":
-                                LoggerHelper.info(TAG, "STATUS_3");
-                                ToastUtil.showMessage("资源无法下载");
-                                mD.dispose();
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
             } else {
-                taskId = XLTaskHelper.instance().addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null);
-                getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
-                    Disposable mD = null;
-
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        mD = d;
-                    }
-
-                    @Override
-                    public void onNext(XLTaskInfo xlTaskInfo) {
-                        switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
-                            case "0":
-                                ToastUtil.showMessage("资源已在下载队列中");
-                                LoggerHelper.info(TAG, "STATUS_0");
-                                LoggerHelper.info(TAG, xlTaskInfo.toString());
-                                mD.dispose();
-                                break;
-                            case "1":
-                                LoggerHelper.info(TAG, "STATUS_1");
-                                LoggerHelper.info(TAG, xlTaskInfo.toString());
-                                break;
-                            case "2":
-                                LoggerHelper.info(TAG, "STATUS_2");
-                                LoggerHelper.info(TAG, xlTaskInfo.toString());
-                                mD.dispose();
-                                break;
-                            case "3":
-                                LoggerHelper.info(TAG, "STATUS_3");
-                                ToastUtil.showMessage("资源无法下载");
-                                mD.dispose();
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-                String url = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
-                        XLTaskHelper.instance().getFileName(link));
-                if (isPlayVideo) {
-                    Intent intent = new Intent(context, PlayVideoActivity.class);
-                    intent.putExtra("url", url);
-                    context.startActivity(intent);
-                }
+                taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,8 +72,8 @@ public class DownloadManager {
         return taskId;
     }
 
-    public static long addTorrentTask(String torrentPath, String savePath, int[] indexs) {
-        return addTorrentTask(torrentPath, savePath, indexs, -1);
+    public static long addTorrentTask(String torrentPath, String savePath, int[] indexs, Consumer<? super XLTaskInfo> nextCall, Consumer<? super Throwable> errorCall) {
+        return addTorrentTask(torrentPath, savePath, indexs, -1, nextCall, errorCall);
     }
 
     /**
@@ -183,11 +84,10 @@ public class DownloadManager {
      * @return
      * @throws Exception
      */
-    public static long addTorrentTask(String torrentPath, String savePath, int[] indexs, int index) {
-        long taskId;
+    public static long addTorrentTask(String torrentPath, String savePath, int[] indexs, int index, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+        long taskId = -1;
         try {
             taskId = XLTaskHelper.instance().addTorrentTask(torrentPath, savePath, indexs);
-            final long finalTaskId = taskId;
             getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
                 Disposable mD = null;
 
@@ -198,33 +98,45 @@ public class DownloadManager {
 
                 @Override
                 public void onNext(XLTaskInfo xlTaskInfo) {
+                    LoggerHelper.info(TAG, xlTaskInfo.toString());
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
-                            ToastUtil.showMessage("资源已在下载队列中");
                             LoggerHelper.info(TAG, "STATUS_0");
-                            LoggerHelper.info(TAG, xlTaskInfo.toString());
-                            mD.dispose();
                             break;
                         case "1":
                             LoggerHelper.info(TAG, "STATUS_1");
-                            LoggerHelper.info(TAG, xlTaskInfo.toString());
                             break;
                         case "2":
                             LoggerHelper.info(TAG, "STATUS_2");
-                            LoggerHelper.info(TAG, xlTaskInfo.toString());
                             mD.dispose();
                             break;
                         case "3":
                             LoggerHelper.info(TAG, "STATUS_3");
-                            ToastUtil.showMessage("资源无法下载");
+                            ToastUtil.showMessage("资源下载失败");
                             mD.dispose();
                             break;
+                        default:
+                            LoggerHelper.info(TAG, "STATUS_DEFAULT");
+                            break;
+                    }
+                    try{
+                        if (nextCall != null){
+                            nextCall.accept(xlTaskInfo);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
-
+                    try{
+                        if (errorCall != null){
+                            errorCall.accept(t);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -237,7 +149,6 @@ public class DownloadManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
         }
         if (taskIds == null) taskIds = new ArrayList<>();
         taskIds.add(taskId);
@@ -252,13 +163,186 @@ public class DownloadManager {
      * @return
      * @throws Exception
      */
-//    public static long addMagentTask(final String url,final String savePath,String fileName) throws Exception {
-//        final long taskId
-//        XLTaskHelper.instance().addMagentTask(url, savePath, fileName);
-//    }
+    public static long addMagentTask(final String url,final String savePath,String fileName, final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+        long taskId = -1;
+        try{
+            taskId = XLTaskHelper.instance().addMagentTask(url, savePath, fileName);
+            getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
+                LoadingDialog loadingDialog = new LoadingDialog(context);
+                Disposable mD = null;
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                    mD = d;
+                }
 
+                @Override
+                public void onNext(XLTaskInfo xlTaskInfo) {
+                    LoggerHelper.info(TAG, xlTaskInfo.toString());
+                    switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
+                        case "0":
+                            LoggerHelper.info(TAG, "STATUS_0");
+                            if(!loadingDialog.isShowing()){
+                                loadingDialog.show();
+                            }
+                            break;
+                        case "1":
+                            LoggerHelper.info(TAG, "STATUS_1");
+                            if(!loadingDialog.isShowing()){
+                                loadingDialog.show();
+                            }
+                            break;
+                        case "2":
+                            LoggerHelper.info(TAG, "STATUS_2");
+                            mD.dispose();
+                            if(loadingDialog.isShowing()){
+                                loadingDialog.dismiss();
+                            }
+                            String torrentPath = PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName;
+                            TorrentInfo torrentInfo = XLTaskHelper.instance().getTorrentInfo(torrentPath);
+                            torrentInfo.torrentPath = torrentPath;
+                            DownloadTorrentDialog dialog = new DownloadTorrentDialog(context, torrentInfo, isPlayVideo);
+                            dialog.show();
+                            break;
+                        case "3":
+                            LoggerHelper.info(TAG, "STATUS_3");
+                            mD.dispose();
+                            if(loadingDialog.isShowing()){
+                                loadingDialog.dismiss();
+                            }
+                            ToastUtil.showMessage("资源下载失败");
+                            break;
+                        default:
+                            LoggerHelper.info(TAG, "STATUS_DEFAULT");
+                            mD.dispose();
+                            if(loadingDialog.isShowing()){
+                                loadingDialog.dismiss();
+                            }
+                            break;
+                    }
+                    try{
+                        if (nextCall != null){
+                            nextCall.accept(xlTaskInfo);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
 
+                @Override
+                public void onError(Throwable t) {
+                    if(loadingDialog.isShowing()){
+                        loadingDialog.dismiss();
+                    }
+                    try{
+                        if (errorCall != null){
+                            errorCall.accept(t);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
 
+                @Override
+                public void onComplete() {
+                    if(loadingDialog.isShowing()){
+                        loadingDialog.dismiss();
+                    }
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return taskId;
+    }
+
+    public static long addThunderTask(String url, String savePath, @Nullable String fileName, Consumer<? super XLTaskInfo> nextCall, Consumer<? super Throwable> errorCall) {
+        return addThunderTask(url, savePath, fileName, null, false, nextCall, errorCall);
+    }
+
+    /**
+     * 添加迅雷链接任务 支持thunder:// ftp:// ed2k:// http:// https:// 协议
+     * @param url
+     * @param savePath 下载文件保存路径
+     * @param fileName 下载文件名 可以通过 getFileName(url) 获取到,为空默认为getFileName(url)的值
+     * @return
+     */
+    public static long addThunderTask(String url, String savePath, @Nullable String fileName, final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+        long taskId = -1;
+        try{
+            taskId = XLTaskHelper.instance().addThunderTask(url, savePath, fileName);
+            String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
+                    XLTaskHelper.instance().getFileName(url));
+            if (isPlayVideo) {
+                Intent intent = new Intent(context, PlayVideoActivity.class);
+                intent.putExtra("url", localUrl);
+                context.startActivity(intent);
+            }
+            getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
+                Disposable mD = null;
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                    mD = d;
+                }
+
+                @Override
+                public void onNext(XLTaskInfo xlTaskInfo) {
+                    LoggerHelper.info(TAG, xlTaskInfo.toString());
+                    switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
+                        case "0":
+                            LoggerHelper.info(TAG, "STATUS_0");
+                            break;
+                        case "1":
+                            LoggerHelper.info(TAG, "STATUS_1");
+                            break;
+                        case "2":
+                            LoggerHelper.info(TAG, "STATUS_2");
+                            mD.dispose();
+                            break;
+                        case "3":
+                            LoggerHelper.info(TAG, "STATUS_3");
+                            ToastUtil.showMessage("资源下载失败");
+                            mD.dispose();
+                            break;
+                        default:
+                            LoggerHelper.info(TAG, "STATUS_DEFAULT");
+                            break;
+                    }
+                    try{
+                        if (nextCall != null){
+                            nextCall.accept(xlTaskInfo);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    try{
+                        if (errorCall != null){
+                            errorCall.accept(t);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return taskId;
+    }
+
+    /**
+     * 获取下载任务的被观察者
+     * @param taskId
+     * @return
+     */
     public static Observable getDownloadObservable(final long taskId) {
         return Observable.interval(0, 5, TimeUnit.SECONDS)
                 .map(new Function<Long, XLTaskInfo>() {

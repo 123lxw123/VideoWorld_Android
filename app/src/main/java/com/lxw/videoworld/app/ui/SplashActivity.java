@@ -2,8 +2,8 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
-import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.service.BackgroundIntentService;
@@ -23,7 +23,7 @@ import io.reactivex.functions.Consumer;
 public class SplashActivity extends BaseActivity {
 
     @BindView(R.id.img_picture)
-    KenBurnsView imgPicture;
+    ImageView imgPicture;
 
     public static final String SPLASH_PICTURE_LINK = "SPLASH_PICTURE_LINK";
 
@@ -68,7 +68,6 @@ public class SplashActivity extends BaseActivity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long along) {
-                        imgPicture.pause();
                         Bundle bundle = new Bundle();
                         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                         intent.putExtras(bundle);

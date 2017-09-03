@@ -70,7 +70,7 @@ public class XLTaskHelper {
      * @param fileName 下载文件名 可以通过 getFileName(url) 获取到,为空默认为getFileName(url)的值
      * @return
      */
-    public synchronized long addThunderTask(String url, String savePath, @Nullable String fileName) {
+    public synchronized long addThunderTask(String url, String savePath, @Nullable String fileName) throws Exception{
         if (url.startsWith("thunder://")) url = XLDownloadManager.getInstance().parserThunderUrl(url);
         final GetTaskId getTaskId = new GetTaskId();
         if(TextUtils.isEmpty(fileName)) {
