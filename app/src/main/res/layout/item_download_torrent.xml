@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_5"
-        android:textColor="?attr/com_font_C"
+        android:textColor="?attr/com_font_A"
         android:textSize="@dimen/sp_14" />
 
     <CheckBox

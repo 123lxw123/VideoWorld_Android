@@ -171,7 +171,7 @@ public class XLTaskHelper {
      * @throws Exception
      */
     public synchronized long addTorrentTask(String torrentPath,String savePath,int []indexs) throws Exception {
-        TorrentInfo torrentInfo = new TorrentInfo();
+         TorrentInfo torrentInfo = new TorrentInfo();
         XLDownloadManager.getInstance().getTorrentInfo(torrentPath,torrentInfo);
         TorrentFileInfo[] fileInfos = torrentInfo.mSubFileInfo;
         BtTaskParam taskParam = new BtTaskParam();
