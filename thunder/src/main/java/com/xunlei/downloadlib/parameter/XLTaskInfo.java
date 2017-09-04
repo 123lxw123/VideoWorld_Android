@@ -2,7 +2,6 @@ package com.xunlei.downloadlib.parameter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 public class XLTaskInfo implements Parcelable {
     public static final Creator<XLTaskInfo> CREATOR = new Creator<XLTaskInfo>() {
@@ -98,5 +97,37 @@ public class XLTaskInfo implements Parcelable {
         this.mAdditionalResVipRecvBytes = parcel.readLong();
         this.mAdditionalResPeerSpeed = parcel.readLong();
         this.mAdditionalResPeerBytes = parcel.readLong();
+    }
+
+    @Override
+    public String toString() {
+        return "XLTaskInfo{" +
+                "mAddedHighSourceState=" + mAddedHighSourceState +
+                ", mAdditionalResCount=" + mAdditionalResCount +
+                ", mAdditionalResDCDNBytes=" + mAdditionalResDCDNBytes +
+                ", mAdditionalResDCDNSpeed=" + mAdditionalResDCDNSpeed +
+                ", mAdditionalResPeerBytes=" + mAdditionalResPeerBytes +
+                ", mAdditionalResPeerSpeed=" + mAdditionalResPeerSpeed +
+                ", mAdditionalResType=" + mAdditionalResType +
+                ", mAdditionalResVipRecvBytes=" + mAdditionalResVipRecvBytes +
+                ", mAdditionalResVipSpeed=" + mAdditionalResVipSpeed +
+                ", mCid='" + mCid + '\'' +
+                ", mDownloadSize=" + mDownloadSize +
+                ", mDownloadSpeed=" + mDownloadSpeed +
+                ", mErrorCode=" + mErrorCode +
+                ", mFileName='" + mFileName + '\'' +
+                ", mFileSize=" + mFileSize +
+                ", mGcid='" + mGcid + '\'' +
+                ", mInfoLen=" + mInfoLen +
+                ", mOriginRecvBytes=" + mOriginRecvBytes +
+                ", mOriginSpeed=" + mOriginSpeed +
+                ", mP2PRecvBytes=" + mP2PRecvBytes +
+                ", mP2PSpeed=" + mP2PSpeed +
+                ", mP2SRecvBytes=" + mP2SRecvBytes +
+                ", mP2SSpeed=" + mP2SSpeed +
+                ", mQueryIndexStatus=" + mQueryIndexStatus +
+                ", mTaskId=" + mTaskId +
+                ", mTaskStatus=" + mTaskStatus +
+                '}';
     }
 }

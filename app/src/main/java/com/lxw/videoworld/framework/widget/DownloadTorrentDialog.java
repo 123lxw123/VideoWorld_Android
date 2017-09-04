@@ -107,7 +107,7 @@ public class DownloadTorrentDialog extends AlertDialog {
                     for(int j = 0; j < indexs1.size(); j++){
                         indexs[j] = indexs1.get(j);
                     }
-                    DownloadManager.addTorrentTask(torrentInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, indexs);
+                    DownloadManager.addTorrentTask(torrentInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, indexs, null, null);
                     dismiss();
                 }else{
                     ToastUtil.showMessage("请选择下载文件");

@@ -15,8 +15,8 @@ import com.xunlei.downloadlib.XLTaskHelper;
 import com.xunlei.downloadlib.parameter.TorrentInfo;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -37,7 +37,7 @@ import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
  */
 
 public class DownloadManager {
-    public static List<Long> taskIds;
+    public static Set<String> downloadUrls = new HashSet<>();
     public static final String TAG = "DownloadManager";
 
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo) {
@@ -56,9 +56,9 @@ public class DownloadManager {
         try {
             if (link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent")) {
                 if(link.startsWith("magnet:?")){
-                    taskId = addMagentTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
+                    taskId = addMagnetTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
                 }else {
-                    taskId = addMagentTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
+                    taskId = addMagnetTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
                 }
             } else {
                 taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
@@ -67,8 +67,6 @@ public class DownloadManager {
             e.printStackTrace();
             return -1;
         }
-        if (taskIds == null) taskIds = new ArrayList<>();
-        taskIds.add(taskId);
         return taskId;
     }
 
@@ -77,14 +75,15 @@ public class DownloadManager {
     }
 
     /**
-     * 添加种子下载任务,如果是磁力链需要先通过addMagentTask将种子下载下来
+     * 添加种子下载任务,如果是磁力链需要先通过addMagnetTask将种子下载下来
      * @param torrentPath 种子地址
      * @param savePath 保存路径
      * @param indexs 需要下载的文件索引
      * @return
      * @throws Exception
      */
-    public static long addTorrentTask(String torrentPath, String savePath, int[] indexs, int index, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+    public static long addTorrentTask(String torrentPath, String savePath, int[] indexs, int index,
+                                      final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try {
             taskId = XLTaskHelper.instance().addTorrentTask(torrentPath, savePath, indexs);
@@ -101,22 +100,24 @@ public class DownloadManager {
                     LoggerHelper.info(TAG, xlTaskInfo.toString());
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
-                            LoggerHelper.info(TAG, "STATUS_0");
+                            LoggerHelper.info(TAG, "TORRENT_STATUS_0");
                             break;
                         case "1":
-                            LoggerHelper.info(TAG, "STATUS_1");
+                            LoggerHelper.info(TAG, "TORRENT_STATUS_1");
+                            if (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize)
+                                mD.dispose();
                             break;
                         case "2":
-                            LoggerHelper.info(TAG, "STATUS_2");
+                            LoggerHelper.info(TAG, "TORRENT_STATUS_2");
                             mD.dispose();
                             break;
                         case "3":
-                            LoggerHelper.info(TAG, "STATUS_3");
+                            LoggerHelper.info(TAG, "TORRENT_STATUS_3");
                             ToastUtil.showMessage("资源下载失败");
                             mD.dispose();
                             break;
                         default:
-                            LoggerHelper.info(TAG, "STATUS_DEFAULT");
+                            LoggerHelper.info(TAG, "TORRENT_STATUS_DEFAULT");
                             break;
                     }
                     try{
@@ -150,8 +151,6 @@ public class DownloadManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (taskIds == null) taskIds = new ArrayList<>();
-        taskIds.add(taskId);
         return taskId;
     }
 
@@ -163,10 +162,12 @@ public class DownloadManager {
      * @return
      * @throws Exception
      */
-    public static long addMagentTask(final String url,final String savePath,String fileName, final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+    public static long addMagnetTask(final String url, final String savePath, String fileName,
+                                     final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try{
-            taskId = XLTaskHelper.instance().addMagentTask(url, savePath, fileName);
+            taskId = XLTaskHelper.instance().addMagnetTask(url, savePath, fileName);
+            downloadUrls.add(url);
             getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
                 LoadingDialog loadingDialog = new LoadingDialog(context);
                 Disposable mD = null;
@@ -180,31 +181,33 @@ public class DownloadManager {
                     LoggerHelper.info(TAG, xlTaskInfo.toString());
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
-                            LoggerHelper.info(TAG, "STATUS_0");
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_0");
                             if(!loadingDialog.isShowing()){
                                 loadingDialog.show();
                             }
                             break;
                         case "1":
-                            LoggerHelper.info(TAG, "STATUS_1");
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_1");
                             if(!loadingDialog.isShowing()){
                                 loadingDialog.show();
                             }
+                            if (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize)
+                                mD.dispose();
                             break;
                         case "2":
-                            LoggerHelper.info(TAG, "STATUS_2");
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_2");
                             mD.dispose();
                             if(loadingDialog.isShowing()){
                                 loadingDialog.dismiss();
                             }
-                            String torrentPath = PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName;
+                            String torrentPath = PATH_OFFLINE_DOWNLOAD +XLTaskHelper.instance().getFileName(url);
                             TorrentInfo torrentInfo = XLTaskHelper.instance().getTorrentInfo(torrentPath);
                             torrentInfo.torrentPath = torrentPath;
                             DownloadTorrentDialog dialog = new DownloadTorrentDialog(context, torrentInfo, isPlayVideo);
                             dialog.show();
                             break;
                         case "3":
-                            LoggerHelper.info(TAG, "STATUS_3");
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_3");
                             mD.dispose();
                             if(loadingDialog.isShowing()){
                                 loadingDialog.dismiss();
@@ -212,7 +215,7 @@ public class DownloadManager {
                             ToastUtil.showMessage("资源下载失败");
                             break;
                         default:
-                            LoggerHelper.info(TAG, "STATUS_DEFAULT");
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_DEFAULT");
                             mD.dispose();
                             if(loadingDialog.isShowing()){
                                 loadingDialog.dismiss();
@@ -266,10 +269,12 @@ public class DownloadManager {
      * @param fileName 下载文件名 可以通过 getFileName(url) 获取到,为空默认为getFileName(url)的值
      * @return
      */
-    public static long addThunderTask(String url, String savePath, @Nullable String fileName, final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+    public static long addThunderTask(String url, String savePath, @Nullable String fileName,
+                                      final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try{
             taskId = XLTaskHelper.instance().addThunderTask(url, savePath, fileName);
+            downloadUrls.add(url);
             String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                     XLTaskHelper.instance().getFileName(url));
             if (isPlayVideo) {
@@ -289,22 +294,24 @@ public class DownloadManager {
                     LoggerHelper.info(TAG, xlTaskInfo.toString());
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
-                            LoggerHelper.info(TAG, "STATUS_0");
+                            LoggerHelper.info(TAG, "THUNDER_STATUS_0");
                             break;
                         case "1":
-                            LoggerHelper.info(TAG, "STATUS_1");
+                            LoggerHelper.info(TAG, "THUNDER_STATUS_1");
+                            if (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize)
+                                mD.dispose();
                             break;
                         case "2":
-                            LoggerHelper.info(TAG, "STATUS_2");
+                            LoggerHelper.info(TAG, "THUNDER_STATUS_2");
                             mD.dispose();
                             break;
                         case "3":
-                            LoggerHelper.info(TAG, "STATUS_3");
+                            LoggerHelper.info(TAG, "THUNDER_STATUS_3");
                             ToastUtil.showMessage("资源下载失败");
                             mD.dispose();
                             break;
                         default:
-                            LoggerHelper.info(TAG, "STATUS_DEFAULT");
+                            LoggerHelper.info(TAG, "THUNDER_STATUS_DEFAULT");
                             break;
                     }
                     try{

@@ -128,7 +128,7 @@ public class XLTaskHelper {
      * @return
      * @throws Exception
      */
-    public synchronized long addMagentTask(final String url,final String savePath,String fileName) throws Exception {
+    public synchronized long addMagnetTask(final String url, final String savePath, String fileName) throws Exception {
         if (url.startsWith("magnet:?")) {
             if(TextUtils.isEmpty(fileName)) {
                 final GetFileName getFileName = new GetFileName();
