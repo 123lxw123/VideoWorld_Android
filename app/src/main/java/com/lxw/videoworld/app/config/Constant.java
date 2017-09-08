@@ -41,6 +41,8 @@ public class Constant {
     public static boolean isDebug = true;
     /** 是否旋转屏幕**/
     public static boolean isAllowScreenRoate = false;
+    /** 下载任务链接集合**/
+    public static String KEY_DOWNLOAD_URLS = "KEY_DOWNLOAD_URLS";
 
     /** 内置SD卡路径**/
     public static String PATH_SD_CARD = Environment.getExternalStorageDirectory().toString() + "/";

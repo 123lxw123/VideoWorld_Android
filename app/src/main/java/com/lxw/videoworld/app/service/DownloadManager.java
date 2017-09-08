@@ -15,8 +15,10 @@ import com.xunlei.downloadlib.XLTaskHelper;
 import com.xunlei.downloadlib.parameter.TorrentInfo;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -37,7 +39,8 @@ import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
  */
 
 public class DownloadManager {
-    public static Set<String> downloadUrls = new HashSet<>();
+    public static List<String> downloadUrls = new ArrayList<>();
+    public static Map<String, XLTaskInfo> xLTaskInfos = new HashMap<>();
     public static final String TAG = "DownloadManager";
 
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo) {
@@ -52,6 +55,11 @@ public class DownloadManager {
      * @return
      */
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+        if(link == null) return -1;
+        if(downloadUrls.contains(link)) {
+            ToastUtil.showMessage("资源已在下载队列中");
+            return -1;
+        }
         long taskId = -1;
         try {
             if (link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent")) {
@@ -63,6 +71,8 @@ public class DownloadManager {
             } else {
                 taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
             }
+            downloadUrls.add(link);
+            xLTaskInfos.put(link, XLTaskHelper.instance().getTaskInfo(taskId));
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.ui.MainActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
+import com.lxw.videoworld.framework.util.GsonUtil;
 import com.lxw.videoworld.framework.util.ManifestUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.taobao.sophix.PatchStatus;
@@ -80,6 +82,8 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
                 Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
         // 初始化迅雷下载
         XLTaskHelper.init(getApplicationContext());
+        // 初始化下载任务链接集合
+        DownloadManager.downloadUrls = GsonUtil.json2List(SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_DOWNLOAD_URLS, ""), String.class);
         //初始化 realm 数据库
 //        Realm.init(this);
 //        RealmConfiguration configuration = new RealmConfiguration.Builder().build();
