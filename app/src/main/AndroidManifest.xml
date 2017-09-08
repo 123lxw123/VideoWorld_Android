@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 在sdcard中创建/删除文件的权限 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
@@ -21,24 +21,24 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 读取日历 -->
-    <!--<uses-permission android:name="android.permission.READ_CALENDAR" />-->
-     读联系人权限
+    <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
+    读联系人权限
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- 写联系人权限 -->
-    <!--<uses-permission android:name="android.permission.WRITE_CONTACTS" />-->
+    <!-- <uses-permission android:name="android.permission.WRITE_CONTACTS" /> -->
     <!-- 拨号权限 -->
-    <!--<uses-permission android:name="android.permission.CALL_PHONE" />-->
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <!-- 读短信权限 -->
-    <!--<uses-permission android:name="android.permission.READ_SMS" />-->
+    <!-- <uses-permission android:name="android.permission.READ_SMS" /> -->
     <!-- 精准位置信息GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-     <!--仅网络定位的权限 -->
+    <!-- 仅网络定位的权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 读取上网记录权限 -->
-    <!--<uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />-->
-    <!-- 读取通话记录 -->
-    <!--<uses-permission android:name="android.permission.READ_CALL_LOG" />-->
 
+    <!-- 读取上网记录权限 -->
+    <!-- <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" /> -->
+    <!-- 读取通话记录 -->
+    <!-- <uses-permission android:name="android.permission.READ_CALL_LOG" /> -->
     <application
         android:name=".framework.application.BaseApplication"
         android:allowBackup="true"
@@ -92,7 +92,7 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
-                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /><!--富文本页面 Javascript 回调API  -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- 富文本页面 Javascript 回调API -->
                 <category android:name="com.lxw.videoworld" />
             </intent-filter>
         </receiver>
@@ -105,18 +105,22 @@
         <activity
             android:name=".app.ui.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".app.ui.FeedbackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".app.ui.CommonWebActivity"
+        <activity
+            android:name=".app.ui.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.CommonWebActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".app.ui.PlayVideoActivity"
-            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.PlayVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/TranslucentAppTheme"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentAppTheme" />
+        <activity android:name=".app.ui.DownloadManagerActivity"
             android:screenOrientation="portrait"/>
-
-        <service android:name=".app.service.BackgroundIntentService"/>
+        <service android:name=".app.service.BackgroundIntentService" />
     </application>
 
 </manifest>

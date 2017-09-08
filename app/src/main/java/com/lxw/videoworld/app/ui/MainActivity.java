@@ -62,6 +62,8 @@ public class MainActivity extends BaseActivity {
     Toolbar toobarMain;
     @BindView(R.id.txt_version)
     TextView txtVersion;
+    @BindView(R.id.txt_download_manager)
+    TextView txtDownloadManager;
     @BindView(R.id.txt_github)
     TextView txtGitHub;
     @BindView(R.id.txt_QQ1)
@@ -405,10 +407,13 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R
+    @OnClick({R.id.txt_download_manager, R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R
             .id.txt_about})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
+            case R.id.txt_download_manager:
+
+                break;
             case R.id.txt_version:
                 getConfig(true);
                 if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
