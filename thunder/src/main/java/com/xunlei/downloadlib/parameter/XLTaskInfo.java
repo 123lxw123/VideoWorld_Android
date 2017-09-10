@@ -39,6 +39,9 @@ public class XLTaskInfo implements Parcelable {
     public int mQueryIndexStatus;
     public long mTaskId;
     public int mTaskStatus;
+    public String sourceUrl;// 下载地址获取种子本地路径
+    public String torrentUrl;// 种子下载地址
+    public int index = -1;// 种子里相应文件序号
 
     public int describeContents() {
         return 0;

@@ -412,7 +412,11 @@ public class MainActivity extends BaseActivity {
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
             case R.id.txt_download_manager:
-
+                Intent intent1 = new Intent(MainActivity.this, DownloadManagerActivity.class);
+                startActivity(intent1);
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerlayout.closeDrawers();
+                }
                 break;
             case R.id.txt_version:
                 getConfig(true);
@@ -422,9 +426,9 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case R.id.txt_github:
-                Intent intent = new Intent(MainActivity.this, CommonWebActivity.class);
-                intent.putExtra("url", "https://github.com/123lxw123");
-                startActivity(intent);
+                Intent intent2 = new Intent(MainActivity.this, CommonWebActivity.class);
+                intent2.putExtra("url", "https://github.com/123lxw123");
+                startActivity(intent2);
                 if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
                 }
@@ -461,8 +465,8 @@ public class MainActivity extends BaseActivity {
                 if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
                 }
-                Intent intent1 = new Intent(MainActivity.this, FeedbackActivity.class);
-                startActivity(intent1);
+                Intent intent3 = new Intent(MainActivity.this, FeedbackActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.txt_about:
                 // 关于

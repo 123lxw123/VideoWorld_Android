@@ -7,7 +7,7 @@
     tools:context="com.lxw.videoworld.app.ui.SplashActivity">
     <ImageView
         android:id="@+id/img_picture"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     

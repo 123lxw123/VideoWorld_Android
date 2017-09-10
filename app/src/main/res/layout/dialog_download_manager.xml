@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/com_wm_bg"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="?attr/com_wm_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:id="@+id/share_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="@string/txt_download_manager"
+            android:textSize="@dimen/sp_16"
+            android:textColor="?attr/com_font_A"/>
+    </LinearLayout>
+
+    <View style="@style/split_style" />
+
+    <LinearLayout
+        android:id="@+id/ll_play_video"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="播放视频"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_reset_download"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="重新下载"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_remove_task"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="删除任务"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_delete_task"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="彻底删除任务"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_open_folder"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="打开文件夹"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_copy_link"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="复制链接"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="取消"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+</LinearLayout>

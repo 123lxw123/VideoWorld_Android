@@ -34074,25 +34074,25 @@ com.lxw.videoworld.framework.widget.NumberProgressBar -> com.lxw.videoworld.fram
     void onRestoreInstanceState(android.os.Parcelable) -> onRestoreInstanceState
     float dp2px(float) -> a
     float sp2px(float) -> b
-com.lxw.videoworld.framework.widget.SourceLinkDialog -> com.lxw.videoworld.framework.widget.e:
+com.lxw.videoworld.app.widget.SourceLinkDialog -> com.lxw.videoworld.framework.widget.e:
     android.app.Activity context -> a
     java.lang.String link -> b
     void <init>(android.app.Activity,java.lang.String) -> <init>
     void onCreate(android.os.Bundle) -> onCreate
     void show() -> show
-    java.lang.String access$000(com.lxw.videoworld.framework.widget.SourceLinkDialog) -> a
-    android.app.Activity access$100(com.lxw.videoworld.framework.widget.SourceLinkDialog) -> b
-com.lxw.videoworld.framework.widget.SourceLinkDialog$1 -> com.lxw.videoworld.framework.widget.e$1:
-    com.lxw.videoworld.framework.widget.SourceLinkDialog this$0 -> a
-    void <init>(com.lxw.videoworld.framework.widget.SourceLinkDialog) -> <init>
+    java.lang.String access$000(com.lxw.videoworld.app.widget.SourceLinkDialog) -> a
+    android.app.Activity access$100(com.lxw.videoworld.app.widget.SourceLinkDialog) -> b
+com.lxw.videoworld.app.widget.SourceLinkDialog$1 -> com.lxw.videoworld.framework.widget.e$1:
+    com.lxw.videoworld.app.widget.SourceLinkDialog this$0 -> a
+    void <init>(com.lxw.videoworld.app.widget.SourceLinkDialog) -> <init>
     void onClick(android.view.View) -> onClick
-com.lxw.videoworld.framework.widget.SourceLinkDialog$2 -> com.lxw.videoworld.framework.widget.e$2:
-    com.lxw.videoworld.framework.widget.SourceLinkDialog this$0 -> a
-    void <init>(com.lxw.videoworld.framework.widget.SourceLinkDialog) -> <init>
+com.lxw.videoworld.app.widget.SourceLinkDialog$2 -> com.lxw.videoworld.framework.widget.e$2:
+    com.lxw.videoworld.app.widget.SourceLinkDialog this$0 -> a
+    void <init>(com.lxw.videoworld.app.widget.SourceLinkDialog) -> <init>
     void onClick(android.view.View) -> onClick
-com.lxw.videoworld.framework.widget.SourceLinkDialog$3 -> com.lxw.videoworld.framework.widget.e$3:
-    com.lxw.videoworld.framework.widget.SourceLinkDialog this$0 -> a
-    void <init>(com.lxw.videoworld.framework.widget.SourceLinkDialog) -> <init>
+com.lxw.videoworld.app.widget.SourceLinkDialog$3 -> com.lxw.videoworld.framework.widget.e$3:
+    com.lxw.videoworld.app.widget.SourceLinkDialog this$0 -> a
+    void <init>(com.lxw.videoworld.app.widget.SourceLinkDialog) -> <init>
     void onClick(android.view.View) -> onClick
 com.lxw.videoworld.wxapi.WXEntryActivity -> com.lxw.videoworld.wxapi.WXEntryActivity:
     com.lxw.videoworld.framework.weixin.WXShareAction wxShareAction -> a

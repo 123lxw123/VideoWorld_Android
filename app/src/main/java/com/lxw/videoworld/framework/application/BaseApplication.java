@@ -84,6 +84,8 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         XLTaskHelper.init(getApplicationContext());
         // 初始化下载任务链接集合
         DownloadManager.downloadUrls = GsonUtil.json2List(SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_DOWNLOAD_URLS, ""), String.class);
+        // 初始化下载种子任务的index集合
+        DownloadManager.formatDownloadIndexs(GsonUtil.json2Map(SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_DOWNLOAD_INDEXS, ""), String.class));
         //初始化 realm 数据库
 //        Realm.init(this);
 //        RealmConfiguration configuration = new RealmConfiguration.Builder().build();

@@ -71,111 +71,119 @@
                 app:background="?attr/com_main_A" />
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="@dimen/dp_280"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="?attr/com_wm_bg"
-                android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="@dimen/dp_280"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="?attr/com_wm_bg">
 
-                <TextView
-                    android:id="@+id/txt_download_manager"
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:text="@string/txt_download_manager"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txt_QQ1"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16"
-                    android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/txt_download_manager"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:text="@string/txt_download_manager"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16" />
 
-                <TextView
-                    android:id="@+id/txt_QQ2"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16"
-                    android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/txt_QQ1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16"
+                        android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txt_github"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:text="GitHub\nhttps://github.com/123lxw123"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16"
-                    android:visibility="visible" />
+                    <TextView
+                        android:id="@+id/txt_QQ2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16"
+                        android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txt_version"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16"
-                    android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/txt_github"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:text="GitHub\nhttps://github.com/123lxw123"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16"
+                        android:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/txt_feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:text="@string/txt_feedback"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16" />
+                    <TextView
+                        android:id="@+id/txt_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16"
+                        android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txt_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    android:background="@drawable/selector_item_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:text="@string/txt_about"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_16" />
+                    <TextView
+                        android:id="@+id/txt_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:text="@string/txt_feedback"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16" />
 
-                <TextView
-                    android:id="@+id/txt_about_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="@dimen/dp_50"
-                    android:paddingBottom="@dimen/dp_8"
-                    android:paddingLeft="@dimen/dp_15"
-                    android:paddingRight="@dimen/dp_15"
-                    android:paddingTop="@dimen/dp_8"
-                    android:textColor="?attr/com_font_A"
-                    android:textSize="@dimen/sp_14"
-                    android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/txt_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@drawable/selector_item_bg"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:text="@string/txt_about"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_16" />
 
-            </LinearLayout>
-        </ScrollView>
+                    <TextView
+                        android:id="@+id/txt_about_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="@dimen/dp_50"
+                        android:paddingBottom="@dimen/dp_8"
+                        android:paddingLeft="@dimen/dp_15"
+                        android:paddingRight="@dimen/dp_15"
+                        android:paddingTop="@dimen/dp_8"
+                        android:textColor="?attr/com_font_A"
+                        android:textSize="@dimen/sp_14"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
 
     </android.support.v4.widget.DrawerLayout>
 

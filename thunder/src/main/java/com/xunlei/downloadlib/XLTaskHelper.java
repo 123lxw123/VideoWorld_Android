@@ -245,8 +245,8 @@ public class XLTaskHelper {
      * 停止任务 文件保留
      * @param taskId
      */
-    public synchronized void startTask(long taskId, boolean z) {
-        XLDownloadManager.getInstance().startTask(taskId, z);
+    public synchronized void startTask(long taskId) {
+        XLDownloadManager.getInstance().startTask(taskId);
     }
 
     /**

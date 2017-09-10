@@ -1,4 +1,4 @@
-package com.lxw.videoworld.framework.widget;
+package com.lxw.videoworld.app.widget;
 
 import android.app.Dialog;
 import android.content.Context;

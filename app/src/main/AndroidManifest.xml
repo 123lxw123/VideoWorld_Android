@@ -110,12 +110,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".app.ui.CommonWebActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".app.ui.PlayVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentAppTheme" />
         <activity android:name=".app.ui.DownloadManagerActivity"

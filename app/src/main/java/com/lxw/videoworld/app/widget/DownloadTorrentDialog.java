@@ -1,4 +1,4 @@
-package com.lxw.videoworld.framework.widget;
+package com.lxw.videoworld.app.widget;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,6 +28,7 @@ import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 public class DownloadTorrentDialog extends AlertDialog {
 
     private Context context;
+    private String torrentUrl;
     private TorrentInfo torrentInfo;
     private boolean isPlayVideo;
     private BaseQuickAdapter<TorrentFileInfo, BaseViewHolder> downloadTorrentAdapter;
@@ -43,9 +44,10 @@ public class DownloadTorrentDialog extends AlertDialog {
         super(context);
     }
 
-    public DownloadTorrentDialog(Context context, TorrentInfo torrentInfo, boolean isPlayVideo) {
+    public DownloadTorrentDialog(Context context, String torrentUrl, TorrentInfo torrentInfo, boolean isPlayVideo) {
         super(context);
         this.context = context;
+        this.torrentUrl = torrentUrl;
         this.torrentInfo = torrentInfo;
         this.isPlayVideo = isPlayVideo;
     }
@@ -107,7 +109,7 @@ public class DownloadTorrentDialog extends AlertDialog {
                     for(int j = 0; j < indexs1.size(); j++){
                         indexs[j] = indexs1.get(j);
                     }
-                    DownloadManager.addTorrentTask(torrentInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, indexs, null, null);
+                    DownloadManager.addTorrentTask(torrentUrl, torrentInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, indexs);
                     dismiss();
                 }else{
                     ToastUtil.showMessage("请选择下载文件");

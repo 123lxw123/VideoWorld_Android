@@ -1,4 +1,4 @@
-package com.lxw.videoworld.framework.widget;
+package com.lxw.videoworld.app.widget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,17 +48,14 @@ public class SourceLinkDialog extends AlertDialog {
             LinearLayout ll_thunder = (LinearLayout) this.findViewById(R.id.ll_thunder);
             LinearLayout ll_copy_link = (LinearLayout) this.findViewById(R.id.ll_copy_link);
             LinearLayout ll_cancel = (LinearLayout) this.findViewById(R.id.ll_cancel);
-            if(isPlayVideo){
-                LinearLayout ll_play_video = (LinearLayout) this.findViewById(R.id.ll_play_video);
-                ll_play_video.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        SourceLinkDialog.this.dismiss();
-                        DownloadManager.addNormalTask(context, link, true);
-                    }
-                });
-                ll_play_video.setVisibility(View.VISIBLE);
-            }
+            LinearLayout ll_play_video = (LinearLayout) this.findViewById(R.id.ll_play_video);
+            ll_play_video.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SourceLinkDialog.this.dismiss();
+                    DownloadManager.addNormalTask(context, link, isPlayVideo);
+                }
+            });
             ll_thunder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

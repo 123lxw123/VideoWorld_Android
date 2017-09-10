@@ -30,7 +30,7 @@ import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.weixin.WXShareDialog;
-import com.lxw.videoworld.framework.widget.SourceLinkDialog;
+import com.lxw.videoworld.app.widget.SourceLinkDialog;
 
 import java.util.ArrayList;
 import java.util.List;

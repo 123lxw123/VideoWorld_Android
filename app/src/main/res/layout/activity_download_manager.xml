@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -19,11 +21,11 @@
             android:src="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/txt_feedback"
+            android:id="@+id/txt_download_manager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/txt_feedback"
+            android:text="@string/txt_download_manager"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp_18" />
 
@@ -32,6 +34,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_download_task"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

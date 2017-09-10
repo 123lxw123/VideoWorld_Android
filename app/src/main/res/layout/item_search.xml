@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/com_wm_bg"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
         app:cardElevation="0px"
         app:cardMaxElevation="2px"
         app:cardUseCompatPadding="false"

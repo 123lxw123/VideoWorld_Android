@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.model.SwitchVideoModel;
+import com.lxw.videoworld.app.widget.SwitchVideoTypeDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;

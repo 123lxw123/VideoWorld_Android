@@ -32,8 +32,7 @@
         android:background="@drawable/selector_item_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:visibility="gone">
+        android:paddingLeft="15dp">
 
         <ImageView
             android:scaleType="centerInside"
@@ -48,7 +47,7 @@
             android:layout_margin="12dp"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:text="边下边播"
+            android:text="下载(边下边播)"
             android:textColor="?attr/com_font_A"
             android:textSize="@dimen/sp_14" />
     </LinearLayout>

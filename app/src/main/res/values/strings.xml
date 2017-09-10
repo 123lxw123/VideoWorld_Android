@@ -56,7 +56,7 @@
     <string name="txt_episodes">集数</string>
 
     <string name="txt_link">链接</string>
-    <string name="txt_thunder">手机迅雷(边下边播)</string>
+    <string name="txt_thunder">手机迅雷</string>
     <string name="txt_copy_link">复制下载链接</string>
 
     <string name="txt_detail">资源详情</string>
@@ -89,6 +89,7 @@
     <string name="txt_feedback_success_tips">感谢您的反馈</string>
     <string name="txt_about">关于</string>
     <string name="txt_download_manager">下载任务</string>
+    <string name="txt_no_data">暂无数据</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,19 +1,21 @@
 package com.lxw.videoworld.framework.util;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-
 
 import com.lxw.videoworld.app.config.Constant;
 
 import java.io.File;
 
 /**
+ *
  * Created by lxw9047 on 2016/10/20.
  */
 
@@ -97,6 +99,22 @@ public class FileUtil {
                 }
             }
             file.delete();
+        }
+    }
+
+    public static void openFolder(Context context, String path){
+        File file = new File(path);
+        if(null==file || !file.exists()){
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setDataAndType(Uri.fromFile(file), "file/*");
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

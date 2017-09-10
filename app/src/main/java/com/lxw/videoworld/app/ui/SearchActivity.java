@@ -34,7 +34,7 @@ import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
-import com.lxw.videoworld.framework.widget.SourceLinkDialog;
+import com.lxw.videoworld.app.widget.SourceLinkDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private final int IMG_SEARCH = 1000;
     private final int IMG_SEARCH_RESULT = 1001;
     private final int IMG_SEARCH_TIMEOUT = 1002;// 搜索超时
-    private final int INTERVAL = 2000; //输入时间间隔为1000毫秒
+    private final int INTERVAL = 0; //输入时间间隔为2000毫秒
     @BindView(R.id.txt_tab1)
     TextView txtTab1;
     @BindView(R.id.txt_tab2)
@@ -372,7 +372,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         if(!TextUtils.isEmpty(newText) && newText.trim().length() > 0){
             if(keyword == null || !keyword.trim().equals(newText.trim())){
                 keyword = newText;
-                doSearch();
+//                doSearch();
             }
         }
         return false;
@@ -412,17 +412,17 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                 break;
             case R.id.img_change_source:
                 // 切换搜索引擎
-//                ToastUtil.showMessage(getString(R.string.txt_change_search));
-//                if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
-//                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_2;
-//                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
-//                } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
-//                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_1;
-//                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
-//                }
-//                searchType = Constant.STATUS_0;
-//                changeTabColor();
-//                doSearch();
+                ToastUtil.showMessage(getString(R.string.txt_change_search));
+                if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1)) {
+                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_2;
+                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
+                } else if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_2)) {
+                    Constant.SEARCH_TYPE = Constant.SEARCH_TYPE_1;
+                    SharePreferencesUtil.setStringSharePreferences(SearchActivity.this, Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_1);
+                }
+                searchType = Constant.STATUS_0;
+                changeTabColor();
+                doSearch();
                 break;
         }
     }
