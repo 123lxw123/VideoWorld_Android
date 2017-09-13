@@ -161,6 +161,7 @@ public class DownloadManager {
                             break;
                         default:
                             LoggerHelper.info(TAG, "TORRENT_STATUS_DEFAULT");
+                            mD.dispose();
                             break;
                     }
                     try {
@@ -188,9 +189,6 @@ public class DownloadManager {
 
                 }
             });
-            for (int i = 0; i < indexs.length; i++) {
-                XLTaskHelper.instance().startDcdn(taskId, indexs[i]);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -359,6 +357,7 @@ public class DownloadManager {
                             break;
                         default:
                             LoggerHelper.info(TAG, "THUNDER_STATUS_DEFAULT");
+                            mD.dispose();
                             break;
                     }
                     try {
@@ -555,4 +554,5 @@ public class DownloadManager {
            }
         }
     }
+
 }

@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.service.DownloadManager;
+import com.lxw.videoworld.app.widget.DownloadManagerDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.NumberProgressBar;
@@ -99,7 +100,7 @@ public class DownloadManagerActivity extends BaseActivity {
         });
     }
 
-    private void setDownloadViewWithStatus(BaseViewHolder helper, XLTaskInfo xlTaskInfo){
+    private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo){
         final CardView layout = (CardView) helper.getView(R.id.cardview_download_item);
         final ImageView statusIcon = (ImageView) helper.getView(R.id.img_start_pause);
         switch (xlTaskInfo.mTaskStatus) {
@@ -107,7 +108,15 @@ public class DownloadManagerActivity extends BaseActivity {
                 if(xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize && xlTaskInfo.mFileSize > 0){// 已完成
                     helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                     statusIcon.setImageResource(R.drawable.ic_complete);
-                    statusIcon.setOnClickListener(null);
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                            dialog.show();
+                        }
+                    };
+                    statusIcon.setOnClickListener(listener);
+                    layout.setOnClickListener(listener);
                 }else {// 连接中
                     helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed)+ "\n" +
                             ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
@@ -115,13 +124,14 @@ public class DownloadManagerActivity extends BaseActivity {
                     statusIcon.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            statusIcon.setImageResource(R.drawable.ic_pause);
-                            layout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            });
+                            DownloadManager.startTask(xlTaskInfo.mTaskId);
+                        }
+                    });
+                    layout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                            dialog.show();
                         }
                     });
                 }
@@ -130,15 +140,45 @@ public class DownloadManagerActivity extends BaseActivity {
                 helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed)+ "\n" +
                         ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_pause);
+                statusIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManager.stopTask(xlTaskInfo.mTaskId);
+                    }
+                });
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                        dialog.show();
+                    }
+                });
                 break;
             case 2:
                 helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_complete);
-                statusIcon.setOnClickListener(null);
+                View.OnClickListener listener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                        dialog.show();
+                    }
+                };
+                statusIcon.setOnClickListener(listener);
+                layout.setOnClickListener(listener);
                 break;
             case 3:
                 helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_error);
+                View.OnClickListener listener1 = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                        dialog.show();
+                    }
+                };
+                statusIcon.setOnClickListener(listener1);
+                layout.setOnClickListener(listener1);
                 break;
             default:
                 break;

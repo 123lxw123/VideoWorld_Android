@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/com_wm_bg"
+    android:background="#000"
     android:layout_gravity="center"
     android:orientation="vertical" >
     <LinearLayout
@@ -111,6 +111,29 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="彻底删除任务"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+
+        <View style="@style/split_style"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_thunder"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="手机迅雷"
             android:textColor="?attr/com_font_A"
             android:textSize="@dimen/sp_14" />
 

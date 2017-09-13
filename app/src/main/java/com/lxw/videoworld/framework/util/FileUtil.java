@@ -103,10 +103,9 @@ public class FileUtil {
     }
 
     public static void openFolder(Context context, String path){
+        if(TextUtils.isEmpty(path)) return;
         File file = new File(path);
-        if(null==file || !file.exists()){
-            return;
-        }
+        if(!file.exists()) return;
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

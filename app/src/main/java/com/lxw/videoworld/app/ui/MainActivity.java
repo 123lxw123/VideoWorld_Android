@@ -62,8 +62,8 @@ public class MainActivity extends BaseActivity {
     Toolbar toobarMain;
     @BindView(R.id.txt_version)
     TextView txtVersion;
-    @BindView(R.id.txt_download_manager)
-    TextView txtDownloadManager;
+    @BindView(R.id.txt_change_theme)
+    TextView txtChangeThemem;
     @BindView(R.id.txt_github)
     TextView txtGitHub;
     @BindView(R.id.txt_QQ1)
@@ -96,9 +96,9 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initViews();
-        if(Constant.configModel != null){
+        if (Constant.configModel != null) {
             setConfig(Constant.configModel, false);
-        }else{
+        } else {
             getConfig(false);
         }
         setJpushAliasAndTags();
@@ -119,30 +119,12 @@ public class MainActivity extends BaseActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     // 主题切换
-                    case R.id.action_change_theme:
-                        switch (Constant.THEME_TYPE) {
-                            case Constant.THEME_TYPE_1:
-                                Constant.THEME_TYPE = Constant.THEME_TYPE_2;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
-                                break;
-                            case Constant.THEME_TYPE_2:
-                                Constant.THEME_TYPE = Constant.THEME_TYPE_3;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
-                                break;
-                            case Constant.THEME_TYPE_3:
-                                Constant.THEME_TYPE = Constant.THEME_TYPE_1;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
-                                break;
-                        }
-                        MainActivity.this.finish();
-                        Intent intent = MainActivity.this.getIntent();
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
-                                .FLAG_ACTIVITY_CLEAR_TASK);
+                    case R.id.action_download_manager:
+                        Intent intent = new Intent(MainActivity.this, DownloadManagerActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
+                            drawerlayout.closeDrawers();
+                        }
                         break;
                     case R.id.action_search:
                         Intent intent1 = new Intent(MainActivity.this, SearchActivity.class);
@@ -407,16 +389,34 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.txt_download_manager, R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R
+    @OnClick({R.id.txt_change_theme, R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R
             .id.txt_about})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
-            case R.id.txt_download_manager:
-                Intent intent1 = new Intent(MainActivity.this, DownloadManagerActivity.class);
-                startActivity(intent1);
-                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerlayout.closeDrawers();
+            case R.id.txt_change_theme:
+                switch (Constant.THEME_TYPE) {
+                    case Constant.THEME_TYPE_1:
+                        Constant.THEME_TYPE = Constant.THEME_TYPE_2;
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
+                        break;
+                    case Constant.THEME_TYPE_2:
+                        Constant.THEME_TYPE = Constant.THEME_TYPE_3;
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
+                        break;
+                    case Constant.THEME_TYPE_3:
+                        Constant.THEME_TYPE = Constant.THEME_TYPE_1;
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
+                        break;
                 }
+                MainActivity.this.finish();
+                Intent intent = MainActivity.this.getIntent();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                        .FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
                 break;
             case R.id.txt_version:
                 getConfig(true);

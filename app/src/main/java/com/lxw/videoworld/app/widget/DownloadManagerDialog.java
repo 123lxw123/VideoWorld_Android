@@ -2,10 +2,12 @@ package com.lxw.videoworld.app.widget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -37,6 +39,7 @@ public class DownloadManagerDialog extends AlertDialog {
     public DownloadManagerDialog(Activity context, XLTaskInfo xlTaskInfo) {
         super(context);
         this.context = context;
+        this.xlTaskInfo = xlTaskInfo;
     }
 
     @Override
@@ -48,6 +51,7 @@ public class DownloadManagerDialog extends AlertDialog {
             LinearLayout ll_reset_download = (LinearLayout) this.findViewById(R.id.ll_reset_download);
             LinearLayout ll_remove_task = (LinearLayout) this.findViewById(R.id.ll_remove_task);
             LinearLayout ll_delete_task = (LinearLayout) this.findViewById(R.id.ll_delete_task);
+            LinearLayout ll_thunder = (LinearLayout) this.findViewById(R.id.ll_thunder);
             LinearLayout ll_open_folder = (LinearLayout) this.findViewById(R.id.ll_open_folder);
             LinearLayout ll_copy_link = (LinearLayout) this.findViewById(R.id.ll_copy_link);
             LinearLayout ll_cancel = (LinearLayout) this.findViewById(R.id.ll_cancel);
@@ -66,7 +70,8 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View view) {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
-                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD);
+                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+                    DownloadManager.xLTaskInfos.remove(xlTaskInfo);
                     if(xlTaskInfo.index >= 0){
                         DownloadManager.removeDownloadIndex(xlTaskInfo.sourceUrl, xlTaskInfo.index);
                         DownloadManager.addTorrentTask(xlTaskInfo.torrentUrl, xlTaskInfo.sourceUrl, PATH_OFFLINE_DOWNLOAD, new int[] {xlTaskInfo.index});
@@ -80,6 +85,7 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
+                    DownloadManager.xLTaskInfos.remove(xlTaskInfo);
                     if(xlTaskInfo.index >= 0){
                         DownloadManager.removeDownloadIndex(xlTaskInfo.sourceUrl, xlTaskInfo.index);
                     }
@@ -91,15 +97,38 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
-                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD);
+                    DownloadManager.xLTaskInfos.remove(xlTaskInfo);
+                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD  + xlTaskInfo.mFileName);
                     if(xlTaskInfo.index >= 0){
                         DownloadManager.removeDownloadIndex(xlTaskInfo.sourceUrl, xlTaskInfo.index);
                     }
                 }
             });
+            ll_thunder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DownloadManagerDialog.this.dismiss();
+                    try {
+                        String url = "";
+                        if(!TextUtils.isEmpty(xlTaskInfo.torrentUrl)){
+                            url = xlTaskInfo.torrentUrl;
+                        }else {
+                            url = xlTaskInfo.sourceUrl;
+                        }
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.addCategory("android.intent.category.DEFAULT");
+                        context.startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                        ToastUtil.showMessage("您还没安装手机迅雷");
+                    }
+
+                }
+            });
             ll_open_folder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    DownloadManagerDialog.this.dismiss();
                     FileUtil.openFolder(context, PATH_OFFLINE_DOWNLOAD);
                 }
             });

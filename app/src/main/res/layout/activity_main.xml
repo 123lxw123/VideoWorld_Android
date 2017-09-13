@@ -88,13 +88,13 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txt_download_manager"
+                        android:id="@+id/txt_change_theme"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_50"
                         android:background="@drawable/selector_item_bg"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp_15"
-                        android:text="@string/txt_download_manager"
+                        android:text="@string/menu_change_theme"
                         android:textColor="?attr/com_font_A"
                         android:textSize="@dimen/sp_16" />
 
