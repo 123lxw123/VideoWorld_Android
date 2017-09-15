@@ -233,16 +233,24 @@ public class XLTaskHelper {
     }
 
     /**
-     * 停止任务 文件保留
+     * 停止任务
      * @param taskId
      */
     public synchronized void stopTask(long taskId) {
+        XLDownloadManager.getInstance().stopTask(taskId);
+    }
+
+    /**
+     * 删除任务 文件保留
+     * @param taskId
+     */
+    public synchronized void removeTask(long taskId) {
         XLDownloadManager.getInstance().stopTask(taskId);
         XLDownloadManager.getInstance().releaseTask(taskId);
     }
 
     /**
-     * 停止任务 文件保留
+     * 开始任务
      * @param taskId
      */
     public synchronized void startTask(long taskId) {

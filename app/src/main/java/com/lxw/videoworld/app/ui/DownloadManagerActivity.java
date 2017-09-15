@@ -95,7 +95,9 @@ public class DownloadManagerActivity extends BaseActivity {
                 .subscribe(new Consumer<Long>() {
             @Override
             public void accept(@NonNull Long aLong) throws Exception {
-                if(DownloadManager.xLTaskInfos != null) downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
+                if(DownloadManager.xLTaskInfos != null) {
+                    downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
+                }
             }
         });
     }
@@ -118,8 +120,7 @@ public class DownloadManagerActivity extends BaseActivity {
                     statusIcon.setOnClickListener(listener);
                     layout.setOnClickListener(listener);
                 }else {// 连接中
-                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed)+ "\n" +
-                            ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                     statusIcon.setImageResource(R.drawable.ic_start);
                     statusIcon.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -137,7 +138,7 @@ public class DownloadManagerActivity extends BaseActivity {
                 }
                 break;
             case 1:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed)+ "\n" +
+                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
                         ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_pause);
                 statusIcon.setOnClickListener(new View.OnClickListener() {
@@ -157,19 +158,6 @@ public class DownloadManagerActivity extends BaseActivity {
             case 2:
                 helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_complete);
-                View.OnClickListener listener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                        dialog.show();
-                    }
-                };
-                statusIcon.setOnClickListener(listener);
-                layout.setOnClickListener(listener);
-                break;
-            case 3:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_error);
                 View.OnClickListener listener1 = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -179,6 +167,19 @@ public class DownloadManagerActivity extends BaseActivity {
                 };
                 statusIcon.setOnClickListener(listener1);
                 layout.setOnClickListener(listener1);
+                break;
+            case 3:
+                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                statusIcon.setImageResource(R.drawable.ic_error);
+                View.OnClickListener listener2 = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                        dialog.show();
+                    }
+                };
+                statusIcon.setOnClickListener(listener2);
+                layout.setOnClickListener(listener2);
                 break;
             default:
                 break;

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
+import com.lxw.videoworld.app.util.XLTaskInfoComparator;
 import com.lxw.videoworld.app.widget.DownloadTorrentDialog;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.log.LoggerHelper;
@@ -20,9 +21,8 @@ import com.xunlei.downloadlib.parameter.TorrentInfo;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -44,8 +44,8 @@ import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 
 public class DownloadManager {
     public static List<String> downloadUrls = new ArrayList<>();
-    public static Map<String, List<Integer>> downloadIndexs = new HashMap<>();
     public static Vector<XLTaskInfo> xLTaskInfos = new Vector<>();
+    public static XLTaskInfoComparator comparator = new XLTaskInfoComparator();
     public static final String TAG = "DownloadManager";
 
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo) {
@@ -82,8 +82,7 @@ public class DownloadManager {
             XLTaskInfo xLTaskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
             xLTaskInfo.sourceUrl = link;
             xLTaskInfo.mFileName = XLTaskHelper.instance().getFileName(link);
-            if (xLTaskInfos == null) xLTaskInfos = new Vector<>();
-            xLTaskInfos.add(xLTaskInfo);
+            addXLTaskInfo(xLTaskInfo);
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
@@ -116,7 +115,6 @@ public class DownloadManager {
         try {
             taskId = XLTaskHelper.instance().addTorrentTask(torrentPath, savePath, indexs);
             addDownloadUrl(torrentPath);
-            putDownloadIndexs(torrentPath,  indexs);
             final TorrentInfo torrentInfo = XLTaskHelper.instance().getTorrentInfo(torrentPath);
             for (int i = 0; i < indexs.length; i++) {
                 XLTaskInfo xLTaskInfo = XLTaskHelper.instance().getBtSubTaskInfo(taskId, indexs[i]).mTaskInfo;
@@ -124,8 +122,7 @@ public class DownloadManager {
                 xLTaskInfo.sourceUrl = torrentPath;
                 xLTaskInfo.torrentUrl = torrentUrl;
                 xLTaskInfo.index = indexs[i];
-                if (xLTaskInfos == null) xLTaskInfos = new Vector<>();
-                xLTaskInfos.add(xLTaskInfo);
+                addXLTaskInfo(xLTaskInfo);
             }
             getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
                 Disposable mD = null;
@@ -138,24 +135,25 @@ public class DownloadManager {
                 @Override
                 public void onNext(XLTaskInfo xlTaskInfo) {
                     LoggerHelper.info(TAG, xlTaskInfo.toString());
-                    for (int i = 0; i < indexs.length; i++) {
-                        updateXLTaskInfo(XLTaskHelper.instance().getBtSubTaskInfo(xlTaskInfo.mTaskId, indexs[i]).mTaskInfo);
-                    }
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_0");
+                            if(xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize){
+                                xlTaskInfo.timestamp = System.currentTimeMillis();
+                                mD.dispose();
+                            }
                             break;
                         case "1":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_1");
-                            if (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize)
-                                mD.dispose();
                             break;
                         case "2":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_2");
+                            xlTaskInfo.timestamp = System.currentTimeMillis();
                             mD.dispose();
                             break;
                         case "3":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_3");
+                            xlTaskInfo.timestamp = System.currentTimeMillis();
                             ToastUtil.showMessage("资源下载失败");
                             mD.dispose();
                             break;
@@ -163,6 +161,9 @@ public class DownloadManager {
                             LoggerHelper.info(TAG, "TORRENT_STATUS_DEFAULT");
                             mD.dispose();
                             break;
+                    }
+                    for (int i = 0; i < indexs.length; i++) {
+                        updateXLTaskInfo(XLTaskHelper.instance().getBtSubTaskInfo(xlTaskInfo.mTaskId, indexs[i]).mTaskInfo);
                     }
                     try {
                         if (nextCall != null) {
@@ -221,11 +222,16 @@ public class DownloadManager {
                 @Override
                 public void onNext(XLTaskInfo xlTaskInfo) {
                     LoggerHelper.info(TAG, xlTaskInfo.toString());
-                    updateXLTaskInfo(xlTaskInfo);
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
                             LoggerHelper.info(TAG, "MAGNET_STATUS_0");
-                            if (!loadingDialog.isShowing()) {
+                            if(xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize){
+                                xlTaskInfo.timestamp = System.currentTimeMillis();
+                                mD.dispose();
+                                if (loadingDialog.isShowing()) {
+                                    loadingDialog.dismiss();
+                                }
+                            }else if (!loadingDialog.isShowing()) {
                                 loadingDialog.show();
                             }
                             break;
@@ -234,8 +240,6 @@ public class DownloadManager {
                             if (!loadingDialog.isShowing()) {
                                 loadingDialog.show();
                             }
-                            if (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize)
-                                mD.dispose();
                             break;
                         case "2":
                             LoggerHelper.info(TAG, "MAGNET_STATUS_2");
@@ -243,6 +247,7 @@ public class DownloadManager {
                             if (loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
                             }
+                            xlTaskInfo.timestamp = System.currentTimeMillis();
                             String torrentPath = PATH_OFFLINE_DOWNLOAD + XLTaskHelper.instance().getFileName(url);
                             TorrentInfo torrentInfo = XLTaskHelper.instance().getTorrentInfo(torrentPath);
                             torrentInfo.torrentPath = torrentPath;
@@ -255,6 +260,7 @@ public class DownloadManager {
                             if (loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
                             }
+                            xlTaskInfo.timestamp = System.currentTimeMillis();
                             ToastUtil.showMessage("资源下载失败");
                             break;
                         default:
@@ -265,6 +271,7 @@ public class DownloadManager {
                             }
                             break;
                     }
+                    updateXLTaskInfo(xlTaskInfo);
                     try {
                         if (nextCall != null) {
                             nextCall.accept(xlTaskInfo);
@@ -336,23 +343,26 @@ public class DownloadManager {
                 @Override
                 public void onNext(XLTaskInfo xlTaskInfo) {
                     LoggerHelper.info(TAG, xlTaskInfo.toString());
-                    updateXLTaskInfo(xlTaskInfo);
                     switch (String.valueOf(xlTaskInfo.mTaskStatus)) {
                         case "0":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_0");
+                            if(xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize){
+                                xlTaskInfo.timestamp = System.currentTimeMillis();
+                                mD.dispose();
+                            }
                             break;
                         case "1":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_1");
-                            if (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize)
-                                mD.dispose();
                             break;
                         case "2":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_2");
+                            xlTaskInfo.timestamp = System.currentTimeMillis();
                             mD.dispose();
                             break;
                         case "3":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_3");
                             ToastUtil.showMessage("资源下载失败");
+                            xlTaskInfo.timestamp = System.currentTimeMillis();
                             mD.dispose();
                             break;
                         default:
@@ -360,6 +370,7 @@ public class DownloadManager {
                             mD.dispose();
                             break;
                     }
+                    updateXLTaskInfo(xlTaskInfo);
                     try {
                         if (nextCall != null) {
                             nextCall.accept(xlTaskInfo);
@@ -431,7 +442,16 @@ public class DownloadManager {
     }
 
     /**
-     * 停止任务 文件保留
+     * 删除任务 文件保留
+     *
+     * @param taskId
+     */
+    public static void removeTask(long taskId) {
+        XLTaskHelper.instance().removeTask(taskId);
+    }
+
+    /**
+     * 开始任务
      *
      * @param taskId
      */
@@ -478,22 +498,6 @@ public class DownloadManager {
         return realUrl;
     }
 
-    private static void updateXLTaskInfo(XLTaskInfo xLTaskInfo) {
-        if (xLTaskInfo == null || xLTaskInfos == null) return;
-        for (int i = 0; i < xLTaskInfos.size(); i++) {
-            if (xLTaskInfo.mTaskId == xLTaskInfos.get(i).mTaskId) {
-                if (xLTaskInfo.mFileName == null)
-                    xLTaskInfo.mFileName = xLTaskInfos.get(i).mFileName;
-                xLTaskInfo.sourceUrl = xLTaskInfos.get(i).sourceUrl;
-                xLTaskInfo.torrentUrl = xLTaskInfos.get(i).torrentUrl;
-                xLTaskInfo.index = xLTaskInfos.get(i).index;
-                xLTaskInfos.remove(i);
-                xLTaskInfos.add(i, xLTaskInfo);
-                break;
-            }
-        }
-    }
-
     public static void addDownloadUrl(String url) {
         if (!TextUtils.isEmpty(url)) {
             if (downloadUrls == null) downloadUrls = new ArrayList<>();
@@ -513,45 +517,73 @@ public class DownloadManager {
         }
     }
 
-    public static void formatDownloadIndexs(Map<String, String> map) {
-        if (map != null) {
-            downloadIndexs = new HashMap<>();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                List<Integer> value = GsonUtil.json2List(entry.getValue(), Integer.class);
-                downloadIndexs.put(entry.getKey(), value);
+    public static void addXLTaskInfo(XLTaskInfo xLTaskInfo){
+        if(xLTaskInfo == null) return;
+        if (xLTaskInfos == null) xLTaskInfos = new Vector<>();
+        xLTaskInfos.add(xLTaskInfo);
+        Collections.sort(DownloadManager.xLTaskInfos, comparator);
+        LoggerHelper.info(TAG, GsonUtil.bean2json(xLTaskInfos));
+        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, Constant.KEY_DOWNLOAD_XLTASKINFOS,
+                GsonUtil.bean2json(xLTaskInfos));
+    }
+
+    public static void removeXLTaskInfo(XLTaskInfo xLTaskInfo){
+        if(xLTaskInfos == null || xLTaskInfo == null) return;
+        for (int i = 0; i <)
+        Collections.sort(DownloadManager.xLTaskInfos, comparator);
+        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, Constant.KEY_DOWNLOAD_XLTASKINFOS,
+                GsonUtil.bean2json(xLTaskInfos));
+    }
+
+    private static void updateXLTaskInfo(XLTaskInfo xLTaskInfo) {
+        if (xLTaskInfo == null || xLTaskInfos == null) return;
+        for (int i = 0; i < xLTaskInfos.size(); i++) {
+            if (xLTaskInfo.mTaskId == xLTaskInfos.get(i).mTaskId) {
+                xLTaskInfos.get(i).mAddedHighSourceState = xLTaskInfo.mAddedHighSourceState;
+                xLTaskInfos.get(i).mAdditionalResCount = xLTaskInfo.mAdditionalResCount;
+                xLTaskInfos.get(i).mAdditionalResDCDNBytes = xLTaskInfo.mAdditionalResDCDNBytes;
+                xLTaskInfos.get(i).mAdditionalResDCDNSpeed = xLTaskInfo.mAdditionalResDCDNSpeed;
+                xLTaskInfos.get(i).mAdditionalResPeerBytes = xLTaskInfo.mAdditionalResPeerBytes;
+                xLTaskInfos.get(i).mAdditionalResPeerSpeed = xLTaskInfo.mAdditionalResPeerSpeed;
+                xLTaskInfos.get(i).mAdditionalResType = xLTaskInfo.mAdditionalResType;
+                xLTaskInfos.get(i).mAdditionalResVipRecvBytes = xLTaskInfo.mAdditionalResVipRecvBytes;
+                xLTaskInfos.get(i).mAdditionalResVipSpeed = xLTaskInfo.mAdditionalResVipSpeed;
+                xLTaskInfos.get(i).mCid = xLTaskInfo.mCid;
+                xLTaskInfos.get(i).mDownloadSize = xLTaskInfo.mDownloadSize;
+                xLTaskInfos.get(i).mDownloadSpeed = xLTaskInfo.mDownloadSpeed;
+                xLTaskInfos.get(i).mErrorCode = xLTaskInfo.mErrorCode;
+                if (!TextUtils.isEmpty(xLTaskInfo.mFileName))
+                    xLTaskInfos.get(i).mFileName = xLTaskInfo.mFileName;
+                xLTaskInfos.get(i).mFileSize = xLTaskInfo.mFileSize;
+                xLTaskInfos.get(i).mGcid = xLTaskInfo.mGcid;
+                xLTaskInfos.get(i).mInfoLen = xLTaskInfo.mInfoLen;
+                xLTaskInfos.get(i).mOriginRecvBytes = xLTaskInfo.mOriginRecvBytes;
+                xLTaskInfos.get(i).mOriginSpeed = xLTaskInfo.mOriginSpeed;
+                xLTaskInfos.get(i).mP2PRecvBytes = xLTaskInfo.mP2PRecvBytes;
+                xLTaskInfos.get(i).mP2PSpeed = xLTaskInfo.mP2PSpeed;
+                xLTaskInfos.get(i).mP2SRecvBytes = xLTaskInfo.mP2SRecvBytes;
+                xLTaskInfos.get(i).mP2SSpeed = xLTaskInfo.mP2SSpeed;
+                xLTaskInfos.get(i).mQueryIndexStatus = xLTaskInfo.mQueryIndexStatus;
+                xLTaskInfos.get(i).mTaskId = xLTaskInfo.mTaskId;
+                xLTaskInfos.get(i).mTaskStatus = xLTaskInfo.mTaskStatus;
+                xLTaskInfos.get(i).timestamp = xLTaskInfo.timestamp;
+                break;
             }
         }
+        Collections.sort(DownloadManager.xLTaskInfos, comparator);
+        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, Constant.KEY_DOWNLOAD_XLTASKINFOS,
+                GsonUtil.bean2json(xLTaskInfos));
     }
 
-    public static void putDownloadIndexs(String url, int[] indexs) {
-        if (downloadIndexs == null) downloadIndexs = new HashMap<>();
-        List<Integer> listIndexs = GsonUtil.json2List(indexs.toString(), Integer.class);
-        if (!TextUtils.isEmpty(url) && indexs != null) {
-            downloadIndexs.put(url, listIndexs);
-        }
-        Map<String, String> map = new HashMap<>();
-        for (Map.Entry<String, List<Integer>> entry : downloadIndexs.entrySet()) {
-            map.put(entry.getKey(), entry.getValue().toString());
-        }
-        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, GsonUtil.bean2json(map), "");
-    }
-
-    public static void removeDownloadIndex(String url, int index) {
-        if (!TextUtils.isEmpty(url) && downloadIndexs != null){
-            List<Integer> listIndexs = downloadIndexs.get(url);
-           if(listIndexs != null && listIndexs.contains(index)){
-               listIndexs.remove(index);
-               if(listIndexs.size() > 0){
-                   downloadIndexs.put(url, listIndexs);
-               }else{
-                   downloadIndexs.remove(url);
-               }
-               Map<String, String> map = new HashMap<>();
-               for (Map.Entry<String, List<Integer>> entry : downloadIndexs.entrySet()) {
-                   map.put(entry.getKey(), entry.getValue().toString());
-               }
-               SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, GsonUtil.bean2json(map), "");
-           }
+    public static void initXLTaskInfos(){
+        if(xLTaskInfos != null && xLTaskInfos.size() > 0){
+            for (int i = 0; i < xLTaskInfos.size(); i++){
+                if(xLTaskInfos.get(i).mTaskStatus == 1) {
+                    xLTaskInfos.get(i).mDownloadSpeed = 0;
+                    xLTaskInfos.get(i).mTaskStatus = 0;
+                }
+            }
+            Collections.sort(DownloadManager.xLTaskInfos, comparator);
         }
     }
 

@@ -44,7 +44,7 @@ public class Constant {
     /** 下载任务链接集合**/
     public static String KEY_DOWNLOAD_URLS = "KEY_DOWNLOAD_URLS";
     /** 下载种子任务选择的index集合**/
-    public static String KEY_DOWNLOAD_INDEXS = "KEY_DOWNLOAD_INDEXS";
+    public static String KEY_DOWNLOAD_XLTASKINFOS = "KEY_DOWNLOAD_XLTASKINFOS";
 
     /** 内置SD卡路径**/
     public static String PATH_SD_CARD = Environment.getExternalStorageDirectory().toString() + "/";

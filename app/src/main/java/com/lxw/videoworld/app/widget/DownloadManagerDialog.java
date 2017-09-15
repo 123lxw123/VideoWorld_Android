@@ -71,9 +71,8 @@ public class DownloadManagerDialog extends AlertDialog {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
                     DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
-                    DownloadManager.xLTaskInfos.remove(xlTaskInfo);
+                    DownloadManager.removeXLTaskInfo(xlTaskInfo);
                     if(xlTaskInfo.index >= 0){
-                        DownloadManager.removeDownloadIndex(xlTaskInfo.sourceUrl, xlTaskInfo.index);
                         DownloadManager.addTorrentTask(xlTaskInfo.torrentUrl, xlTaskInfo.sourceUrl, PATH_OFFLINE_DOWNLOAD, new int[] {xlTaskInfo.index});
                     }else {
                         DownloadManager.addNormalTask(context, xlTaskInfo.sourceUrl, false);
@@ -85,11 +84,8 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
-                    DownloadManager.xLTaskInfos.remove(xlTaskInfo);
-                    if(xlTaskInfo.index >= 0){
-                        DownloadManager.removeDownloadIndex(xlTaskInfo.sourceUrl, xlTaskInfo.index);
-                    }
-                    DownloadManager.stopTask(xlTaskInfo.mTaskId);
+                    DownloadManager.removeXLTaskInfo(xlTaskInfo);
+                    DownloadManager.removeTask(xlTaskInfo.mTaskId);
                 }
             });
             ll_delete_task.setOnClickListener(new View.OnClickListener() {
@@ -97,11 +93,8 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
-                    DownloadManager.xLTaskInfos.remove(xlTaskInfo);
+                    DownloadManager.removeXLTaskInfo(xlTaskInfo);
                     DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD  + xlTaskInfo.mFileName);
-                    if(xlTaskInfo.index >= 0){
-                        DownloadManager.removeDownloadIndex(xlTaskInfo.sourceUrl, xlTaskInfo.index);
-                    }
                 }
             });
             ll_thunder.setOnClickListener(new View.OnClickListener() {

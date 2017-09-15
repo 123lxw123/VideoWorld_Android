@@ -42,6 +42,7 @@ public class XLTaskInfo implements Parcelable {
     public String sourceUrl;// 下载地址获取种子本地路径
     public String torrentUrl;// 种子下载地址
     public int index = -1;// 种子里相应文件序号
+    public long timestamp = -1;// 标记完成或者错误的时间戳
 
     public int describeContents() {
         return 0;
@@ -71,6 +72,10 @@ public class XLTaskInfo implements Parcelable {
         parcel.writeLong(this.mAdditionalResVipRecvBytes);
         parcel.writeLong(this.mAdditionalResPeerSpeed);
         parcel.writeLong(this.mAdditionalResPeerBytes);
+        parcel.writeString(this.sourceUrl);
+        parcel.writeString(this.torrentUrl);
+        parcel.writeInt(this.index);
+        parcel.writeLong(this.timestamp);
     }
 
     public XLTaskInfo() {
@@ -100,6 +105,10 @@ public class XLTaskInfo implements Parcelable {
         this.mAdditionalResVipRecvBytes = parcel.readLong();
         this.mAdditionalResPeerSpeed = parcel.readLong();
         this.mAdditionalResPeerBytes = parcel.readLong();
+        this.sourceUrl = parcel.readString();
+        this.torrentUrl = parcel.readString();
+        this.index = parcel.readInt();
+        this.timestamp = parcel.readLong();
     }
 
     @Override
@@ -131,6 +140,10 @@ public class XLTaskInfo implements Parcelable {
                 ", mQueryIndexStatus=" + mQueryIndexStatus +
                 ", mTaskId=" + mTaskId +
                 ", mTaskStatus=" + mTaskStatus +
+                ", sourceUrl='" + sourceUrl + '\'' +
+                ", torrentUrl='" + torrentUrl + '\'' +
+                ", index=" + index +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package com.lxw.videoworld.framework.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.service.DownloadManager;
@@ -15,6 +16,7 @@ import com.taobao.sophix.PatchStatus;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
 import com.xunlei.downloadlib.XLTaskHelper;
+import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -83,9 +85,15 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         // 初始化迅雷下载
         XLTaskHelper.init(getApplicationContext());
         // 初始化下载任务链接集合
-        DownloadManager.downloadUrls = GsonUtil.json2List(SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_DOWNLOAD_URLS, ""), String.class);
-        // 初始化下载种子任务的index集合
-        DownloadManager.formatDownloadIndexs(GsonUtil.json2Map(SharePreferencesUtil.getStringSharePreferences(appContext, Constant.KEY_DOWNLOAD_INDEXS, ""), String.class));
+        DownloadManager.downloadUrls = GsonUtil.json2List(SharePreferencesUtil.getStringSharePreferences(appContext,
+                Constant.KEY_DOWNLOAD_URLS, ""), String.class);
+        // 初始化下载种子任务信息集合
+        String taskInfoJsonString = SharePreferencesUtil.getStringSharePreferences(appContext,
+                Constant.KEY_DOWNLOAD_XLTASKINFOS, "");
+        if(!TextUtils.isEmpty(taskInfoJsonString)){
+            DownloadManager.xLTaskInfos = GsonUtil.json2Vector(taskInfoJsonString, XLTaskInfo[].class);
+            DownloadManager.initXLTaskInfos();
+        }
         //初始化 realm 数据库
 //        Realm.init(this);
 //        RealmConfiguration configuration = new RealmConfiguration.Builder().build();

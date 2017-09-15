@@ -1,6 +1,5 @@
 package com.lxw.videoworld.framework.util;
 
-import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -104,15 +103,14 @@ public class FileUtil {
 
     public static void openFolder(Context context, String path){
         if(TextUtils.isEmpty(path)) return;
-        File file = new File(path);
-        if(!file.exists()) return;
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setDataAndType(Uri.fromFile(file), "file/*");
         try {
+            Uri uri = Uri.fromFile(new File(path));
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setDataAndType(uri, "*/*");
             context.startActivity(intent);
-        } catch (ActivityNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
