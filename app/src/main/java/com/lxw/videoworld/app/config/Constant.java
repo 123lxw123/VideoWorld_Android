@@ -41,8 +41,6 @@ public class Constant {
     public static boolean isDebug = true;
     /** 是否旋转屏幕**/
     public static boolean isAllowScreenRoate = false;
-    /** 下载任务链接集合**/
-    public static String KEY_DOWNLOAD_URLS = "KEY_DOWNLOAD_URLS";
     /** 下载种子任务选择的index集合**/
     public static String KEY_DOWNLOAD_XLTASKINFOS = "KEY_DOWNLOAD_XLTASKINFOS";
 

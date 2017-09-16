@@ -20,6 +20,7 @@ import com.xunlei.downloadlib.parameter.TorrentInfo;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 import com.xunlei.downloadlib.parameter.XLTaskLocalUrl;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -170,7 +171,7 @@ public class XLTaskHelper {
      * @return
      * @throws Exception
      */
-    public synchronized long addTorrentTask(String torrentPath,String savePath,int []indexs) throws Exception {
+    public synchronized long addTorrentTask(String torrentPath,String savePath, List<Integer>indexs) throws Exception {
          TorrentInfo torrentInfo = new TorrentInfo();
         XLDownloadManager.getInstance().getTorrentInfo(torrentPath,torrentInfo);
         TorrentFileInfo[] fileInfos = torrentInfo.mSubFileInfo;
@@ -182,8 +183,8 @@ public class XLTaskHelper {
         taskParam.setTorrentPath(torrentPath);
         GetTaskId getTaskId = new GetTaskId();
         XLDownloadManager.getInstance().createBtTask(taskParam,getTaskId);
-        if(fileInfos.length > 1 && indexs != null && indexs.length > 0) {
-            BtIndexSet btIndexSet = new BtIndexSet(indexs.length);
+        if(fileInfos.length > 1 && indexs != null && indexs.size() > 0) {
+            BtIndexSet btIndexSet = new BtIndexSet(indexs.size());
             int i = 0;
             for(int index : indexs) {
                 btIndexSet.mIndexSet[i++] = index;
@@ -237,7 +238,7 @@ public class XLTaskHelper {
      * @param taskId
      */
     public synchronized void stopTask(long taskId) {
-        XLDownloadManager.getInstance().stopTask(taskId);
+        XLDownloadManager.getInstance().stopTaskWithReason(taskId, 1000);
     }
 
     /**

@@ -39,8 +39,8 @@ public class XLTaskInfo implements Parcelable {
     public int mQueryIndexStatus;
     public long mTaskId;
     public int mTaskStatus;
-    public String sourceUrl;// 下载地址获取种子本地路径
-    public String torrentUrl;// 种子下载地址
+    public String sourceUrl;// 下载地址
+    public String torrentPath;// 种子保存地址
     public int index = -1;// 种子里相应文件序号
     public long timestamp = -1;// 标记完成或者错误的时间戳
 
@@ -73,7 +73,7 @@ public class XLTaskInfo implements Parcelable {
         parcel.writeLong(this.mAdditionalResPeerSpeed);
         parcel.writeLong(this.mAdditionalResPeerBytes);
         parcel.writeString(this.sourceUrl);
-        parcel.writeString(this.torrentUrl);
+        parcel.writeString(this.torrentPath);
         parcel.writeInt(this.index);
         parcel.writeLong(this.timestamp);
     }
@@ -106,7 +106,7 @@ public class XLTaskInfo implements Parcelable {
         this.mAdditionalResPeerSpeed = parcel.readLong();
         this.mAdditionalResPeerBytes = parcel.readLong();
         this.sourceUrl = parcel.readString();
-        this.torrentUrl = parcel.readString();
+        this.torrentPath = parcel.readString();
         this.index = parcel.readInt();
         this.timestamp = parcel.readLong();
     }
@@ -141,7 +141,7 @@ public class XLTaskInfo implements Parcelable {
                 ", mTaskId=" + mTaskId +
                 ", mTaskStatus=" + mTaskStatus +
                 ", sourceUrl='" + sourceUrl + '\'' +
-                ", torrentUrl='" + torrentUrl + '\'' +
+                ", torrentPath='" + torrentPath + '\'' +
                 ", index=" + index +
                 ", timestamp=" + timestamp +
                 '}';

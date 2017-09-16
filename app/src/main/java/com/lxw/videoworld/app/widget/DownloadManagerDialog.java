@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -19,6 +18,8 @@ import com.lxw.videoworld.app.ui.PlayVideoActivity;
 import com.lxw.videoworld.framework.util.FileUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
+
+import java.util.Collections;
 
 import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 
@@ -69,13 +70,12 @@ public class DownloadManagerDialog extends AlertDialog {
                 @Override
                 public void onClick(View view) {
                     DownloadManagerDialog.this.dismiss();
-                    DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
                     DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
                     DownloadManager.removeXLTaskInfo(xlTaskInfo);
                     if(xlTaskInfo.index >= 0){
-                        DownloadManager.addTorrentTask(xlTaskInfo.torrentUrl, xlTaskInfo.sourceUrl, PATH_OFFLINE_DOWNLOAD, new int[] {xlTaskInfo.index});
+                        DownloadManager.addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), false);
                     }else {
-                        DownloadManager.addNormalTask(context, xlTaskInfo.sourceUrl, false);
+                        DownloadManager.addNormalTask(context, xlTaskInfo.sourceUrl, false, false);
                     }
                 }
             });
@@ -83,7 +83,6 @@ public class DownloadManagerDialog extends AlertDialog {
                 @Override
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
-                    DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
                     DownloadManager.removeXLTaskInfo(xlTaskInfo);
                     DownloadManager.removeTask(xlTaskInfo.mTaskId);
                 }
@@ -92,7 +91,6 @@ public class DownloadManagerDialog extends AlertDialog {
                 @Override
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
-                    DownloadManager.removeDownloadUrl(xlTaskInfo.sourceUrl);
                     DownloadManager.removeXLTaskInfo(xlTaskInfo);
                     DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD  + xlTaskInfo.mFileName);
                 }
@@ -102,12 +100,7 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View view) {
                     DownloadManagerDialog.this.dismiss();
                     try {
-                        String url = "";
-                        if(!TextUtils.isEmpty(xlTaskInfo.torrentUrl)){
-                            url = xlTaskInfo.torrentUrl;
-                        }else {
-                            url = xlTaskInfo.sourceUrl;
-                        }
+                        String url = xlTaskInfo.sourceUrl;
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         intent.addCategory("android.intent.category.DEFAULT");
                         context.startActivity(intent);
@@ -132,12 +125,7 @@ public class DownloadManagerDialog extends AlertDialog {
                     //获取剪贴板管理器：
                     ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                     // 创建普通字符型ClipData
-                    ClipData mClipData = null;
-                    if(!TextUtils.isEmpty(xlTaskInfo.torrentUrl)){
-                        mClipData = ClipData.newPlainText("downloadLink", xlTaskInfo.torrentUrl);
-                    }else {
-                        mClipData = ClipData.newPlainText("downloadLink", xlTaskInfo.sourceUrl);
-                    }
+                    ClipData mClipData = ClipData.newPlainText("downloadLink", xlTaskInfo.sourceUrl);
                     // 将ClipData内容放到系统剪贴板里。
                     cm.setPrimaryClip(mClipData);
                     ToastUtil.showMessage("已复制到剪切板");

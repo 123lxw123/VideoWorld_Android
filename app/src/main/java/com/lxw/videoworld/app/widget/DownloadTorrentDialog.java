@@ -28,7 +28,7 @@ import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 public class DownloadTorrentDialog extends AlertDialog {
 
     private Context context;
-    private String torrentUrl;
+    private String sourceUrl;
     private TorrentInfo torrentInfo;
     private boolean isPlayVideo;
     private BaseQuickAdapter<TorrentFileInfo, BaseViewHolder> downloadTorrentAdapter;
@@ -44,10 +44,10 @@ public class DownloadTorrentDialog extends AlertDialog {
         super(context);
     }
 
-    public DownloadTorrentDialog(Context context, String torrentUrl, TorrentInfo torrentInfo, boolean isPlayVideo) {
+    public DownloadTorrentDialog(Context context, String sourceUrl, TorrentInfo torrentInfo, boolean isPlayVideo) {
         super(context);
         this.context = context;
-        this.torrentUrl = torrentUrl;
+        this.sourceUrl = sourceUrl;
         this.torrentInfo = torrentInfo;
         this.isPlayVideo = isPlayVideo;
     }
@@ -98,18 +98,14 @@ public class DownloadTorrentDialog extends AlertDialog {
             @Override
             public void onClick(View v) {
                 List<TorrentFileInfo> torrentFileInfos = downloadTorrentAdapter.getData();
-                List<Integer> indexs1 = new ArrayList<>();
+                List<Integer> indexs = new ArrayList<>();
                 for(int i = 0; i < torrentFileInfos.size(); i++){
                     if(torrentFileInfos.get(i).checked){
-                        indexs1.add(torrentFileInfos.get(i).mFileIndex);
+                        indexs.add(torrentFileInfos.get(i).mFileIndex);
                     }
                 }
-                if(indexs1.size() > 0){
-                    int[] indexs = new int[indexs1.size()];
-                    for(int j = 0; j < indexs1.size(); j++){
-                        indexs[j] = indexs1.get(j);
-                    }
-                    DownloadManager.addTorrentTask(torrentUrl, torrentInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, indexs);
+                if(indexs.size() > 0){
+                    DownloadManager.addTorrentTask(sourceUrl, torrentInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, indexs, false);
                     dismiss();
                 }else{
                     ToastUtil.showMessage("请选择下载文件");

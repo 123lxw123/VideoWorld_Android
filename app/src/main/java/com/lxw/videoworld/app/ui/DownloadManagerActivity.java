@@ -69,12 +69,6 @@ public class DownloadManagerActivity extends BaseActivity {
                     ((NumberProgressBar)helper.getView(R.id.txt_download_progress)).setProgress(0);
                 }
                 setDownloadViewWithStatus(helper, item);
-                helper.setOnClickListener(R.id.img_start_pause, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManager.stopTask(item.mTaskId);
-                    }
-                });
             }
         };
         recyclerviewDownloadTask.setLayoutManager(new LinearLayoutManager(this));
@@ -120,12 +114,13 @@ public class DownloadManagerActivity extends BaseActivity {
                     statusIcon.setOnClickListener(listener);
                     layout.setOnClickListener(listener);
                 }else {// 连接中
-                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                    statusIcon.setImageResource(R.drawable.ic_start);
+                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
+                            ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                    statusIcon.setImageResource(R.drawable.ic_connect);
                     statusIcon.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DownloadManager.startTask(xlTaskInfo.mTaskId);
+                            DownloadManager.stopTask(xlTaskInfo.mTaskId);
                         }
                     });
                     layout.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +175,24 @@ public class DownloadManagerActivity extends BaseActivity {
                 };
                 statusIcon.setOnClickListener(listener2);
                 layout.setOnClickListener(listener2);
+                break;
+            case 4:
+                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
+                        ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                statusIcon.setImageResource(R.drawable.ic_start);
+                statusIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManager.startTask(xlTaskInfo.mTaskId);
+                    }
+                });
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
+                        dialog.show();
+                    }
+                });
                 break;
             default:
                 break;

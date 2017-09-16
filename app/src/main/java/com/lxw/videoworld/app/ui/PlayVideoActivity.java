@@ -58,7 +58,8 @@ public class PlayVideoActivity extends BaseActivity {
 
     private void init() {
         videoPlayer.setUp(url, false, "");
-
+        //全屏
+        videoPlayer.setIfCurrentIsFullscreen(true);
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

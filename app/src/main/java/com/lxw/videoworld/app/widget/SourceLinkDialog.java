@@ -53,7 +53,7 @@ public class SourceLinkDialog extends AlertDialog {
                 @Override
                 public void onClick(View view) {
                     SourceLinkDialog.this.dismiss();
-                    DownloadManager.addNormalTask(context, link, isPlayVideo);
+                    DownloadManager.addNormalTask(context, link, isPlayVideo, false);
                 }
             });
             ll_thunder.setOnClickListener(new View.OnClickListener() {

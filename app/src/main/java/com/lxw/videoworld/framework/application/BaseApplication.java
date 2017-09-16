@@ -84,15 +84,12 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
                 Constant.KEY_SEARCH_TYPE, Constant.SEARCH_TYPE_2);
         // 初始化迅雷下载
         XLTaskHelper.init(getApplicationContext());
-        // 初始化下载任务链接集合
-        DownloadManager.downloadUrls = GsonUtil.json2List(SharePreferencesUtil.getStringSharePreferences(appContext,
-                Constant.KEY_DOWNLOAD_URLS, ""), String.class);
         // 初始化下载种子任务信息集合
         String taskInfoJsonString = SharePreferencesUtil.getStringSharePreferences(appContext,
                 Constant.KEY_DOWNLOAD_XLTASKINFOS, "");
         if(!TextUtils.isEmpty(taskInfoJsonString)){
             DownloadManager.xLTaskInfos = GsonUtil.json2Vector(taskInfoJsonString, XLTaskInfo[].class);
-            DownloadManager.initXLTaskInfos();
+            DownloadManager.initDownload();
         }
         //初始化 realm 数据库
 //        Realm.init(this);
