@@ -29,11 +29,56 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp_18" />
 
+        <ImageView
+            android:id="@+id/img_add_task"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_add" />
+
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_add_task"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <EditText
+            android:id="@+id/edit_source_url"
+            android:background="@drawable/bg_tab_select"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="@dimen/dp_10"
+            android:hint="请输入下载链接"
+            android:textColor="?attr/com_font_A"
+            android:textColorHint="?attr/com_font_C"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_add_task"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_10"
+            android:background="@drawable/selector_btn_bg"
+            android:text="@string/txt_download"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="@dimen/sp_14"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_40" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_download_task"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="@dimen/dp_0" />
 
 </LinearLayout>

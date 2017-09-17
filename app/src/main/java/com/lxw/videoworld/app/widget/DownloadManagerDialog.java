@@ -17,9 +17,18 @@ import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
 import com.lxw.videoworld.framework.util.FileUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
+import com.xunlei.downloadlib.LinuxFileCommand;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
+import java.io.File;
 import java.util.Collections;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 
@@ -70,13 +79,33 @@ public class DownloadManagerDialog extends AlertDialog {
                 @Override
                 public void onClick(View view) {
                     DownloadManagerDialog.this.dismiss();
-                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
                     DownloadManager.removeXLTaskInfo(xlTaskInfo);
-                    if(xlTaskInfo.index >= 0){
-                        DownloadManager.addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), false);
-                    }else {
-                        DownloadManager.addNormalTask(context, xlTaskInfo.sourceUrl, false, false);
-                    }
+                    DownloadManager.removeTask(xlTaskInfo.mTaskId);
+                    Observable.create(new ObservableOnSubscribe<String>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                            try {
+                                FileUtil.deleteFile(new File(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName));
+                                FileUtil.deleteFile(new File(PATH_OFFLINE_DOWNLOAD + "." + xlTaskInfo.mFileName + ".js"));
+                                new LinuxFileCommand(Runtime.getRuntime()).deleteDirectory(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+                                new LinuxFileCommand(Runtime.getRuntime()).deleteDirectory(PATH_OFFLINE_DOWNLOAD + "." + xlTaskInfo.mFileName + ".js");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            emitter.onNext("");
+                        }
+                    }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<String>() {
+                                @Override
+                                public void accept(String string) throws Exception {
+                                    if (xlTaskInfo.index >= 0) {
+                                        DownloadManager.addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath, PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), false);
+                                    } else {
+                                        DownloadManager.addNormalTask(context, xlTaskInfo.sourceUrl, false, false);
+                                    }
+                                }
+                            });
                 }
             });
             ll_remove_task.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +121,28 @@ public class DownloadManagerDialog extends AlertDialog {
                 public void onClick(View v) {
                     DownloadManagerDialog.this.dismiss();
                     DownloadManager.removeXLTaskInfo(xlTaskInfo);
-                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD  + xlTaskInfo.mFileName);
+                    DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+                    Observable.create(new ObservableOnSubscribe<String>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                            try {
+                                FileUtil.deleteFile(new File(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName));
+                                FileUtil.deleteFile(new File(PATH_OFFLINE_DOWNLOAD + "." + xlTaskInfo.mFileName + ".js"));
+                                new LinuxFileCommand(Runtime.getRuntime()).deleteDirectory(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+                                new LinuxFileCommand(Runtime.getRuntime()).deleteDirectory(PATH_OFFLINE_DOWNLOAD + "." + xlTaskInfo.mFileName + ".js");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            emitter.onNext("");
+                        }
+                    }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<String>() {
+                                @Override
+                                public void accept(String string) throws Exception {
+
+                                }
+                            });
                 }
             });
             ll_thunder.setOnClickListener(new View.OnClickListener() {

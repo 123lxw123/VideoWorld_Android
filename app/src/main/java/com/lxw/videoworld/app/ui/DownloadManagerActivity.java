@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -14,6 +18,7 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.widget.DownloadManagerDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
+import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.NumberProgressBar;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
@@ -38,6 +43,14 @@ public class DownloadManagerActivity extends BaseActivity {
     TextView txtDownloadManager;
     @BindView(R.id.recyclerview_download_task)
     RecyclerView recyclerviewDownloadTask;
+    @BindView(R.id.img_add_task)
+    ImageView imgAddTask;
+    @BindView(R.id.edit_source_url)
+    EditText editSourceUrl;
+    @BindView(R.id.btn_add_task)
+    Button btnAddTask;
+    @BindView(R.id.ll_add_task)
+    LinearLayout llAddTask;
 
     private BaseQuickAdapter<XLTaskInfo, BaseViewHolder> downloadManagerAdapter;
     private Disposable disposable;
@@ -58,15 +71,35 @@ public class DownloadManagerActivity extends BaseActivity {
                 finish();
             }
         });
+        imgAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                llAddTask.setVisibility(View.VISIBLE);
+                editSourceUrl.requestFocus();
+            }
+        });
+        btnAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sourceUrl = editSourceUrl.getText().toString().trim();
+                if(!TextUtils.isEmpty(sourceUrl)){
+                    DownloadManager.addNormalTask(DownloadManagerActivity.this, sourceUrl, false, false);
+                }else {
+                    ToastUtil.showMessage("下载链接为空");
+                }
+                editSourceUrl.setText("");
+                llAddTask.setVisibility(View.GONE);
+            }
+        });
         downloadManagerAdapter = new BaseQuickAdapter<XLTaskInfo, BaseViewHolder>(R.layout.item_download_manager, DownloadManager.xLTaskInfos) {
             @Override
             protected void convert(BaseViewHolder helper, final XLTaskInfo item) {
-                helper.setText(R.id.txt_download_type, item.mFileName.split("\\.")[item.mFileName.split("\\.").length -1]);
+                helper.setText(R.id.txt_download_type, item.mFileName.split("\\.")[item.mFileName.split("\\.").length - 1]);
                 helper.setText(R.id.txt_download_title, item.mFileName);
-                if (item.mFileSize > 0){
-                    ((NumberProgressBar)helper.getView(R.id.txt_download_progress)).setProgress((int) Math.floor(item.mDownloadSize * 100 / item.mFileSize));
-                }else {
-                    ((NumberProgressBar)helper.getView(R.id.txt_download_progress)).setProgress(0);
+                if (item.mFileSize > 0) {
+                    ((NumberProgressBar) helper.getView(R.id.txt_download_progress)).setProgress((int) Math.floor(item.mDownloadSize * 100 / item.mFileSize));
+                } else {
+                    ((NumberProgressBar) helper.getView(R.id.txt_download_progress)).setProgress(0);
                 }
                 setDownloadViewWithStatus(helper, item);
             }
@@ -76,32 +109,32 @@ public class DownloadManagerActivity extends BaseActivity {
     }
 
     private void initData() {
-        if(DownloadManager.xLTaskInfos != null) {
+        if (DownloadManager.xLTaskInfos != null) {
             downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
             refreshData();
         }
     }
 
-    private void refreshData(){
+    private void refreshData() {
         disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
-            @Override
-            public void accept(@NonNull Long aLong) throws Exception {
-                if(DownloadManager.xLTaskInfos != null) {
-                    downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
-                }
-            }
-        });
+                    @Override
+                    public void accept(@NonNull Long aLong) throws Exception {
+                        if (DownloadManager.xLTaskInfos != null) {
+                            downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
+                        }
+                    }
+                });
     }
 
-    private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo){
+    private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {
         final CardView layout = (CardView) helper.getView(R.id.cardview_download_item);
         final ImageView statusIcon = (ImageView) helper.getView(R.id.img_start_pause);
         switch (xlTaskInfo.mTaskStatus) {
             case 0:
-                if(xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize && xlTaskInfo.mFileSize > 0){// 已完成
+                if (xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize && xlTaskInfo.mFileSize > 0) {// 已完成
                     helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                     statusIcon.setImageResource(R.drawable.ic_complete);
                     View.OnClickListener listener = new View.OnClickListener() {
@@ -113,14 +146,14 @@ public class DownloadManagerActivity extends BaseActivity {
                     };
                     statusIcon.setOnClickListener(listener);
                     layout.setOnClickListener(listener);
-                }else {// 连接中
+                } else {// 连接中
                     helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
                             ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                     statusIcon.setImageResource(R.drawable.ic_connect);
                     statusIcon.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DownloadManager.stopTask(xlTaskInfo.mTaskId);
+                            DownloadManager.startTask(DownloadManagerActivity.this, xlTaskInfo);
                         }
                     });
                     layout.setOnClickListener(new View.OnClickListener() {
@@ -177,13 +210,12 @@ public class DownloadManagerActivity extends BaseActivity {
                 layout.setOnClickListener(listener2);
                 break;
             case 4:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
-                        ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_start);
                 statusIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DownloadManager.startTask(xlTaskInfo.mTaskId);
+                        DownloadManager.startTask(DownloadManagerActivity.this, xlTaskInfo);
                     }
                 });
                 layout.setOnClickListener(new View.OnClickListener() {

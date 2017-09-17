@@ -220,7 +220,7 @@ public class XLTaskHelper {
      * @param savePath
      */
     public synchronized void deleteTask(long taskId,final String savePath) {
-        stopTask(taskId);
+        removeTask(taskId);
         new Handler(Daemon.looper()).post(new Runnable() {
             @Override
             public void run() {
@@ -238,7 +238,7 @@ public class XLTaskHelper {
      * @param taskId
      */
     public synchronized void stopTask(long taskId) {
-        XLDownloadManager.getInstance().stopTaskWithReason(taskId, 1000);
+        XLDownloadManager.getInstance().stopTask(taskId);
     }
 
     /**
