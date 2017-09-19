@@ -3,14 +3,6 @@ apply plugin: 'android-apt'
 apply plugin: 'realm-android'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'alias'
-            keyPassword '123456'
-            storeFile file('E:/VideoWorld_Android/appKeyStore.jks')
-            storePassword '123456'
-        }
-    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
