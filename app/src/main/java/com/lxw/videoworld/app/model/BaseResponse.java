@@ -1,4 +1,4 @@
-package com.lxw.videoworld.framework.http;
+package com.lxw.videoworld.app.model;
 
 import java.io.Serializable;
 

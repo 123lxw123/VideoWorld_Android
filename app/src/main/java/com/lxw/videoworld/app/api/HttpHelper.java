@@ -7,7 +7,7 @@ import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
-import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.app.model.BaseResponse;
 
 import java.io.File;
 import java.io.IOException;

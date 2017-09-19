@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.ToastUtil;
 

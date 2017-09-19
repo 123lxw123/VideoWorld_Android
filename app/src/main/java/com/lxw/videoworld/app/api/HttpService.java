@@ -5,7 +5,7 @@ import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
-import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.app.model.BaseResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;

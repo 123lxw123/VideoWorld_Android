@@ -6,6 +6,7 @@ import android.net.ParseException;
 
 import com.google.gson.JsonParseException;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.StringUtil;

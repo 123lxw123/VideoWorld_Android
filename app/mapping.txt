@@ -33148,8 +33148,8 @@ com.lxw.videoworld.app.service.BackgroundIntentService$1 -> com.lxw.videoworld.a
     java.lang.String val$url -> a
     com.lxw.videoworld.app.service.BackgroundIntentService this$0 -> b
     void <init>(com.lxw.videoworld.app.service.BackgroundIntentService,android.content.Context,io.reactivex.Observable,boolean,boolean,java.lang.String) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.service.BackgroundIntentService$1$1 -> com.lxw.videoworld.app.service.BackgroundIntentService$1$1:
     com.lxw.videoworld.app.service.BackgroundIntentService$1 this$1 -> a
     void <init>(com.lxw.videoworld.app.service.BackgroundIntentService$1) -> <init>
@@ -33195,8 +33195,8 @@ com.lxw.videoworld.app.ui.FeedbackActivity$2 -> com.lxw.videoworld.app.ui.Feedba
 com.lxw.videoworld.app.ui.FeedbackActivity$2$1 -> com.lxw.videoworld.app.ui.FeedbackActivity$2$1:
     com.lxw.videoworld.app.ui.FeedbackActivity$2 this$1 -> a
     void <init>(com.lxw.videoworld.app.ui.FeedbackActivity$2,android.content.Context,io.reactivex.Observable) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.ui.FeedbackActivity_ViewBinding -> com.lxw.videoworld.app.ui.FeedbackActivity_ViewBinding:
     com.lxw.videoworld.app.ui.FeedbackActivity target -> b
     void <init>(com.lxw.videoworld.app.ui.FeedbackActivity,android.view.View) -> <init>
@@ -33258,8 +33258,8 @@ com.lxw.videoworld.app.ui.MainActivity$5 -> com.lxw.videoworld.app.ui.MainActivi
     boolean val$flag_dialog -> a
     com.lxw.videoworld.app.ui.MainActivity this$0 -> b
     void <init>(com.lxw.videoworld.app.ui.MainActivity,android.content.Context,io.reactivex.Observable,boolean,boolean,boolean) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.ui.MainActivity$6 -> com.lxw.videoworld.app.ui.MainActivity$6:
     java.lang.String val$link -> a
     int val$lacalVersionCode -> b
@@ -33410,8 +33410,8 @@ com.lxw.videoworld.app.ui.SearchActivity$6$1 -> com.lxw.videoworld.app.ui.Search
 com.lxw.videoworld.app.ui.SearchActivity$7 -> com.lxw.videoworld.app.ui.SearchActivity$7:
     com.lxw.videoworld.app.ui.SearchActivity this$0 -> a
     void <init>(com.lxw.videoworld.app.ui.SearchActivity,android.content.Context,io.reactivex.Observable,boolean) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.ui.SearchActivity$7$1 -> com.lxw.videoworld.app.ui.SearchActivity$7$1:
     int count -> b
     com.lxw.videoworld.app.ui.SearchActivity$7 this$1 -> a
@@ -33420,8 +33420,8 @@ com.lxw.videoworld.app.ui.SearchActivity$7$1 -> com.lxw.videoworld.app.ui.Search
 com.lxw.videoworld.app.ui.SearchActivity$8 -> com.lxw.videoworld.app.ui.SearchActivity$8:
     com.lxw.videoworld.app.ui.SearchActivity this$0 -> a
     void <init>(com.lxw.videoworld.app.ui.SearchActivity,android.content.Context,io.reactivex.Observable,boolean) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.ui.SearchActivity_ViewBinding -> com.lxw.videoworld.app.ui.SearchActivity_ViewBinding:
     com.lxw.videoworld.app.ui.SearchActivity target -> b
     void <init>(com.lxw.videoworld.app.ui.SearchActivity,android.view.View) -> <init>
@@ -33513,8 +33513,8 @@ com.lxw.videoworld.app.ui.SourceDetailActivity$1 -> com.lxw.videoworld.app.ui.So
 com.lxw.videoworld.app.ui.SourceDetailActivity$2 -> com.lxw.videoworld.app.ui.SourceDetailActivity$2:
     com.lxw.videoworld.app.ui.SourceDetailActivity this$0 -> a
     void <init>(com.lxw.videoworld.app.ui.SourceDetailActivity,android.content.Context,io.reactivex.Observable) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.ui.SourceDetailActivity$3 -> com.lxw.videoworld.app.ui.SourceDetailActivity$3:
     com.lxw.videoworld.app.ui.SourceDetailActivity this$0 -> a
     void <init>(com.lxw.videoworld.app.ui.SourceDetailActivity) -> <init>
@@ -33617,8 +33617,8 @@ com.lxw.videoworld.app.ui.SourceTypeFragment$4$1 -> com.lxw.videoworld.app.ui.So
 com.lxw.videoworld.app.ui.SourceTypeFragment$5 -> com.lxw.videoworld.app.ui.SourceTypeFragment$5:
     com.lxw.videoworld.app.ui.SourceTypeFragment this$0 -> a
     void <init>(com.lxw.videoworld.app.ui.SourceTypeFragment,android.content.Context,io.reactivex.Observable,boolean,boolean) -> <init>
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
 com.lxw.videoworld.app.ui.SourceTypeFragment_ViewBinding -> com.lxw.videoworld.app.ui.SourceTypeFragment_ViewBinding:
     com.lxw.videoworld.app.ui.SourceTypeFragment target -> b
     void <init>(com.lxw.videoworld.app.ui.SourceTypeFragment,android.view.View) -> <init>
@@ -33677,7 +33677,7 @@ com.lxw.videoworld.framework.base.BaseActivity -> com.lxw.videoworld.framework.b
     com.lxw.videoworld.framework.widget.LoadingDialog getProgressBar() -> o
 com.lxw.videoworld.framework.base.BaseFragment -> com.lxw.videoworld.framework.base.BaseFragment:
     void <init>() -> <init>
-com.lxw.videoworld.framework.http.BaseResponse -> com.lxw.videoworld.framework.b.a:
+com.lxw.videoworld.app.model.BaseResponse -> com.lxw.videoworld.framework.b.a:
     int code -> a
     java.lang.String message -> b
     java.lang.Object result -> c
@@ -33698,8 +33698,8 @@ com.lxw.videoworld.framework.http.HttpManager -> com.lxw.videoworld.framework.b.
     void <init>(android.content.Context,io.reactivex.Observable,boolean,boolean) -> <init>
     void doRequest() -> a
     void cancel() -> b
-    void onSuccess(com.lxw.videoworld.framework.http.BaseResponse) -> a
-    void onFailure(com.lxw.videoworld.framework.http.BaseResponse) -> b
+    void onSuccess(com.lxw.videoworld.app.model.BaseResponse) -> a
+    void onFailure(com.lxw.videoworld.app.model.BaseResponse) -> b
     boolean access$000(com.lxw.videoworld.framework.http.HttpManager) -> a
     android.content.Context access$100(com.lxw.videoworld.framework.http.HttpManager) -> b
     boolean access$200(com.lxw.videoworld.framework.http.HttpManager) -> c
@@ -33710,7 +33710,7 @@ com.lxw.videoworld.framework.http.HttpManager$1 -> com.lxw.videoworld.framework.
     void onError(java.lang.Throwable) -> onError
     void onComplete() -> onComplete
     void onSubscribe(io.reactivex.disposables.Disposable) -> onSubscribe
-    void onNext(com.lxw.videoworld.framework.http.BaseResponse) -> a
+    void onNext(com.lxw.videoworld.app.model.BaseResponse) -> a
     void onNext(java.lang.Object) -> onNext
 com.lxw.videoworld.framework.image.ImageManager -> com.lxw.videoworld.framework.image.a:
     com.lxw.videoworld.framework.image.ImageManager mInstance -> a

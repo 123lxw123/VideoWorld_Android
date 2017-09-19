@@ -27,7 +27,7 @@ import com.lxw.videoworld.app.model.SearchListModel;
 import com.lxw.videoworld.app.model.SearchModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.GsonUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;

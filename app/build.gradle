@@ -7,15 +7,6 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
-//    signingConfigs {
-//        config {
-//            keyAlias 'alias'
-//            keyPassword '123456'
-//            storeFile file('/Users/lixiongwen/Documents/Android_Project/VideoWorld_Android/appKeyStore.jks')
-//            storePassword '123456'
-//        }
-//    }
-
     defaultConfig {
         applicationId "com.lxw.videoworld"
         minSdkVersion 21
@@ -33,6 +24,7 @@ android {
                 JPUSH_APPKEY : "0fe4400f45bc53ce6a2c704a", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL: "COMMON_CHANNEL", //用户渠道统计的渠道名称
         ]
+        multiDexEnabled = true
 
     }
     buildTypes {
