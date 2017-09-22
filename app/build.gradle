@@ -96,4 +96,5 @@ dependencies {
     compile 'com.shuyu:gsyVideoPlayer-java:2.0.4'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile 'cn.pedant.sweetalert:library:1.3'
 }
