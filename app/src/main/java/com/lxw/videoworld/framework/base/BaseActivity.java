@@ -84,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         progressBar = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        progressBar.getProgressHelper().setBarColor(getResources().getColor(R.color.color_009587));
+        progressBar.getProgressHelper().setBarColor(getCustomColor(R.styleable.BaseColor_com_assist_A));
         progressBar.setTitleText("Loading");
         progressBar.setCancelable(true);
     }
@@ -129,7 +129,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showProgressBar(){
         if(progressBar == null){
             progressBar = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-            progressBar.getProgressHelper().setBarColor(getResources().getColor(R.color.color_009587));
+            progressBar.getProgressHelper().setBarColor(getCustomColor(R.styleable.BaseColor_com_assist_A));
             progressBar.setTitleText("Loading");
             progressBar.setCancelable(true);
         }

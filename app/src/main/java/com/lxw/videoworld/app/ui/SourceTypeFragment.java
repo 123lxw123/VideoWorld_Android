@@ -226,6 +226,8 @@ public class SourceTypeFragment extends Fragment {
                     }, 500);
                 }
             }, recyclerviewSourceType);
+            // 当列表滑动到倒数第N个Item的时候(默认是1)回调onLoadMoreRequested方法
+            sourceAdapter.setPreLoadNumber(7);
             sourceAdapter.setLoadMoreView(new EmptyLoadMoreView());
             // 动画
             sourceAdapter.openLoadAnimation();
@@ -265,7 +267,9 @@ public class SourceTypeFragment extends Fragment {
                             }
                             // banner 初始化
                             if (sourceBannerFragments.size() > 0) {
-                                bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                if(SourceTypeFragment.this.getParentFragment() != null){
+                                    bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getParentFragment().getFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                }else bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
                                 viewpagerBanner.setAdapter(bannerAdapter);
                                 viewpagerBanner.startAutoScroll(true);
                                 if (sourceAdapter.getHeaderLayoutCount() == 0) {

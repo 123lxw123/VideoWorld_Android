@@ -63,12 +63,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <com.ashokvarma.bottomnavigation.BottomNavigationBar
+            <android.support.design.widget.BottomNavigationView
                 android:id="@+id/navigationbar_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:background="?attr/com_main_A" />
+                app:menu="@menu/bootom_nav"
+                app:itemIconTint="@color/color_FFFFFF"
+                app:itemTextColor="@color/color_FFFFFF"
+                app:itemBackground="?attr/com_main_A"/>
         </LinearLayout>
 
 

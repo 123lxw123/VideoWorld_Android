@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/bottom_nav_movie"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:title="@string/txt_tab1"
+        android:icon="@drawable/svg_movie"/>
+
+    <item android:id="@+id/bottom_nav_tv"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:title="@string/txt_tab2"
+        android:icon="@drawable/svg_tv"/>
+
+    <item android:id="@+id/bottom_nav_variety"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:title="@string/txt_tab3"
+        android:icon="@drawable/svg_variety"/>
+
+    <item android:id="@+id/bottom_nav_anime"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:title="@string/txt_tab4"
+        android:icon="@drawable/svg_anime"/>
+
+    <item android:id="@+id/bottom_nav_game"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:title="@string/txt_tab5"
+        android:icon="@drawable/svg_game"/>
+</menu>

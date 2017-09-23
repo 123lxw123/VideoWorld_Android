@@ -4,6 +4,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
@@ -20,16 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.DownloadUtil;
@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.viewpager_main)
     ViewPager viewpagerMain;
     @BindView(R.id.navigationbar_main)
-    BottomNavigationBar navigationbarMain;
+    BottomNavigationView navigationbarMain;
     @BindView(R.id.toobar_main)
     Toolbar toobarMain;
     @BindView(R.id.txt_version)
@@ -172,29 +172,27 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        navigationbarMain.setBackgroundColor(getCustomColor(R.styleable.BaseColor_com_main_A));
-        navigationbarMain.setMode(BottomNavigationBar.MODE_FIXED);
-
-        navigationbarMain.addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_1,
-                getString(R.string.txt_tab1))).addItem(new BottomNavigationItem(R.drawable
-                .ic_tab_unselect_2, getString(R.string.txt_tab2))).addItem(new
-                BottomNavigationItem(R.drawable.ic_tab_unselect_3, getString(R.string.txt_tab3)))
-                .addItem(new BottomNavigationItem(R.drawable.ic_tab_unselect_4, getString(R
-                        .string.txt_tab4))).addItem(new BottomNavigationItem(R.drawable
-                .ic_tab_unselect_5, getString(R.string.txt_tab5))).initialise();
-
-        navigationbarMain.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
+        navigationbarMain.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onTabSelected(int position) {
-                viewpagerMain.setCurrentItem(position);
-            }
-
-            @Override
-            public void onTabUnselected(int position) {
-            }
-
-            @Override
-            public void onTabReselected(int position) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.bottom_nav_movie:
+                        viewpagerMain.setCurrentItem(0);
+                        break;
+                    case R.id.bottom_nav_tv:
+                        viewpagerMain.setCurrentItem(1);
+                        break;
+                    case R.id.bottom_nav_variety:
+                        viewpagerMain.setCurrentItem(2);
+                        break;
+                    case R.id.bottom_nav_anime:
+                        viewpagerMain.setCurrentItem(3);
+                        break;
+                    case R.id.bottom_nav_game:
+                        viewpagerMain.setCurrentItem(4);
+                        break;
+                }
+                return true;
             }
         });
 

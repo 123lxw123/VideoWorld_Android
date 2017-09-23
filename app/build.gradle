@@ -25,7 +25,7 @@ android {
                 JPUSH_CHANNEL: "COMMON_CHANNEL", //用户渠道统计的渠道名称
         ]
         multiDexEnabled = true
-
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -61,7 +61,6 @@ dependencies {
     // jpush
     // smarttablayout
     // infinitecycleviewpager
-    compile project(path: ':bottom-navigation-bar')
     compile project(path: ':infinitecycleviewpager')
     compile project(path: ':thunder')
     compile 'com.android.support:appcompat-v7:25.3.1'

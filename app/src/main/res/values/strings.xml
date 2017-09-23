@@ -84,13 +84,14 @@
     <string name="txt_QQ2">福利群   %1$s</string>
     <string name="txt_feedback">反馈</string>
     <string name="txt_feedback_commit">提交</string>
-    <string name="txt_feedback_tips">意见、建议、吐槽...畅所欲言</string>
+    <string name="txt_feedback_tips">意见、建议、吐槽…畅所欲言</string>
     <string name="txt_no_feedback_tips">请先输入您的反馈内容</string>
     <string name="txt_feedback_success_tips">感谢您的反馈</string>
     <string name="txt_about">关于</string>
     <string name="txt_download_manager">下载任务</string>
     <string name="txt_download">下载</string>
     <string name="txt_no_data">暂无数据</string>
+    <string name="txt_load_more">加载更多中…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
