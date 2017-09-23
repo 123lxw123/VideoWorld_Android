@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
 import com.lxw.videoworld.app.util.XLTaskInfoComparator;
@@ -17,7 +18,7 @@ import com.lxw.videoworld.framework.util.FileUtil;
 import com.lxw.videoworld.framework.util.GsonUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
-import com.lxw.videoworld.framework.widget.LoadingDialog;
+import com.lxw.videoworld.framework.util.ValueUtil;
 import com.xunlei.downloadlib.XLDownloadManager;
 import com.xunlei.downloadlib.XLTaskHelper;
 import com.xunlei.downloadlib.parameter.TorrentInfo;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -233,11 +235,15 @@ public class DownloadManager {
             taskId = XLTaskHelper.instance().addMagnetTask(url, savePath, fileName);
             getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
                 Disposable mD = null;
-                LoadingDialog loadingDialog = new LoadingDialog(context);
+                SweetAlertDialog loadingDialog;
 
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
                     mD = d;
+                    loadingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+                    loadingDialog.getProgressHelper().setBarColor(ValueUtil.getCustomColor(context, R.styleable.BaseColor_com_assist_A));
+                    loadingDialog.setTitleText("Loading");
+                    loadingDialog.setCancelable(true);
                 }
 
                 @Override

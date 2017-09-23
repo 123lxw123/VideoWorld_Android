@@ -44,7 +44,7 @@ public class PlayVideoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtil.hideStatusBar(this);
+//        StatusBarUtil.hideStatusBar(this);
         setContentView(R.layout.activity_play_video);
         ButterKnife.bind(this);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
@@ -57,9 +57,6 @@ public class PlayVideoActivity extends BaseActivity {
     }
 
     private void init() {
-        videoPlayer.setUp(url, false, "");
-        //全屏
-        videoPlayer.setIfCurrentIsFullscreen(true);
         //增加封面
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -83,6 +80,7 @@ public class PlayVideoActivity extends BaseActivity {
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StatusBarUtil.hideStatusBar(PlayVideoActivity.this);
                 orientationUtils.resolveByClick();
             }
         });
@@ -104,7 +102,10 @@ public class PlayVideoActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-
+        //全屏
+        videoPlayer.setIfCurrentIsFullscreen(false);
+        // 播放
+        videoPlayer.setUp(url, false, "");
         //过渡动画
         initTransition();
     }
@@ -133,6 +134,7 @@ public class PlayVideoActivity extends BaseActivity {
     public void onBackPressed() {
         //先返回正常状态
         if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            StatusBarUtil.showSystemBar(PlayVideoActivity.this);
             videoPlayer.getFullscreenButton().performClick();
             return;
         }

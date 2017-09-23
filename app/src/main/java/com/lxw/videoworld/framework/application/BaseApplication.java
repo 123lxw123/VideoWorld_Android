@@ -91,10 +91,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
             DownloadManager.xLTaskInfos = GsonUtil.json2Vector(taskInfoJsonString, XLTaskInfo[].class);
             DownloadManager.initDownload();
         }
-        //初始化 realm 数据库
-//        Realm.init(this);
-//        RealmConfiguration configuration = new RealmConfiguration.Builder().build();
-//        Realm.setDefaultConfiguration(configuration);
         // Jpush 初始化
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
