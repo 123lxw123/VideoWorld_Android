@@ -82,8 +82,8 @@ public class XLTaskHelper {
         if (url.startsWith("ftp://") || url.startsWith("http://") || url.startsWith("https://")) {
             P2spTaskParam taskParam = new P2spTaskParam();
             taskParam.setCreateMode(1);
-            taskParam.setFileName(fileName);
             taskParam.setFilePath(savePath);
+            taskParam.setFileName(fileName);
             taskParam.setUrl(url);
             taskParam.setSeqId(seq.incrementAndGet());
             taskParam.setCookie("");

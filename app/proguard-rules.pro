@@ -127,3 +127,5 @@
 -dontwarn tv.danmaku.ijk.**
 -keep class com.shuyu.gsyvideoplayer.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.**
+
+-keep class com.xunlei.downloadlib.parameter.** { *; }
