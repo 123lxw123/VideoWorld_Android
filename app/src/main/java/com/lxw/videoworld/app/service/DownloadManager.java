@@ -13,9 +13,9 @@ import com.lxw.videoworld.app.util.XLTaskInfoComparator;
 import com.lxw.videoworld.app.widget.DownloadTorrentDialog;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.log.LoggerHelper;
-import com.lxw.videoworld.framework.util.Base64Util;
 import com.lxw.videoworld.framework.util.FileUtil;
 import com.lxw.videoworld.framework.util.GsonUtil;
+import com.lxw.videoworld.framework.util.NetUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
@@ -79,6 +79,11 @@ public class DownloadManager {
                 } else {
                     taskId = addMagnetTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isInitDownload, nextCall, errorCall);
                 }
+                if (NetUtil.getNetWorkState(context) == NetUtil.NETWORK_MOBILE){
+                    ToastUtil.showMessage("资源开始下载\n当前为移动网络，请注意您的流量");
+                }else {
+                    ToastUtil.showMessage("资源开始下载");
+                }
             } else {
                 taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
             }
@@ -126,6 +131,11 @@ public class DownloadManager {
             }
             final List<Integer> newIndexs = indexs;
             taskId = XLTaskHelper.instance().addTorrentTask(torrentPath, savePath, indexs);
+            if (NetUtil.getNetWorkState(BaseApplication.appContext) == NetUtil.NETWORK_MOBILE){
+                ToastUtil.showMessage("资源开始下载\n当前为移动网络，请注意您的流量");
+            }else {
+                ToastUtil.showMessage("资源开始下载");
+            }
             for (int i = 0; i < indexs.size(); i++) {
                 XLTaskInfo xLTaskInfo = XLTaskHelper.instance().getBtSubTaskInfo(taskId, indexs.get(i)).mTaskInfo;
                 xLTaskInfo.mFileName = torrentInfo.mSubFileInfo[indexs.get(i)].mFileName;
@@ -532,16 +542,8 @@ public class DownloadManager {
      * @return
      */
     public static String getRealUrl(String url) {
-        String realUrl = "";
-        if (!TextUtils.isEmpty(url)) {
-            //去掉迅雷地址前缀
-            url = url.substring(10, url.length());
-            //解密
-            realUrl = Base64Util.decodeBase64(url);
-            //去掉头AA，尾ZZ
-            realUrl = realUrl.substring(2, realUrl.length() - 2);
-        }
-        return realUrl;
+        if (url.startsWith("thunder://")) url = XLDownloadManager.getInstance().parserThunderUrl(url);
+        return url;
     }
 
     public static void addXLTaskInfo(XLTaskInfo xLTaskInfo) {

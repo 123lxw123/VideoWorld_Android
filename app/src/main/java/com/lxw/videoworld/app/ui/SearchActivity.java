@@ -199,7 +199,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         });
         // 加载更多
         // 当列表滑动到倒数第N个Item的时候(默认是1)回调onLoadMoreRequested方法
-        searchAdapter.setPreLoadNumber(3 );
         searchAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {

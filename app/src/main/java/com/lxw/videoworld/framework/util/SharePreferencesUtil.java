@@ -51,4 +51,25 @@ public class SharePreferencesUtil {
         int value = sharedPreferences.getInt(key, defaultValue);
         return value;
     }
+
+    public static void setBooleanSharePreferences(Context context, String key, boolean value) {
+        //实例化SharedPreferences对象
+        SharedPreferences sharedPreferences = (SharedPreferences) PreferenceManager
+                .getDefaultSharedPreferences(context);
+        //实例化SharedPreferences.Editor对象
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //用putString的方法保存数据
+        editor.putBoolean(key, value);
+        //提交当前数据
+        editor.commit();
+    }
+
+    public static boolean getBooleanSharePreferences(Context context, String key, boolean defaultValue) {
+        //实例化SharedPreferences对象
+        SharedPreferences sharedPreferences = (SharedPreferences) PreferenceManager
+                .getDefaultSharedPreferences(context);
+        //获取key相应value 否则返回默认值
+        boolean value = sharedPreferences.getBoolean(key, defaultValue);
+        return value;
+    }
 }

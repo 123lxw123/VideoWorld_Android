@@ -79,9 +79,9 @@
     <string name="no_update_tips">当前已是最新版本</string>
     <string name="update_file_name">VideoWorld.apk</string>
 
-    <string name="txt_version">版本   %1$s</string>
-    <string name="txt_QQ1">和谐群   %1$s</string>
-    <string name="txt_QQ2">福利群   %1$s</string>
+    <string name="txt_download_path">下载路径</string>
+    <string name="txt_version">版本号</string>
+    <string name="txt_QQ">和谐群</string>
     <string name="txt_feedback">反馈</string>
     <string name="txt_feedback_commit">提交</string>
     <string name="txt_feedback_tips">意见、建议、吐槽…畅所欲言</string>

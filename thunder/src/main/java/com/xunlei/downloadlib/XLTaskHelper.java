@@ -34,7 +34,7 @@ public class XLTaskHelper {
         XLDownloadManager instance = XLDownloadManager.getInstance();
         InitParam initParam = new InitParam();
         initParam.mAppKey = "xzNjAwOQ^^yb==aa214316d5e0a63a5b58db24557fa2^e";
-        initParam.mAppVersion = "5.41.2.4980";
+        initParam.mAppVersion = "5.21.2.4170";
         initParam.mStatSavePath = context.getFilesDir().getPath();
         initParam.mStatCfgSavePath = context.getFilesDir().getPath();
         initParam.mPermissionLevel = 2;

@@ -2,10 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-
     defaultConfig {
         applicationId "com.lxw.videoworld"
         minSdkVersion 21
@@ -15,7 +13,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi', 'armeabi-v7a'
+            abiFilters 'armeabi'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         manifestPlaceholders = [
@@ -29,12 +27,10 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-//            signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             minifyEnabled false
-//            signingConfig signingConfigs.config
         }
     }
 }
@@ -45,20 +41,35 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     // retrofit
+
     // glide
+
     // okhttp
+
     // RxJava RxAndroid
+
     // photoview
+
     // materialdialog
+
     // kenburnsview
+
     // logger
+
     // gson
+
     // butterknife
+
     // BaseRecyclerViewAdapterHelper
+
     // weixin
+
     //hotfix
+
     // jpush
+
     // smarttablayout
+
     // infinitecycleviewpager
     compile project(path: ':infinitecycleviewpager')
     compile project(path: ':thunder')

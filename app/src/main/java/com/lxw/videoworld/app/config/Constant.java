@@ -43,6 +43,8 @@ public class Constant {
     public static boolean isAllowScreenRoate = false;
     /** 下载种子任务选择的index集合**/
     public static String KEY_DOWNLOAD_XLTASKINFOS = "KEY_DOWNLOAD_XLTASKINFOS";
+    /** 是否允许切换 4g 网络时下载 **/
+    public static String KEY_IS_ALLOW_4G = "KEY_IS_ALLOW_4G";
 
     /** 内置SD卡路径**/
     public static String PATH_SD_CARD = Environment.getExternalStorageDirectory().toString() + "/";

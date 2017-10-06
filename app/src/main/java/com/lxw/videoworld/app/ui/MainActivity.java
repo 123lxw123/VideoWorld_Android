@@ -3,6 +3,8 @@ package com.lxw.videoworld.app.ui;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,8 +19,10 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +32,7 @@ import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.service.NetBroadcastReceiver;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.HttpManager;
@@ -66,10 +71,8 @@ public class MainActivity extends BaseActivity {
     TextView txtChangeThemem;
     @BindView(R.id.txt_github)
     TextView txtGitHub;
-    @BindView(R.id.txt_QQ1)
-    TextView txtQQ1;
-    @BindView(R.id.txt_QQ2)
-    TextView txtQQ2;
+    @BindView(R.id.txt_QQ)
+    TextView txtQQ;
     @BindView(R.id.txt_feedback)
     TextView txtFeedback;
     @BindView(R.id.txt_about)
@@ -84,6 +87,22 @@ public class MainActivity extends BaseActivity {
     LinearLayout llNotice;
     @BindView(R.id.drawerlayout)
     DrawerLayout drawerlayout;
+    @BindView(R.id.switch_allow_4G)
+    Switch switchAllow4G;
+    @BindView(R.id.ll_change_theme)
+    LinearLayout llChangeTheme;
+    @BindView(R.id.txt_allow_4G)
+    TextView txtAllow4G;
+    @BindView(R.id.ll_version)
+    LinearLayout llVersion;
+    @BindView(R.id.ll_about_content)
+    LinearLayout llAboutContent;
+    @BindView(R.id.ll_QQ)
+    LinearLayout llQQ;
+    @BindView(R.id.txt_download_path)
+    TextView txtDownloadPath;
+    @BindView(R.id.txt_download_path_value)
+    TextView txtDownloadPathValue;
     private boolean flag_exit = false;
     private boolean flag_back = true;
     private QuickFragmentPageAdapter pagerAdapter;
@@ -204,6 +223,86 @@ public class MainActivity extends BaseActivity {
                 R.string.txt_copy_link, R.string.txt_copy_link);
         drawerlayout.setDrawerListener(toggle);
         toggle.syncState();
+
+        boolean isAllow4G = SharePreferencesUtil.getBooleanSharePreferences(MainActivity.this, Constant.KEY_IS_ALLOW_4G, false);
+        switchAllow4G.setChecked(!isAllow4G);
+        switchAllow4G.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharePreferencesUtil.setBooleanSharePreferences(MainActivity.this, Constant.KEY_IS_ALLOW_4G, !isChecked);
+            }
+        });
+
+        llChangeTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (Constant.THEME_TYPE) {
+                    case Constant.THEME_TYPE_1:
+                        Constant.THEME_TYPE = Constant.THEME_TYPE_2;
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
+                        break;
+                    case Constant.THEME_TYPE_2:
+                        Constant.THEME_TYPE = Constant.THEME_TYPE_3;
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
+                        break;
+                    case Constant.THEME_TYPE_3:
+                        Constant.THEME_TYPE = Constant.THEME_TYPE_1;
+                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
+                        break;
+                }
+                MainActivity.this.finish();
+                Intent intent = MainActivity.this.getIntent();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                        .FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
+
+        // 复制群号
+        llQQ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(txtQQ.getText())) {
+                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService
+                            (Context.CLIPBOARD_SERVICE);
+                    clip.setText(txtQQ.getText());
+                    if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
+                        drawerlayout.closeDrawers();
+                    }
+                    ToastUtil.showMessage("已复制群号");
+                }
+            }
+        });
+
+        llVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getConfig(true);
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerlayout.closeDrawers();
+                }
+            }
+        });
+
+        txtDownloadPathValue.setText("../VideoWorld/download");
+        txtDownloadPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txtDownloadPathValue.getVisibility() == View.GONE)
+                    txtDownloadPathValue.setVisibility(View.VISIBLE);
+                else  txtDownloadPathValue.setVisibility(View.GONE);
+            }
+        });
+
+        // 监听网络变化
+        NetBroadcastReceiver netBroadcastReceiver = new NetBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netBroadcastReceiver, filter);
     }
 
     @Override
@@ -313,17 +412,10 @@ public class MainActivity extends BaseActivity {
 
         // 侧滑菜单
         String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
-        if (!TextUtils.isEmpty(versionName)) {
-            txtVersion.setText(String.format(getString(R.string.txt_version), versionName));
-            txtVersion.setVisibility(View.VISIBLE);
-        }
+        txtVersion.setText(versionName);
+
         if (!TextUtils.isEmpty(configModel.getQQ1())) {
-            txtQQ1.setText(String.format(getString(R.string.txt_QQ1), configModel.getQQ1()));
-            txtQQ1.setVisibility(View.VISIBLE);
-        }
-        if (!TextUtils.isEmpty(configModel.getQQ2())) {
-            txtQQ2.setText(String.format(getString(R.string.txt_QQ2), configModel.getQQ2()));
-            txtQQ2.setVisibility(View.VISIBLE);
+            txtQQ.setText(configModel.getQQ1());
         }
         if (!TextUtils.isEmpty(configModel.getIntro())) {
             txtAboutContent.setText(configModel.getIntro());
@@ -337,10 +429,10 @@ public class MainActivity extends BaseActivity {
                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant
                         .KEY_NOTICE, configModel.getNotice());
                 txtNotice.setText(configModel.getNotice());
+                txtNotice.setSelected(true);
                 llNotice.setVisibility(View.VISIBLE);
             }
         }
-
         // 更新升级
         try {
             final int lacalVersionCode = Integer.valueOf(ManifestUtil.getApkVersionCode
@@ -387,75 +479,15 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.txt_change_theme, R.id.txt_version, R.id.txt_github, R.id.txt_QQ1, R.id.txt_QQ2, R.id.txt_feedback, R
-            .id.txt_about})
+    @OnClick({R.id.txt_github, R.id.txt_feedback, R.id.txt_about})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
-            case R.id.txt_change_theme:
-                switch (Constant.THEME_TYPE) {
-                    case Constant.THEME_TYPE_1:
-                        Constant.THEME_TYPE = Constant.THEME_TYPE_2;
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
-                        break;
-                    case Constant.THEME_TYPE_2:
-                        Constant.THEME_TYPE = Constant.THEME_TYPE_3;
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
-                        break;
-                    case Constant.THEME_TYPE_3:
-                        Constant.THEME_TYPE = Constant.THEME_TYPE_1;
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
-                        break;
-                }
-                MainActivity.this.finish();
-                Intent intent = MainActivity.this.getIntent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
-                        .FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                break;
-            case R.id.txt_version:
-                getConfig(true);
-                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerlayout.closeDrawers();
-                }
-                break;
-
             case R.id.txt_github:
                 Intent intent2 = new Intent(MainActivity.this, CommonWebActivity.class);
                 intent2.putExtra("url", "https://github.com/123lxw123");
                 startActivity(intent2);
                 if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
                     drawerlayout.closeDrawers();
-                }
-                break;
-            case R.id.txt_QQ1:
-                // 复制群号
-                if (configModel != null && !TextUtils.isEmpty(configModel
-                        .getQQ1())) {
-                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService
-                            (Context.CLIPBOARD_SERVICE);
-                    clip.setText(configModel.getQQ1());
-                    if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-                        drawerlayout.closeDrawers();
-                    }
-                    ToastUtil.showMessage("已复制群号");
-                }
-                break;
-            case R.id.txt_QQ2:
-                // 复制群号
-                if (configModel != null && !TextUtils.isEmpty(configModel
-                        .getQQ2())) {
-                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService
-                            (Context.CLIPBOARD_SERVICE);
-                    clip.setText(configModel.getQQ2());
-                    if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-                        drawerlayout.closeDrawers();
-                    }
-                    ToastUtil.showMessage("已复制群号");
-
                 }
                 break;
             case R.id.txt_feedback:
@@ -468,10 +500,10 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.txt_about:
                 // 关于
-                if (txtAboutContent.getVisibility() == View.GONE) {
-                    txtAboutContent.setVisibility(View.VISIBLE);
+                if (llAboutContent.getVisibility() == View.GONE) {
+                    llAboutContent.setVisibility(View.VISIBLE);
                 } else {
-                    txtAboutContent.setVisibility(View.GONE);
+                    llAboutContent.setVisibility(View.GONE);
                 }
                 break;
         }

@@ -17,6 +17,7 @@
     <dimen name="sp_40">40sp</dimen>
 
     <dimen name="dp_0">0dp</dimen>
+    <dimen name="dp_0.5">0.5dp</dimen>
     <dimen name="dp_3">3dp</dimen>
     <dimen name="dp_4">4dp</dimen>
     <dimen name="dp_5">5dp</dimen>

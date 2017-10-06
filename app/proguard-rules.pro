@@ -127,5 +127,9 @@
 -dontwarn tv.danmaku.ijk.**
 -keep class com.shuyu.gsyvideoplayer.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.**
-
+# xunlei
 -keep class com.xunlei.downloadlib.parameter.** { *; }
+#微信分享
+-keep class com.tencent.mm.opensdk.** { *;}
+-keep class com.tencent.wxop.** {*;}
+-keep class com.tencent.mm.sdk.** {*;}
