@@ -1,7 +1,5 @@
 package com.lxw.videoworld.app.service;
 
-import android.text.Html;
-
 import com.lxw.videoworld.app.model.SearchModel;
 
 import org.jsoup.Jsoup;
@@ -11,6 +9,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -20,41 +20,30 @@ import java.util.List;
 
 public class SearchSpider {
     public static List<SearchModel> getZhongziSearchResult(String url){
-//        List<String> titles = page.getHtml().css("table.table-striped").css("h4").all();
-//        List<String> dates = page.getHtml().css("table.table-striped").regex("创建日期：(.*?)</strong>").all();
-//        List<String> sizes = page.getHtml().css("table.table-striped").regex("大小：(.*?)</strong>").all();
-//        List<String> hots = page.getHtml().css("table.table-striped").regex("热度：(.*?)</strong>").all();
-//        Html html = new Html(page.getRawText());
-//        List<String> links = html.css("table.table-striped").regex("class=\"ls-magnet\">.*?href=\"(.*?)\"").all();
-//        List<SearchResult> results = new ArrayList<>();
-//        if(links != null && links.size() > 0){
-//            for(int i = 0 ; i < links.size(); i++){
-//                SearchResult result = new SearchResult();
-//                result.setTitle(StringUtil.disposeField(titles.get(i)));
-//                result.setDate(StringUtil.disposeField(dates.get(i)));
-//                result.setSize(StringUtil.disposeField(sizes.get(i)));
-//                result.setHot(StringUtil.disposeField(hots.get(i)));
-//                result.setCiliLink(StringUtil.disposeField(links.get(i)));
-//                results.add(result);
-//            }
-//        }
         try{
             Document htmlString = Jsoup.connect(url).get();
             Elements datas = htmlString.select("table.table-striped");
-//            Elements titles = htmlString.select("table.table-striped").select("h4");
-//            Elements dates = htmlString.select("table.table-striped").select("h4").text().ma;
-//            Elements sizes = htmlString.select("table.table-striped").select("h4");
-//            Elements hots = htmlString.select("table.table-striped").select("h4");
             List<SearchModel> results = new ArrayList<>();
             for (int i = 0; datas != null && i < datas.size(); i++){
                 SearchModel result = new SearchModel();
                 result.setTitle(datas.get(i).select("h4").text());
-                result.setDate(datas.get(i).text().matches("创建日期：(.*?)</strong>"));
-                result.setTitle(datas.get(i).select("h4").text());
-                result.setTitle(datas.get(i).select("h4").text());
+                result.setDate(getMatchContent(datas.get(i).text(), "创建日期：(.*?)</strong>"));
+                result.setSize(getMatchContent(datas.get(i).text(), "大小：(.*?)</strong>"));
+                result.setHot(getMatchContent(datas.get(i).text(), "热度：(.*?)</strong>"));
+                result.setCiliLink(getMatchContent(datas.get(i).text(), "class=\"ls-magnet\">.*?href=\"(.*?)\""));
+                results.add(result);
             }
+            return results;
         }catch (IOException e){
             e.printStackTrace();
         }
+        return new ArrayList<>();
+    }
+
+    public static String getMatchContent(String originText, String regex){
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(originText); // 获取 matcher 对象
+        if (m.find()) return m.group(0);
+        else return "";
     }
 }

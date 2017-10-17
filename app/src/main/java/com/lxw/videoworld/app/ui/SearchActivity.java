@@ -2,8 +2,6 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,26 +21,31 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SearchListModel;
 import com.lxw.videoworld.app.model.SearchModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
+import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.GsonUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
-import com.lxw.videoworld.app.widget.SourceLinkDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener, View.OnClickListener {
 
@@ -58,10 +61,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     @BindView(R.id.recyclerview_result)
     RecyclerView recyclerviewResult;
 
-    private final int IMG_SEARCH = 1000;
-    private final int IMG_SEARCH_RESULT = 1001;
-    private final int IMG_SEARCH_TIMEOUT = 1002;// 搜索超时
-    private final int INTERVAL = 0; //输入时间间隔为2000毫秒
     @BindView(R.id.txt_tab1)
     TextView txtTab1;
     @BindView(R.id.txt_tab2)
@@ -79,18 +78,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private int page = 1;
     private boolean flag_loadmore = false;
     private String searchType = Constant.STATUS_0;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == IMG_SEARCH) {
-                getSearch();
-            } else if (msg.what == IMG_SEARCH_RESULT) {
-                getSearchResult();
-            } else if (msg.what == IMG_SEARCH_TIMEOUT) {
-                ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_timeout));
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,7 +205,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         recyclerviewResult.setAdapter(searchAdapter);
     }
 
-    private void getSearch() {
+    private void getSearchResult() {
         if (timer != null) {
             timer.cancel();
             timer = null;
@@ -227,45 +214,33 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             keyword = keyword.trim();
             closeKeyboard();
             showProgressBar();
-            new HttpManager<String>(SearchActivity.this, HttpHelper.getInstance().getSearch(getSearchUrl(), keyword, Constant.SEARCH_TYPE), false) {
-
+            Observable.create(new ObservableOnSubscribe<List<SearchModel>>() {
                 @Override
-                public void onSuccess(BaseResponse<String> response) {
-                    if (timer == null) {
-                        timer = new Timer();
-                    }
-                    timer.schedule(new TimerTask() {
-                        private int count = 0;
+                public void subscribe(ObservableEmitter<List<SearchModel>> emitter) throws Exception {
+
+                }
+            }).observeOn(AndroidSchedulers.mainThread())  //回到主线程去处理请求结果
+                    .subscribe(new Observer<List<SearchModel>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                        }
 
                         @Override
-                        public void run() {
-                            if (count < HttpHelper.DEFAULT_TIMEOUT) {
-                                count++;
-                                mHandler.sendEmptyMessage(IMG_SEARCH_RESULT);
-                            } else {
-                                // 超时
-                                hideProgressBar();
-                                flag_loadmore = false;
-                                timer.cancel();
-                                timer = null;
-                                mHandler.sendEmptyMessage(IMG_SEARCH_TIMEOUT);
-                            }
+                        public void onNext(List<SearchModel> value) {
                         }
-                    }, 1000, 1000);
-                }
 
-                @Override
-                public void onFailure(BaseResponse<String> response) {
-                    hideProgressBar();
-                    flag_loadmore = false;
-                }
-            }.doRequest();
-        } else {
-//            ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_empty_tips));
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
+
         }
-    }
 
-    private void getSearchResult() {
+    private void getSearch() {
         new HttpManager<SearchResultModel>(SearchActivity.this, HttpHelper.getInstance().getSearchResult(getSearchUrl()), false) {
 
             @Override
@@ -370,8 +345,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if(!TextUtils.isEmpty(newText) && newText.trim().length() > 0){
-            if(keyword == null || !keyword.trim().equals(newText.trim())){
+        if (!TextUtils.isEmpty(newText) && newText.trim().length() > 0) {
+            if (keyword == null || !keyword.trim().equals(newText.trim())) {
                 keyword = newText;
 //                doSearch();
             }
