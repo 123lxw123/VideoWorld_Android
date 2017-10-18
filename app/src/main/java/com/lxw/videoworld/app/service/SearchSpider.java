@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 public class SearchSpider {
     public static List<SearchModel> getZhongziSearchResult(String url){
         try{
-            Document htmlString = Jsoup.connect(url).get();
-            Elements datas = htmlString.select("table.table-striped");
+            Document htmlString = Jsoup.connect(url).timeout(16000).get();
+            Elements datas = htmlString.select("ul.mlist > li");
             List<SearchModel> results = new ArrayList<>();
             for (int i = 0; datas != null && i < datas.size(); i++){
                 SearchModel result = new SearchModel();
@@ -36,8 +36,8 @@ public class SearchSpider {
             return results;
         }catch (IOException e){
             e.printStackTrace();
+            return null;
         }
-        return new ArrayList<>();
     }
 
     public static String getMatchContent(String originText, String regex){

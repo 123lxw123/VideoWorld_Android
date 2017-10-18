@@ -19,16 +19,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
-import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
-import com.lxw.videoworld.app.model.BaseResponse;
-import com.lxw.videoworld.app.model.SearchListModel;
 import com.lxw.videoworld.app.model.SearchModel;
-import com.lxw.videoworld.app.model.SearchResultModel;
+import com.lxw.videoworld.app.service.SearchSpider;
 import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.framework.http.HttpManager;
-import com.lxw.videoworld.framework.util.GsonUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
@@ -36,7 +31,6 @@ import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +40,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener, View.OnClickListener {
 
@@ -74,7 +69,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private List<SearchModel> searchModels = new ArrayList<>();
     private BaseQuickAdapter<SearchModel, BaseViewHolder> searchAdapter;
     private String keyword;
-    private Timer timer;
     private int page = 1;
     private boolean flag_loadmore = false;
     private String searchType = Constant.STATUS_0;
@@ -105,7 +99,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         changeTabColor();
         // 热搜关键词
         String str = SharePreferencesUtil.getStringSharePreferences(this, Constant.KEY_SEARCH_HOTWORDS, "");
-//        hotwords = ValueUtil.string2list("[大话西游,美国队长3,卧虎藏龙2,我的特工爷爷,伦敦落陷,奇幻森林,火锅英雄,欢乐颂全集]");
         hotwords = ValueUtil.string2list(str);
         if (hotwords != null && hotwords.size() > 0) {
             recyclerviewKeyword.setLayoutManager(new GridLayoutManager(this, 4));
@@ -206,10 +199,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     }
 
     private void getSearchResult() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
         if (!TextUtils.isEmpty(keyword) && keyword.trim().length() > 0) {
             keyword = keyword.trim();
             closeKeyboard();
@@ -217,64 +206,46 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             Observable.create(new ObservableOnSubscribe<List<SearchModel>>() {
                 @Override
                 public void subscribe(ObservableEmitter<List<SearchModel>> emitter) throws Exception {
-
+                    emitter.onNext(SearchSpider.getZhongziSearchResult(getSearchUrl()));
                 }
-            }).observeOn(AndroidSchedulers.mainThread())  //回到主线程去处理请求结果
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())  //回到主线程去处理请求结果
                     .subscribe(new Observer<List<SearchModel>>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                         }
 
                         @Override
-                        public void onNext(List<SearchModel> value) {
+                        public void onNext(List<SearchModel> list) {
+                            hideProgressBar();
+                            if (list != null && !list.isEmpty()) {
+                                if (flag_loadmore) {
+                                    searchModels.addAll(list);
+                                    searchAdapter.addData(list);
+                                    searchAdapter.loadMoreComplete();
+                                } else {
+                                    searchModels.clear();
+                                    searchModels.addAll(list);
+                                    searchAdapter.setNewData(list);
+                                }
+                                page++;
+                            } else if (list == null) ToastUtil.showMessage("");
+                            searchview.clearFocus();
+                            flag_loadmore = false;
                         }
 
                         @Override
                         public void onError(Throwable e) {
+                            hideProgressBar();
                         }
 
                         @Override
                         public void onComplete() {
+                            hideProgressBar();
                         }
                     });
 
         }
-
-    private void getSearch() {
-        new HttpManager<SearchResultModel>(SearchActivity.this, HttpHelper.getInstance().getSearchResult(getSearchUrl()), false) {
-
-            @Override
-            public void onSuccess(BaseResponse<SearchResultModel> response) {
-                hideProgressBar();
-                if (timer != null) {
-                    timer.cancel();
-                    timer = null;
-                }
-                if (response.getResult() != null) {
-                    String list = response.getResult().getList();
-                    SearchListModel searchListModel = GsonUtil.json2Bean(list, SearchListModel.class);
-                    if (searchListModel != null && searchListModel.getList() != null) {
-                        if (flag_loadmore) {
-                            searchModels.addAll(searchListModel.getList());
-                            searchAdapter.addData(searchListModel.getList());
-                            searchAdapter.loadMoreComplete();
-                        } else {
-                            searchModels.clear();
-                            searchModels.addAll(searchListModel.getList());
-                            searchAdapter.setNewData(searchListModel.getList());
-                        }
-                        page++;
-                    }
-                }
-                searchview.clearFocus();
-                flag_loadmore = false;
-            }
-
-            @Override
-            public void onFailure(BaseResponse<SearchResultModel> response) {
-
-            }
-        }.doRequest();
     }
 
     // 获取搜索的 Url
@@ -348,7 +319,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         if (!TextUtils.isEmpty(newText) && newText.trim().length() > 0) {
             if (keyword == null || !keyword.trim().equals(newText.trim())) {
                 keyword = newText;
-//                doSearch();
             }
         }
         return false;
@@ -358,11 +328,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         if (!flag_loadmore) {
             page = 1;
         }
-
-        if (mHandler.hasMessages(IMG_SEARCH)) {
-            mHandler.removeMessages(IMG_SEARCH);
-        }
-        mHandler.sendEmptyMessageDelayed(IMG_SEARCH, INTERVAL);
+        getSearchResult();
     }
 
     @Override
@@ -406,14 +372,5 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-        super.onDestroy();
     }
 }
