@@ -178,7 +178,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             }
         });
         // 加载更多
-        // 当列表滑动到倒数第N个Item的时候(默认是1)回调onLoadMoreRequested方法
         searchAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -206,7 +205,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             Observable.create(new ObservableOnSubscribe<List<SearchModel>>() {
                 @Override
                 public void subscribe(ObservableEmitter<List<SearchModel>> emitter) throws Exception {
-                    emitter.onNext(SearchSpider.getZhongziSearchResult(getSearchUrl()));
+                    if (Constant.SEARCH_TYPE.equals(Constant.SEARCH_TYPE_1))
+                        emitter.onNext(SearchSpider.getZhongziSearchResult(getSearchUrl()));
+                    else emitter.onNext(SearchSpider.getDiaosiSearchResult(getSearchUrl()));
                 }
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())  //回到主线程去处理请求结果

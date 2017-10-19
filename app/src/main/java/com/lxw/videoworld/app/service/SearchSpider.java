@@ -1,6 +1,7 @@
 package com.lxw.videoworld.app.service;
 
 import com.lxw.videoworld.app.model.SearchModel;
+import com.lxw.videoworld.app.util.StringUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,8 +10,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -19,18 +18,21 @@ import java.util.regex.Pattern;
  */
 
 public class SearchSpider {
-    public static List<SearchModel> getZhongziSearchResult(String url){
+    public static List<SearchModel> getDiaosiSearchResult(String url){
         try{
-            Document htmlString = Jsoup.connect(url).timeout(16000).get();
+            Document htmlString = Jsoup.connect(url).timeout(20000).get();
             Elements datas = htmlString.select("ul.mlist > li");
             List<SearchModel> results = new ArrayList<>();
             for (int i = 0; datas != null && i < datas.size(); i++){
                 SearchModel result = new SearchModel();
-                result.setTitle(datas.get(i).select("h4").text());
-                result.setDate(getMatchContent(datas.get(i).text(), "创建日期：(.*?)</strong>"));
-                result.setSize(getMatchContent(datas.get(i).text(), "大小：(.*?)</strong>"));
-                result.setHot(getMatchContent(datas.get(i).text(), "热度：(.*?)</strong>"));
-                result.setCiliLink(getMatchContent(datas.get(i).text(), "class=\"ls-magnet\">.*?href=\"(.*?)\""));
+                Elements spans = datas.get(i).select("dl.BotInfo").select("dt > span");
+                result.setTitle(StringUtil.disposeField(datas.get(i).select("div.T1").text()));
+                result.setSize(StringUtil.disposeField(spans.get(0).text()));
+                result.setAmounts(StringUtil.disposeField(spans.get(1).text()));
+                result.setDate(StringUtil.disposeField(spans.get(2).text()));
+                result.setHot(StringUtil.disposeField(spans.get(3).text()));
+                result.setCiliLink(datas.get(i).select("div.dInfo > a").first().attr("href").trim());
+                result.setThunderLink(datas.get(i).select("div.dInfo > a").last().attr("href").trim());
                 results.add(result);
             }
             return results;
@@ -40,10 +42,26 @@ public class SearchSpider {
         }
     }
 
-    public static String getMatchContent(String originText, String regex){
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(originText); // 获取 matcher 对象
-        if (m.find()) return m.group(0);
-        else return "";
+    public static List<SearchModel> getZhongziSearchResult(String url){
+        try{
+            Document htmlString = Jsoup.connect(url).timeout(20000).get();
+            Elements datas = htmlString.select("tbody");
+            List<SearchModel> results = new ArrayList<>();
+            for (int i = 0; datas != null && i < datas.size(); i++){
+                SearchModel result = new SearchModel();
+                Elements tds = datas.get(i).select("tr").get(1).select("td");
+                result.setTitle(datas.get(i).select("h4").text());
+                result.setDate(tds.get(0).select("strong").text());
+                result.setSize(tds.get(1).select("strong").text());
+                result.setHot(tds.get(2).select("strong").text());
+                result.setCiliLink(tds.get(3).select("a").attr("href").trim());
+                results.add(result);
+            }
+            return results;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
+
 }
