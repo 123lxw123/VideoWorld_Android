@@ -29,6 +29,7 @@ import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
+import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
@@ -219,6 +220,7 @@ public class SourceTypeFragment extends Fragment {
                         public void run() {
                             // TODO
                             frag_refresh = false;
+                            sourceAdapter.setEnableLoadMore(false);
                             // 加载数据
                             getList(sourceType, category, type, Constant.LIST_LIMIT * page + BANNER_LIMIT + "", Constant.LIST_LIMIT + "", false);
                         }
@@ -244,6 +246,7 @@ public class SourceTypeFragment extends Fragment {
     }
 
     public void getList(String sourceType, String category, String type, String start, String limit, boolean flag_dialog) {
+        LoggerHelper.info("SourceTypeFragment", start + " + " + limit);
         new HttpManager<SourceListModel>((BaseActivity) SourceTypeFragment.this.getActivity(), HttpHelper.getInstance().getList(sourceType, category, type, start, limit), flag_dialog, true) {
 
             @Override
@@ -295,11 +298,13 @@ public class SourceTypeFragment extends Fragment {
                 } else {
                     sourceAdapter.loadMoreFail();
                 }
+                sourceAdapter.setEnableLoadMore(true);
             }
 
             @Override
             public void onFailure(BaseResponse<SourceListModel> response) {
                 sourceAdapter.loadMoreFail();
+                sourceAdapter.setEnableLoadMore(true);
             }
         }.doRequest();
     }

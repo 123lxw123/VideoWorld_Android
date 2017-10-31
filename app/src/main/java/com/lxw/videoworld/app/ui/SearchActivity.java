@@ -233,11 +233,15 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                             } else if (list == null) ToastUtil.showMessage("");
                             searchview.clearFocus();
                             flag_loadmore = false;
+                            searchAdapter.setEnableLoadMore(true);
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             hideProgressBar();
+                            flag_loadmore = false;
+                            searchAdapter.loadMoreFail();
+                            searchAdapter.setEnableLoadMore(true);
                         }
 
                         @Override
