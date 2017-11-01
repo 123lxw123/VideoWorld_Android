@@ -46,17 +46,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
                 app:max="100" />
-        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_download_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:gravity="right"
-            android:textColor="?com_font_A"
-            android:textSize="@dimen/sp_14" />
+            <TextView
+                android:id="@+id/txt_download_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:gravity="right"
+                android:textColor="?com_font_A"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/img_start_pause"
