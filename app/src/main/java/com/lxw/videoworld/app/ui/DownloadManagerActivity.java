@@ -199,15 +199,19 @@ public class DownloadManagerActivity extends BaseActivity {
             case 3:
                 helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 statusIcon.setImageResource(R.drawable.ic_error);
-                View.OnClickListener listener2 = new View.OnClickListener() {
+                statusIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManager.startTask(DownloadManagerActivity.this, xlTaskInfo);
+                    }
+                });
+                layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
                         dialog.show();
                     }
-                };
-                statusIcon.setOnClickListener(listener2);
-                layout.setOnClickListener(listener2);
+                });
                 break;
             case 4:
                 helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));

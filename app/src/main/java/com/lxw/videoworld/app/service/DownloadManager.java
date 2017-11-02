@@ -66,13 +66,20 @@ public class DownloadManager {
      */
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo,
                                      final boolean isInitDownload, Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
-        if (link == null) return -1;
-        if (!isInitDownload && isInDownloadQueue(link, XLTaskHelper.instance().getFileName(link))) {
-            ToastUtil.showMessage("资源已在下载队列中");
-            return -1;
-        }
         long taskId = -1;
         try {
+            if (link == null) return -1;
+            if (!isInitDownload && isInDownloadQueue(link, XLTaskHelper.instance().getFileName(link))) {
+                ToastUtil.showMessage("资源已在下载队列中");
+                String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
+                        XLTaskHelper.instance().getFileName(link));
+                if (isPlayVideo && !(link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent"))) {
+                    Intent intent = new Intent(context, PlayVideoActivity.class);
+                    intent.putExtra("url", localUrl);
+                    context.startActivity(intent);
+                }
+                return -1;
+            }
             if (link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent")) {
                 if (link.startsWith("magnet:?")) {
                     taskId = addMagnetTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isInitDownload, nextCall, errorCall);
