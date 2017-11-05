@@ -84,6 +84,8 @@ public class DownloadManagerActivity extends BaseActivity {
                 String sourceUrl = editSourceUrl.getText().toString().trim();
                 if(!TextUtils.isEmpty(sourceUrl)){
                     DownloadManager.addNormalTask(DownloadManagerActivity.this, sourceUrl, false, false);
+                    if (disposable == null) initRefresh();
+                    else refreshData();
                 }else {
                     ToastUtil.showMessage("下载链接为空");
                 }
@@ -111,22 +113,26 @@ public class DownloadManagerActivity extends BaseActivity {
     private void initData() {
         if (DownloadManager.xLTaskInfos != null) {
             downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
-            refreshData();
+            initRefresh();
         }
     }
 
-    private void refreshData() {
-        disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
+    private void initRefresh() {
+        disposable = Observable.interval(0, 3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@NonNull Long aLong) throws Exception {
-                        if (DownloadManager.xLTaskInfos != null) {
-                            downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
-                        }
+                      refreshData();
                     }
                 });
+    }
+
+    private void refreshData(){
+        if (DownloadManager.xLTaskInfos != null) {
+            downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
+        }
     }
 
     private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {
