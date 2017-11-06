@@ -1,6 +1,10 @@
 package com.lxw.videoworld.app.ui;
 
+import android.app.ListFragment;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.widget.DownloadManagerDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
@@ -41,8 +46,6 @@ public class DownloadManagerActivity extends BaseActivity {
     ImageView imgBack;
     @BindView(R.id.txt_download_manager)
     TextView txtDownloadManager;
-    @BindView(R.id.recyclerview_download_task)
-    RecyclerView recyclerviewDownloadTask;
     @BindView(R.id.img_add_task)
     ImageView imgAddTask;
     @BindView(R.id.edit_source_url)
@@ -51,6 +54,10 @@ public class DownloadManagerActivity extends BaseActivity {
     Button btnAddTask;
     @BindView(R.id.ll_add_task)
     LinearLayout llAddTask;
+    @BindView(R.id.tab_download_status)
+    TabLayout tabDownloadStatus;
+    @BindView(R.id.viewpager_download)
+    ViewPager viewpagerDownload;
 
     private BaseQuickAdapter<XLTaskInfo, BaseViewHolder> downloadManagerAdapter;
     private Disposable disposable;
@@ -82,17 +89,34 @@ public class DownloadManagerActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String sourceUrl = editSourceUrl.getText().toString().trim();
-                if(!TextUtils.isEmpty(sourceUrl)){
+                if (!TextUtils.isEmpty(sourceUrl)) {
                     DownloadManager.addNormalTask(DownloadManagerActivity.this, sourceUrl, false, false);
                     if (disposable == null) initRefresh();
                     else refreshData();
-                }else {
+                } else {
                     ToastUtil.showMessage("下载链接为空");
                 }
                 editSourceUrl.setText("");
                 llAddTask.setVisibility(View.GONE);
             }
         });
+        viewpagerDownload.setAdapter(new QuickFragmentPageAdapter(getSupportFragmentManager(), ListFragment) {
+            @Override
+            public Fragment getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public int getCount() {
+                return 0;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return super.getPageTitle(position);
+            }
+        });
+        tabDownloadStatus.setupWithViewPager(viewpagerDownload);
         downloadManagerAdapter = new BaseQuickAdapter<XLTaskInfo, BaseViewHolder>(R.layout.item_download_manager, DownloadManager.xLTaskInfos) {
             @Override
             protected void convert(BaseViewHolder helper, final XLTaskInfo item) {
@@ -124,12 +148,12 @@ public class DownloadManagerActivity extends BaseActivity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@NonNull Long aLong) throws Exception {
-                      refreshData();
+                        refreshData();
                     }
                 });
     }
 
-    private void refreshData(){
+    private void refreshData() {
         if (DownloadManager.xLTaskInfos != null) {
             downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
         }
