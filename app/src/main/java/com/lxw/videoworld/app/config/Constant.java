@@ -34,6 +34,11 @@ public class Constant {
     public static final String THEME_TYPE_3 = "3";// blue
     public static final String KEY_THEME_TYPE = "THEME_TYPE";
 
+    public static final String DOWNLOAD_TYPE = "DOWNLOAD_TYPE";
+    public static final String DOWNLOAD_TYPE_ALL = "DOWNLOAD_TYPE_ALL";
+    public static final String DOWNLOAD_TYPE_DOWNLOADING = "DOWNLOAD_TYPE_DOWNLOADING";
+    public static final String DOWNLOAD_TYPE_COMPLETE = "DOWNLOAD_TYPE_COMPLETE";
+
     public static final String API_VERSION = "v1/";
     public static final String BASE_URL = "http://172840g32p.iok.la:80/videoworld/" + Constant.API_VERSION;
 

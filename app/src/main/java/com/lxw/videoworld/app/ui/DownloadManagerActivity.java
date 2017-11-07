@@ -1,13 +1,8 @@
 package com.lxw.videoworld.app.ui;
 
-import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -16,18 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
+import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.service.DownloadManager;
-import com.lxw.videoworld.app.widget.DownloadManagerDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.ToastUtil;
-import com.lxw.videoworld.framework.util.ValueUtil;
-import com.lxw.videoworld.framework.widget.NumberProgressBar;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -59,8 +52,14 @@ public class DownloadManagerActivity extends BaseActivity {
     @BindView(R.id.viewpager_download)
     ViewPager viewpagerDownload;
 
-    private BaseQuickAdapter<XLTaskInfo, BaseViewHolder> downloadManagerAdapter;
+
     private Disposable disposable;
+    private DownloadListFragment allListFragment;
+    private DownloadListFragment downloadingListFragment;
+    private DownloadListFragment completeListFragment;
+
+    private List<XLTaskInfo> downloadingList = new ArrayList<>();
+    private List<XLTaskInfo> completeList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,43 +99,14 @@ public class DownloadManagerActivity extends BaseActivity {
                 llAddTask.setVisibility(View.GONE);
             }
         });
-        viewpagerDownload.setAdapter(new QuickFragmentPageAdapter(getSupportFragmentManager(), ListFragment) {
-            @Override
-            public Fragment getItem(int position) {
-                return null;
-            }
 
-            @Override
-            public int getCount() {
-                return 0;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return super.getPageTitle(position);
-            }
-        });
+        viewpagerDownload.setAdapter(new QuickFragmentPageAdapter(getSupportFragmentManager(), createDownLoadListFragments(),
+                new String[]{Constant.DOWNLOAD_TYPE_ALL, Constant.DOWNLOAD_TYPE_DOWNLOADING, Constant.DOWNLOAD_TYPE_COMPLETE}));
         tabDownloadStatus.setupWithViewPager(viewpagerDownload);
-        downloadManagerAdapter = new BaseQuickAdapter<XLTaskInfo, BaseViewHolder>(R.layout.item_download_manager, DownloadManager.xLTaskInfos) {
-            @Override
-            protected void convert(BaseViewHolder helper, final XLTaskInfo item) {
-                helper.setText(R.id.txt_download_type, item.mFileName.split("\\.")[item.mFileName.split("\\.").length - 1]);
-                helper.setText(R.id.txt_download_title, item.mFileName);
-                if (item.mFileSize > 0) {
-                    ((NumberProgressBar) helper.getView(R.id.txt_download_progress)).setProgress((int) Math.floor(item.mDownloadSize * 100 / item.mFileSize));
-                } else {
-                    ((NumberProgressBar) helper.getView(R.id.txt_download_progress)).setProgress(0);
-                }
-                setDownloadViewWithStatus(helper, item);
-            }
-        };
-        recyclerviewDownloadTask.setLayoutManager(new LinearLayoutManager(this));
-        recyclerviewDownloadTask.setAdapter(downloadManagerAdapter);
     }
 
     private void initData() {
         if (DownloadManager.xLTaskInfos != null) {
-            downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
             initRefresh();
         }
     }
@@ -154,115 +124,42 @@ public class DownloadManagerActivity extends BaseActivity {
     }
 
     private void refreshData() {
+        downloadingList.clear();
+        completeList.clear();
         if (DownloadManager.xLTaskInfos != null) {
-            downloadManagerAdapter.setNewData(DownloadManager.xLTaskInfos);
+            for (int i = 0; i < DownloadManager.xLTaskInfos.size(); i++){
+                XLTaskInfo xlTaskInfo = DownloadManager.xLTaskInfos.get(i);
+                if (xlTaskInfo.mTaskStatus == 2 || (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mFileSize == xlTaskInfo.mDownloadSize)){
+                    completeList.add(xlTaskInfo);
+                } else downloadingList.add(xlTaskInfo);
+            }
         }
+        if (allListFragment != null) allListFragment.refreshData(DownloadManager.xLTaskInfos);
+        if (downloadingListFragment != null) downloadingListFragment.refreshData(downloadingList);
+        if (completeListFragment != null) completeListFragment.refreshData(completeList);
     }
 
-    private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {
-        final CardView layout = (CardView) helper.getView(R.id.cardview_download_item);
-        final ImageView statusIcon = (ImageView) helper.getView(R.id.img_start_pause);
-        switch (xlTaskInfo.mTaskStatus) {
-            case 0:
-                if (xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize && xlTaskInfo.mFileSize > 0) {// 已完成
-                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                    statusIcon.setImageResource(R.drawable.ic_complete);
-                    View.OnClickListener listener = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                            dialog.show();
-                        }
-                    };
-                    statusIcon.setOnClickListener(listener);
-                    layout.setOnClickListener(listener);
-                } else {// 连接中
-                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
-                            ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                    statusIcon.setImageResource(R.drawable.ic_connect);
-                    statusIcon.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DownloadManager.startTask(DownloadManagerActivity.this, xlTaskInfo);
-                        }
-                    });
-                    layout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                            dialog.show();
-                        }
-                    });
-                }
-                break;
-            case 1:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
-                        ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_pause);
-                statusIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManager.stopTask(xlTaskInfo.mTaskId);
-                    }
-                });
-                layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                        dialog.show();
-                    }
-                });
-                break;
-            case 2:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_complete);
-                View.OnClickListener listener1 = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                        dialog.show();
-                    }
-                };
-                statusIcon.setOnClickListener(listener1);
-                layout.setOnClickListener(listener1);
-                break;
-            case 3:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_error);
-                statusIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManager.startTask(DownloadManagerActivity.this, xlTaskInfo);
-                    }
-                });
-                layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                        dialog.show();
-                    }
-                });
-                break;
-            case 4:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_start);
-                statusIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManager.startTask(DownloadManagerActivity.this, xlTaskInfo);
-                    }
-                });
-                layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DownloadManagerDialog dialog = new DownloadManagerDialog(DownloadManagerActivity.this, xlTaskInfo);
-                        dialog.show();
-                    }
-                });
-                break;
-            default:
-                break;
-        }
+    private List<DownloadListFragment> createDownLoadListFragments(){
+        List<DownloadListFragment> fragments = new ArrayList<>();
+        DownloadListFragment allListFragment = new DownloadListFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(Constant.DOWNLOAD_TYPE, Constant.DOWNLOAD_TYPE_ALL);
+        allListFragment.setArguments(bundle1);
+        fragments.add(allListFragment);
+        this.allListFragment = allListFragment;
+        DownloadListFragment downloadingListFragment = new DownloadListFragment();
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(Constant.DOWNLOAD_TYPE, Constant.DOWNLOAD_TYPE_DOWNLOADING);
+        downloadingListFragment.setArguments(bundle2);
+        fragments.add(downloadingListFragment);
+        this.downloadingListFragment = downloadingListFragment;
+        DownloadListFragment completeListFragment = new DownloadListFragment();
+        Bundle bundle3 = new Bundle();
+        bundle3.putString(Constant.DOWNLOAD_TYPE, Constant.DOWNLOAD_TYPE_COMPLETE);
+        completeListFragment.setArguments(bundle3);
+        fragments.add(completeListFragment);
+        this.completeListFragment = completeListFragment;
+        return fragments;
     }
 
     @Override
