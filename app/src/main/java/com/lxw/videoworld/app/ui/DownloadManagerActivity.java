@@ -101,7 +101,7 @@ public class DownloadManagerActivity extends BaseActivity {
         });
 
         viewpagerDownload.setAdapter(new QuickFragmentPageAdapter(getSupportFragmentManager(), createDownLoadListFragments(),
-                new String[]{Constant.DOWNLOAD_TYPE_ALL, Constant.DOWNLOAD_TYPE_DOWNLOADING, Constant.DOWNLOAD_TYPE_COMPLETE}));
+                new String[]{"全部", "下载中", "已完成"}));
         tabDownloadStatus.setupWithViewPager(viewpagerDownload);
     }
 

@@ -79,7 +79,7 @@ public class DownloadListFragment extends Fragment {
     }
 
     public void refreshData(List<XLTaskInfo> datas){
-        downloadManagerAdapter.setNewData(datas);
+        if (downloadManagerAdapter != null) downloadManagerAdapter.setNewData(datas);
     }
 
     private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {

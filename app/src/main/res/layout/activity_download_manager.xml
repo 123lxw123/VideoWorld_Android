@@ -42,21 +42,20 @@
 
     <LinearLayout
         android:id="@+id/ll_add_task"
-        android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
+        android:background="?attr/com_main_A"
+        android:padding="@dimen/dp_10"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">
         <EditText
             android:id="@+id/edit_source_url"
-            android:background="@drawable/bg_tab_select"
+            android:background="@drawable/bg_tab_unselect"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:padding="@dimen/dp_10"
             android:hint="请输入下载链接"
-            android:textColor="?attr/com_font_A"
+            android:textColor="?attr/com_font_C"
             android:textColorHint="?attr/com_font_C"
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content" />
@@ -66,7 +65,7 @@
             android:gravity="center"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/dp_10"
-            android:background="@drawable/selector_btn_bg"
+            android:background="@drawable/bg_tab_unselect"
             android:text="@string/txt_download"
             android:textColor="@color/color_FFFFFF"
             android:textSize="@dimen/sp_14"
@@ -77,6 +76,7 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_download_status"
+        android:background="?attr/com_main_A"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabIndicatorColor="?attr/com_assist_A"
