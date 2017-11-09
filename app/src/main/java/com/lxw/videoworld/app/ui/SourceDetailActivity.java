@@ -22,15 +22,16 @@ import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceInfoModel;
+import com.lxw.videoworld.app.service.DownloadManager;
+import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.weixin.WXShareDialog;
-import com.lxw.videoworld.app.widget.SourceLinkDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,8 @@ public class SourceDetailActivity extends BaseActivity {
     ImageView imgExpandClose;
     @BindView(R.id.edit_empty)
     EditText editEmpty;
+    @BindView(R.id.img_play_video)
+    ImageView imgPlayVideo;
     private boolean flag_expand = false;// 简介展开收起标识
     private int width;
     private int height;
@@ -101,9 +104,9 @@ public class SourceDetailActivity extends BaseActivity {
                 SourceDetailActivity.this.finish();
             }
         });
-        if(!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)){
+        if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
             getSourceDetail();
-        }else {
+        } else {
             sourceDetailModel = (SourceDetailModel) getIntent().getSerializableExtra("sourceDetailModel");
             if (sourceDetailModel != null) {
                 initDatas();
@@ -135,7 +138,7 @@ public class SourceDetailActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         url = getIntent().getStringExtra("url");
         sourceType = getIntent().getStringExtra("sourceType");
-        if(!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)){
+        if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
             getSourceDetail();
         }
     }
@@ -143,7 +146,7 @@ public class SourceDetailActivity extends BaseActivity {
     private void initViews() {
 
         images = ValueUtil.string2list(sourceDetailModel.getImages());
-
+        final List<String> links = ValueUtil.string2list(sourceDetailModel.getLinks());
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,6 +176,17 @@ public class SourceDetailActivity extends BaseActivity {
             }
             imgPicture.getLayoutParams().height = picHeight;
             viewEmpty.getLayoutParams().height = picHeight;
+            if (!sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
+                imgPlayVideo.setVisibility(View.VISIBLE);
+                imgPlayVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (links != null && links.size() > 0) {
+                            DownloadManager.addNormalTask(SourceDetailActivity.this, links.get(0), true, false);
+                        }
+                    }
+                });
+            }else imgPlayVideo.setVisibility(View.VISIBLE);
             ImageManager.getInstance().loadImage(this, imgPicture, images.get(0));
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getTitle())) {
@@ -237,7 +251,6 @@ public class SourceDetailActivity extends BaseActivity {
 //            }
             llPicture.setVisibility(View.VISIBLE);
         }
-        List<String> links = ValueUtil.string2list(sourceDetailModel.getLinks());
         if (links != null && links.size() > 0) {
             recyclerviewLink.setNestedScrollingEnabled(false);
             recyclerviewLink.setLayoutManager(new LinearLayoutManager(this));
@@ -252,10 +265,10 @@ public class SourceDetailActivity extends BaseActivity {
                 @Override
                 public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
-                    if(sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)){
+                    if (sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
                         SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position), false);
                         dialog.show();
-                    }else {
+                    } else {
                         SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position), true);
                         dialog.show();
                     }

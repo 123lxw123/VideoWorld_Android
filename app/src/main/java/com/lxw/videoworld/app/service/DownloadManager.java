@@ -624,14 +624,35 @@ public class DownloadManager {
         if (xLTaskInfos != null && xLTaskInfos.size() > 0) {
             for (int i = 0; i < xLTaskInfos.size(); i++) {
                 XLTaskInfo xlTaskInfo = xLTaskInfos.get(i);
-                if (xlTaskInfo.mTaskStatus != 2 && xlTaskInfo.mTaskStatus != 3 && !(xlTaskInfo.mTaskStatus == 0 &&
-                        xlTaskInfo.mFileSize > 0 && xlTaskInfo.mFileSize == xlTaskInfo.mDownloadSize)) {
+                if (xlTaskInfo.mTaskStatus != 2 && !(xlTaskInfo.mFileSize > 0 && xlTaskInfo.mFileSize == xlTaskInfo.mDownloadSize)) {
+                    Long tempTaskId;
                     if (xlTaskInfo.index >= 0) {
-                        stopTask(addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath,
-                                PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), true));
+                        tempTaskId = addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath,
+                                PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), true);
                     } else {
-                        stopTask(addNormalTask(BaseApplication.appContext, xlTaskInfo.sourceUrl, false, true));
+                        tempTaskId = addNormalTask(BaseApplication.appContext, xlTaskInfo.sourceUrl, false, true);
                     }
+                    final Long taskId = tempTaskId;
+                    Observable.timer(1000, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<Long>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable disposable) {
+                                }
+
+                                @Override
+                                public void onNext(@NonNull Long number) {
+                                    stopTask(taskId);
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                }
+                            });
                 }
             }
             Collections.sort(DownloadManager.xLTaskInfos, comparator);

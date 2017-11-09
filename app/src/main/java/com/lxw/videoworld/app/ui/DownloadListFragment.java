@@ -20,6 +20,7 @@ import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.NumberProgressBar;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,9 +51,11 @@ public class DownloadListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_download_list, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
-        initView();
+        if (rootView == null){
+            rootView = inflater.inflate(R.layout.fragment_download_list, container, false);
+            unbinder = ButterKnife.bind(this, rootView);
+            initView();
+        }
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
@@ -61,7 +64,7 @@ public class DownloadListFragment extends Fragment {
     }
 
     private void initView() {
-        downloadManagerAdapter = new BaseQuickAdapter<XLTaskInfo, BaseViewHolder>(R.layout.item_download_manager, DownloadManager.xLTaskInfos) {
+        downloadManagerAdapter = new BaseQuickAdapter<XLTaskInfo, BaseViewHolder>(R.layout.item_download_manager, null) {
             @Override
             protected void convert(BaseViewHolder helper, final XLTaskInfo item) {
                 helper.setText(R.id.txt_download_type, item.mFileName.split("\\.")[item.mFileName.split("\\.").length - 1]);
@@ -76,6 +79,36 @@ public class DownloadListFragment extends Fragment {
         };
         recyclerviewDownloadList.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerviewDownloadList.setAdapter(downloadManagerAdapter);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            List<XLTaskInfo> downloadingList = new ArrayList<>();
+            List<XLTaskInfo> completeList = new ArrayList<>();
+            if (DownloadManager.xLTaskInfos != null) {
+                for (int i = 0; i < DownloadManager.xLTaskInfos.size(); i++){
+                    XLTaskInfo xlTaskInfo = DownloadManager.xLTaskInfos.get(i);
+                    if (xlTaskInfo.mTaskStatus == 2 || (xlTaskInfo.mFileSize != 0 && xlTaskInfo.mFileSize == xlTaskInfo.mDownloadSize)){
+                        completeList.add(xlTaskInfo);
+                    } else downloadingList.add(xlTaskInfo);
+                }
+            }
+            if (downloadType != null){
+                switch (downloadType){
+                    case Constant.DOWNLOAD_TYPE_ALL:
+                        refreshData(DownloadManager.xLTaskInfos);
+                        break;
+                    case Constant.DOWNLOAD_TYPE_DOWNLOADING:
+                        refreshData(downloadingList);
+                        break;
+                    case Constant.DOWNLOAD_TYPE_COMPLETE:
+                        refreshData(completeList);
+                        break;
+                }
+            }
+        }
     }
 
     public void refreshData(List<XLTaskInfo> datas){
@@ -191,4 +224,7 @@ public class DownloadListFragment extends Fragment {
         }
     }
 
+    public void setDownloadType(String downloadType) {
+        this.downloadType = downloadType;
+    }
 }

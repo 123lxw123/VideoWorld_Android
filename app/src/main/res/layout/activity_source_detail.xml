@@ -77,11 +77,23 @@
                         android:layout_height="1px"
                         android:visibility="visible" />
 
-                    <View
-                        android:id="@+id/view_empty"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null" />
+                        android:layout_height="wrap_content">
+                        <View
+                            android:id="@+id/view_empty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null" />
+
+                        <ImageView
+                            android:id="@+id/img_play_video"
+                            android:padding="@dimen/dp_20"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_play_video"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
