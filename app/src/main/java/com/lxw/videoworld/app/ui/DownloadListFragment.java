@@ -139,6 +139,7 @@ public class DownloadListFragment extends Fragment {
                     statusIcon.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            DownloadManager.stopTask(xlTaskInfo.mTaskId);
                             DownloadManager.startTask(getActivity(), xlTaskInfo);
                         }
                     });
@@ -189,6 +190,7 @@ public class DownloadListFragment extends Fragment {
                 statusIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DownloadManager.stopTask(xlTaskInfo.mTaskId);
                         DownloadManager.startTask(getActivity(), xlTaskInfo);
                         statusIcon.setImageResource(R.drawable.ic_connect);
                     }

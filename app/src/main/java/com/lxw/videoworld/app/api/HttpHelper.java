@@ -58,7 +58,9 @@ public class HttpHelper {
         // 设置网络请求缓存
         File cacheFile = new File(BaseApplication.getappContext().getCacheDir(), "response");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
-        httpClientBuilder.cache(cache);
+        httpClientBuilder.cache(cache)
+                .addInterceptor(new CacheInterceptor())
+                .addNetworkInterceptor(new CacheInterceptor());
         retrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
