@@ -59,8 +59,7 @@ public class HttpHelper {
         File cacheFile = new File(BaseApplication.getappContext().getCacheDir(), "response");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
         httpClientBuilder.cache(cache)
-                .addInterceptor(new CacheInterceptor())
-                .addNetworkInterceptor(new CacheInterceptor());
+                .addInterceptor(new CacheInterceptor());
         retrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
