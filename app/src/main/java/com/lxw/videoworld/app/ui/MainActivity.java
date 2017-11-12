@@ -32,17 +32,21 @@ import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.service.NetBroadcastReceiver;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.DownloadUtil;
+import com.lxw.videoworld.framework.util.FileUtil;
 import com.lxw.videoworld.framework.util.ManifestUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
+import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.CustomDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -103,6 +107,10 @@ public class MainActivity extends BaseActivity {
     TextView txtDownloadPath;
     @BindView(R.id.txt_download_path_value)
     TextView txtDownloadPathValue;
+    @BindView(R.id.txt_cache)
+    TextView txtCache;
+    @BindView(R.id.ll_clear_cache)
+    LinearLayout llClearCache;
     private boolean flag_exit = false;
     private boolean flag_back = true;
     private QuickFragmentPageAdapter pagerAdapter;
@@ -288,13 +296,40 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        llClearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerlayout.closeDrawers();
+                }
+                CustomDialog customDialog = new CustomDialog(MainActivity.this, "清理缓存", "清理缓存将会删除所有下载记录以及下载路径中的所有文件，确定要清理缓存？", "立即清理", "取消") {
+                    @Override
+                    public void ok() {
+                        super.ok();
+                        File file = new File(Constant.PATH_OFFLINE_DOWNLOAD);
+                        String cacheSize = ValueUtil.formatFileSize(FileUtil.getFileSize(file));
+                        FileUtil.deleteFile(file);
+                        DownloadManager.removeAllXLTaskInfo();
+                        txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
+                        ToastUtil.showMessage("已清理缓存：" + cacheSize);
+                    }
+
+                    @Override
+                    public void cancel() {
+                        super.cancel();
+                    }
+                };
+                customDialog.show();
+            }
+        });
+
         txtDownloadPathValue.setText("../VideoWorld/download");
         txtDownloadPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (txtDownloadPathValue.getVisibility() == View.GONE)
                     txtDownloadPathValue.setVisibility(View.VISIBLE);
-                else  txtDownloadPathValue.setVisibility(View.GONE);
+                else txtDownloadPathValue.setVisibility(View.GONE);
             }
         });
 
@@ -477,6 +512,13 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        File file = new File(Constant.PATH_OFFLINE_DOWNLOAD);
+        txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
     }
 
     @OnClick({R.id.txt_github, R.id.txt_feedback, R.id.txt_about})

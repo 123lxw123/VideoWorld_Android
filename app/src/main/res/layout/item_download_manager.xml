@@ -4,30 +4,27 @@
     android:id="@+id/cardview_download_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_8">
+    android:layout_marginEnd="@dimen/dp_8"
+    android:layout_marginStart="@dimen/dp_8"
+    android:layout_marginTop="@dimen/dp_8">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/dp_8">
+        android:padding="@dimen/dp_10">
 
-        <TextView
-            android:id="@+id/txt_download_type"
-            android:layout_width="@dimen/dp_55"
+        <ImageView
+            android:id="@+id/img_download_type"
+            android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_50"
-            android:background="?attr/com_main_A"
-            android:gravity="center"
-            android:padding="@dimen/dp_3"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp_16" />
 
         <LinearLayout
-            android:layout_marginStart="@dimen/dp_10"
-            android:gravity="center_vertical"
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -44,25 +41,57 @@
                 android:id="@+id/txt_download_progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_5"
                 app:max="100" />
 
-            <TextView
-                android:id="@+id/txt_download_info"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp_8"
-                android:gravity="right"
-                android:textColor="?com_font_A"
-                android:textSize="@dimen/sp_14" />
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/img_start_pause"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            android:layout_marginLeft="@dimen/dp_8" />
+                <TextView
+                    android:id="@+id/txt_download_speed"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                        android:textColor="?com_font_A"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/txt_download_size"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:textColor="?com_font_C"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/txt_download_time"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:textColor="?com_font_C"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/txt_download_status"
+                    android:background="@drawable/bg_tab_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:paddingEnd="@dimen/dp_15"
+                    android:paddingStart="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_5"
+                    android:textColor="?com_font_A"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

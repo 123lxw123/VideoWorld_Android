@@ -101,6 +101,7 @@ public class FileUtil {
         }
     }
 
+    // 打开文件夹
     public static void openFolder(Context context, String path){
         if(TextUtils.isEmpty(path)) return;
         try {
@@ -112,6 +113,25 @@ public class FileUtil {
             context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // 获取文件、文件夹大小
+    public static long getFileSize(File file) {
+        //判断文件是否存在
+        if (file.exists()) {
+            //如果是目录则递归计算其内容的总大小
+            if (file.isDirectory()) {
+                File[] children = file.listFiles();
+                long size = 0;
+                for (File f : children)
+                    size += getFileSize(f);
+                return size;
+            } else {//如果是文件则直接返回其大小
+                return file.length();
+            }
+        } else {
+            return 0;
         }
     }
 

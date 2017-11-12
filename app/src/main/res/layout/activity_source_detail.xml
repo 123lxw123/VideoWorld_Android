@@ -88,7 +88,7 @@
 
                         <ImageView
                             android:id="@+id/img_play_video"
-                            android:padding="@dimen/dp_20"
+                            android:padding="@dimen/dp_50"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_play_video"
                             android:layout_width="wrap_content"

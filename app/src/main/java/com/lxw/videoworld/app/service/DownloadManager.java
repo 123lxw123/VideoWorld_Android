@@ -674,4 +674,11 @@ public class DownloadManager {
         return false;
     }
 
+    public static void removeAllXLTaskInfo(){
+        if (xLTaskInfos == null) return;
+        for (int i = 0; i < xLTaskInfos.size(); i++) {
+           removeXLTaskInfo(xLTaskInfos.get(i));
+        }
+    }
+
 }

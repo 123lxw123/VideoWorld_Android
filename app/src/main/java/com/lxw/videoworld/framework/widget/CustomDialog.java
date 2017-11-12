@@ -20,7 +20,7 @@ public class CustomDialog {
     }
 
     public CustomDialog(Activity context, String title, String message, String okText, String cancelText) {
-        this(context, title, message, null, null, true);
+        this(context, title, message, okText, cancelText, true);
     }
 
     public CustomDialog(Activity context, String title, String message, String okText, String cancelText, boolean flag_cancel) {

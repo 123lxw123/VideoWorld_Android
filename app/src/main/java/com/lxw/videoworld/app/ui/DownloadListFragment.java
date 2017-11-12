@@ -1,14 +1,14 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -16,6 +16,7 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.widget.DownloadManagerDialog;
+import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.NumberProgressBar;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
@@ -27,7 +28,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class DownloadListFragment extends Fragment {
+import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
+
+public class DownloadListFragment extends BaseFragment {
 
     Unbinder unbinder;
     @BindView(R.id.recyclerview_download_list)
@@ -67,18 +70,47 @@ public class DownloadListFragment extends Fragment {
         downloadManagerAdapter = new BaseQuickAdapter<XLTaskInfo, BaseViewHolder>(R.layout.item_download_manager, null) {
             @Override
             protected void convert(BaseViewHolder helper, final XLTaskInfo item) {
-                helper.setText(R.id.txt_download_type, item.mFileName.split("\\.")[item.mFileName.split("\\.").length - 1]);
                 helper.setText(R.id.txt_download_title, item.mFileName);
                 if (item.mFileSize > 0) {
                     ((NumberProgressBar) helper.getView(R.id.txt_download_progress)).setProgress((int) Math.floor(item.mDownloadSize * 100 / item.mFileSize));
                 } else {
                     ((NumberProgressBar) helper.getView(R.id.txt_download_progress)).setProgress(0);
                 }
+                setDownloadType(helper, item);
                 setDownloadViewWithStatus(helper, item);
             }
         };
         recyclerviewDownloadList.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerviewDownloadList.setAdapter(downloadManagerAdapter);
+    }
+
+    public void setDownloadType(BaseViewHolder helper, final XLTaskInfo xlTaskInfo){
+        String downloadType = xlTaskInfo.mFileName.split("\\.")[xlTaskInfo.mFileName.split("\\.").length - 1].toLowerCase();
+        for (int i = 0; i < Constant.videos.length; i++){
+            if (Constant.videos[i].equals(downloadType)){
+                helper.setImageResource(R.id.img_download_type, R.drawable.svg_video);
+                return;
+            }
+        }
+        for (int i = 0; i < Constant.musics.length; i++){
+            if (Constant.musics[i].equals(downloadType)){
+                helper.setImageResource(R.id.img_download_type, R.drawable.svg_music);
+                return;
+            }
+        }
+        for (int i = 0; i < Constant.images.length; i++){
+            if (Constant.images[i].equals(downloadType)){
+                helper.setImageResource(R.id.img_download_type, R.drawable.svg_image);
+                return;
+            }
+        }
+        for (int i = 0; i < Constant.documents.length; i++){
+            if (Constant.documents[i].equals(downloadType)){
+                helper.setImageResource(R.id.img_download_type, R.drawable.svg_document);
+                return;
+            }
+        }
+        helper.setImageResource(R.id.img_download_type, R.drawable.svg_package);
     }
 
     @Override
@@ -115,14 +147,13 @@ public class DownloadListFragment extends Fragment {
         if (downloadManagerAdapter != null) downloadManagerAdapter.setNewData(datas);
     }
 
-    private void setDownloadViewWithStatus(BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {
-        final CardView layout = (CardView) helper.getView(R.id.cardview_download_item);
-        final ImageView statusIcon = (ImageView) helper.getView(R.id.img_start_pause);
+    private void setDownloadViewWithStatus(final BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {
+        final CardView layout = helper.getView(R.id.cardview_download_item);
+        final TextView statusText = helper.getView(R.id.txt_download_status);
         switch (xlTaskInfo.mTaskStatus) {
             case 0:
                 if (xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize && xlTaskInfo.mFileSize > 0) {// 已完成
-                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                    statusIcon.setImageResource(R.drawable.ic_complete);
+                    setDownloadStatus(Constant.STATUS_2, helper, xlTaskInfo);
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -130,13 +161,21 @@ public class DownloadListFragment extends Fragment {
                             dialog.show();
                         }
                     };
-                    statusIcon.setOnClickListener(listener);
+                    if (isDownloadVideo(xlTaskInfo)) {
+                        statusText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String url = DownloadManager.getLoclUrl(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+                                Intent intent = new Intent(getContext(), PlayVideoActivity.class);
+                                intent.putExtra("url", url);
+                                getContext().startActivity(intent);
+                            }
+                        });
+                    } else statusText.setOnClickListener(listener);
                     layout.setOnClickListener(listener);
                 } else {// 连接中
-                    helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
-                            ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                    statusIcon.setImageResource(R.drawable.ic_connect);
-                    statusIcon.setOnClickListener(new View.OnClickListener() {
+                    setDownloadStatus(Constant.STATUS_0, helper, xlTaskInfo);
+                    statusText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             DownloadManager.stopTask(xlTaskInfo.mTaskId);
@@ -153,14 +192,12 @@ public class DownloadListFragment extends Fragment {
                 }
                 break;
             case 1:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s" + "\n" +
-                        ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_pause);
-                statusIcon.setOnClickListener(new View.OnClickListener() {
+                setDownloadStatus(Constant.STATUS_1, helper, xlTaskInfo);
+                statusText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DownloadManager.stopTask(xlTaskInfo.mTaskId);
-                        statusIcon.setImageResource(R.drawable.ic_start);
+                        setDownloadStatus(Constant.STATUS_4, helper, xlTaskInfo);
                     }
                 });
                 layout.setOnClickListener(new View.OnClickListener() {
@@ -172,8 +209,7 @@ public class DownloadListFragment extends Fragment {
                 });
                 break;
             case 2:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_complete);
+                setDownloadStatus(Constant.STATUS_2, helper, xlTaskInfo);
                 View.OnClickListener listener1 = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -181,18 +217,26 @@ public class DownloadListFragment extends Fragment {
                         dialog.show();
                     }
                 };
-                statusIcon.setOnClickListener(listener1);
+                if (isDownloadVideo(xlTaskInfo)) {
+                    statusText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String url = DownloadManager.getLoclUrl(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+                            Intent intent = new Intent(getContext(), PlayVideoActivity.class);
+                            intent.putExtra("url", url);
+                            getContext().startActivity(intent);
+                        }
+                    });
+                } else statusText.setOnClickListener(listener1);
                 layout.setOnClickListener(listener1);
                 break;
             case 3:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_error);
-                statusIcon.setOnClickListener(new View.OnClickListener() {
+                setDownloadStatus(Constant.STATUS_3, helper, xlTaskInfo);
+                statusText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DownloadManager.stopTask(xlTaskInfo.mTaskId);
-                        DownloadManager.startTask(getActivity(), xlTaskInfo);
-                        statusIcon.setImageResource(R.drawable.ic_connect);
+                        DownloadManager.removeTask(xlTaskInfo.mTaskId);
+                        setDownloadStatus(Constant.STATUS_1, helper, xlTaskInfo);
                     }
                 });
                 layout.setOnClickListener(new View.OnClickListener() {
@@ -204,13 +248,12 @@ public class DownloadListFragment extends Fragment {
                 });
                 break;
             case 4:
-                helper.setText(R.id.txt_download_info, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + "\n" + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
-                statusIcon.setImageResource(R.drawable.ic_start);
-                statusIcon.setOnClickListener(new View.OnClickListener() {
+                setDownloadStatus(Constant.STATUS_4, helper, xlTaskInfo);
+                statusText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DownloadManager.startTask(getActivity(), xlTaskInfo);
-                        statusIcon.setImageResource(R.drawable.ic_pause);
+                        setDownloadStatus(Constant.STATUS_1, helper, xlTaskInfo);
                     }
                 });
                 layout.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +267,75 @@ public class DownloadListFragment extends Fragment {
             default:
                 break;
         }
+    }
+
+    public void setDownloadStatus(String downloadStatus, BaseViewHolder helper, XLTaskInfo xlTaskInfo){
+        final TextView statusText = helper.getView(R.id.txt_download_status);
+        switch (downloadStatus){
+            case Constant.STATUS_0:// 连接中
+                helper.setText(R.id.txt_download_speed, "资源连接中...");
+                helper.setText(R.id.txt_download_size, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + " / " + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                helper.setText(R.id.txt_download_time, "");
+                statusText.setBackgroundResource(R.drawable.bg_tab_select);
+                statusText.setTextColor(getCustomColor(R.styleable.BaseColor_com_font_A));
+                statusText.setText("重试");
+                break;
+            case Constant.STATUS_1:// 下载中
+                helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed));
+                helper.setText(R.id.txt_download_size, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + " / " + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                long downloadTime;
+                if (xlTaskInfo.mFileSize - xlTaskInfo.mDownloadSize > 0) {
+                    downloadTime = (xlTaskInfo.mFileSize - xlTaskInfo.mDownloadSize) / xlTaskInfo.mDownloadSpeed;
+                    helper.setText(R.id.txt_download_time, ValueUtil.formatTime(downloadTime));
+                } else helper.setText(R.id.txt_download_time, "");
+                statusText.setBackgroundResource(R.drawable.bg_tab_select);
+                statusText.setTextColor(getCustomColor(R.styleable.BaseColor_com_font_A));
+                statusText.setText("暂停");
+                break;
+            case Constant.STATUS_2:// 已完成
+                helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                helper.setText(R.id.txt_download_size, "");
+                helper.setText(R.id.txt_download_time, "");
+                if (isDownloadVideo(xlTaskInfo)){
+                    statusText.setTextColor(getResources().getColor(R.color.color_009587));
+                    statusText.setBackgroundResource(R.drawable.bg_tab_green);
+                    statusText.setText("播放");
+                } else {
+                    statusText.setTextColor(getCustomColor(R.styleable.BaseColor_com_font_C));
+                    statusText.setBackgroundDrawable(null);
+                    statusText.setText("完成");
+                }
+                break;
+            case Constant.STATUS_3:// 下载错误
+                helper.setText(R.id.txt_download_speed, "下载失败");
+                helper.setText(R.id.txt_download_size, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + " / " + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                helper.setText(R.id.txt_download_time, "");
+                statusText.setBackgroundResource(R.drawable.bg_tab_red);
+                statusText.setTextColor(getResources().getColor(R.color.com_font_D_gold));
+                statusText.setText("重试");
+                break;
+            case Constant.STATUS_4:// 暂停中
+                helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + " / " + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
+                helper.setText(R.id.txt_download_size, "");
+                helper.setText(R.id.txt_download_time, "");
+                statusText.setBackgroundResource(R.drawable.bg_tab_select);
+                statusText.setTextColor(getCustomColor(R.styleable.BaseColor_com_font_A));
+                statusText.setText("继续");
+                break;
+        }
+
+    }
+
+    public boolean isDownloadVideo(XLTaskInfo xlTaskInfo){
+        String downloadType = xlTaskInfo.mFileName.split("\\.")[xlTaskInfo.mFileName.split("\\.").length - 1].toLowerCase();
+        boolean isVideo = false;
+        for (int i = 0; i < Constant.videos.length; i++){
+            if (Constant.videos[i].equals(downloadType)){
+                isVideo = true;
+                break;
+            }
+        }
+        return isVideo;
     }
 
     public void setDownloadType(String downloadType) {

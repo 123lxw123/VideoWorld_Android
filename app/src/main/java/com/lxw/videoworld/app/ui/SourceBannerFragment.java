@@ -3,7 +3,6 @@ package com.lxw.videoworld.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
+import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
@@ -32,7 +32,7 @@ import butterknife.Unbinder;
  * Created by lxw9047 on 2017/6/12.
  */
 
-public class SourceBannerFragment extends Fragment {
+public class SourceBannerFragment extends BaseFragment {
 
     //    @BindView(R.id.img_banner)
 //    ImageView imgBanner;

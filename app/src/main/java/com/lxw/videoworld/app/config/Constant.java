@@ -69,6 +69,7 @@ public class Constant {
     public static final String STATUS_1 = "1";
     public static final String STATUS_2 = "2";
     public static final String STATUS_3 = "3";
+    public static final String STATUS_4 = "4";
 
     /** GridLayoutManager 每行显示列数**/
     public static int GRIDLAYOUTMANAGER_SPANCOUNT = 3;
@@ -77,6 +78,16 @@ public class Constant {
     /** Banner 条数和列表条数**/
     public static final int BANNER_LIMIT = 5;
     public static final int LIST_LIMIT = 18;
+
+    public static final String[] videos = new String[]{"mp4", "mkv", "avi", "wmv", "flv", "f4v", "xv", "3gp", "webm", "vdat", "ts",
+            "rmvb", "m3u8","rm", "mpg", "mpeg", "mov","asf", "vob", "swf"};
+    public static final String[] musics = new String[]{"mp3", "ra", "wma", "ogg", "m4a", "acc", "m4r", "flac", "ac3", "mmf", "amr",
+            "wv", "mod", "apg", "dsd", "mp2", "vqf", "cd", "ape", "md", "mid", "mp3pro"};
+    public static final String[] images = new String[]{"bmp", "jpg", "png", "tiff", "gif", "pcx", "tga", "exif", "fpx", "svg", "psd",
+            "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf", "jpeg"};
+    public static final String[] documents = new String[]{"txt", "pdf", "doc", "docx", "docm", "rtf", "xls", "xlsx", "pptx", "pptm",
+            "xlsm", "ppt", "html", "htm", "wpd", "torrent", "chm", "mht"};
+    public static final String[] packages = new String[]{"exe", "iso", "apk", "rar", "zip", "7z", "pkg", "dmg"};
     /**
      * 请求网络成功
      */

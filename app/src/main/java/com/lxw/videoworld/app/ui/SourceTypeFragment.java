@@ -3,7 +3,6 @@ package com.lxw.videoworld.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,10 +22,11 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.app.model.BaseResponse;
+import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
@@ -48,7 +48,7 @@ import static com.lxw.videoworld.app.config.Constant.BANNER_LIMIT;
 /**
  * 资源列表
  */
-public class SourceTypeFragment extends Fragment {
+public class SourceTypeFragment extends BaseFragment {
     @BindView(R.id.recyclerview_source_type)
     RecyclerView recyclerviewSourceType;
     @BindView(R.id.refresh_source_type)

@@ -2,7 +2,6 @@ package com.lxw.videoworld.app.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.framework.base.BaseFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.Bundler;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -23,7 +23,7 @@ import butterknife.Unbinder;
 /**
  * 资源列表
  */
-public class SourceCategoryFragment extends Fragment {
+public class SourceCategoryFragment extends BaseFragment {
 
     @BindView(R.id.tab_source_category)
     SmartTabLayout tabSourceCategory;
