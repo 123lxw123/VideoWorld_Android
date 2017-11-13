@@ -1,5 +1,6 @@
 package com.lxw.videoworld.framework.util;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -103,6 +104,7 @@ public class GsonUtil {
 	 * @return 返回一个 Vector
 	 */
 	public static <T> Vector<T> json2Vector(String json, Class<T[]> clazz) {
+		if (TextUtils.isEmpty(json)) return null;
 		T[] arr = new Gson().fromJson(json, clazz);
 		return new Vector<>(Arrays.asList(arr)); //or return Arrays.asList(new Gson().fromJson(json, clazz)); for a one-liner
 	}

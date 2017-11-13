@@ -34,6 +34,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -51,7 +52,7 @@ public class DownloadManager {
     public static Vector<XLTaskInfo> xLTaskInfos = new Vector<>();
     public static XLTaskInfoComparator comparator = new XLTaskInfoComparator();
     public static final String TAG = "DownloadManager";
-
+    public static final CompositeDisposable disposables = new CompositeDisposable();
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo, final boolean isInitDownload) {
         return addNormalTask(context, link, isPlayVideo, isInitDownload, null, null);
     }
@@ -161,6 +162,7 @@ public class DownloadManager {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
                     mD = d;
+                    disposables.add(d);
                 }
 
                 @Override
@@ -257,6 +259,7 @@ public class DownloadManager {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
                     mD = d;
+                    disposables.add(d);
                     loadingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
                     loadingDialog.getProgressHelper().setBarColor(ValueUtil.getCustomColor(context, R.styleable.BaseColor_com_assist_A));
                     loadingDialog.setTitleText("Loading");
@@ -389,6 +392,7 @@ public class DownloadManager {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
                     mD = d;
+                    disposables.add(d);
                 }
 
                 @Override
@@ -567,7 +571,7 @@ public class DownloadManager {
         if (xLTaskInfos == null || xLTaskInfo == null) return;
         for (int i = 0; i < xLTaskInfos.size(); i++) {
             if (xLTaskInfo.mFileName.equals(xLTaskInfos.get(i).mFileName)) {
-                xLTaskInfos.remove(i);
+                xLTaskInfos.remove(xLTaskInfo);
                 break;
             }
         }
@@ -675,10 +679,15 @@ public class DownloadManager {
     }
 
     public static void removeAllXLTaskInfo(){
+        disposables.clear();
         if (xLTaskInfos == null) return;
         for (int i = 0; i < xLTaskInfos.size(); i++) {
-           removeXLTaskInfo(xLTaskInfos.get(i));
+            XLTaskInfo xlTaskInfo = xLTaskInfos.get(i);
+            DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
         }
+        xLTaskInfos.clear();
+        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, Constant.KEY_DOWNLOAD_XLTASKINFOS,
+                "");
     }
 
 }

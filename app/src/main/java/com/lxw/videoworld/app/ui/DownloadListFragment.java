@@ -284,7 +284,7 @@ public class DownloadListFragment extends BaseFragment {
                 helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed));
                 helper.setText(R.id.txt_download_size, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + " / " + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 long downloadTime;
-                if (xlTaskInfo.mFileSize - xlTaskInfo.mDownloadSize > 0) {
+                if (xlTaskInfo.mFileSize - xlTaskInfo.mDownloadSize > 0 && xlTaskInfo.mDownloadSpeed > 0) {
                     downloadTime = (xlTaskInfo.mFileSize - xlTaskInfo.mDownloadSize) / xlTaskInfo.mDownloadSpeed;
                     helper.setText(R.id.txt_download_time, ValueUtil.formatTime(downloadTime));
                 } else helper.setText(R.id.txt_download_time, "");
