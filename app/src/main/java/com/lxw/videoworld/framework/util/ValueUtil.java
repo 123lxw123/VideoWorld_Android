@@ -102,10 +102,8 @@ public class ValueUtil {
         long second = timeSecond % 60;
         long minute = (timeSecond / 60) % 60;
         long hour = timeSecond / 60 / 60;
-        if (hour > 0) {
-            if (hour > 99) return "99:59:59";
-            else return decimalFormat.format(hour) + ":" + decimalFormat.format(minute) + ":" + decimalFormat.format(second);
-        }else return decimalFormat.format(minute) + ":" + decimalFormat.format(second);
+        if (hour > 99) return "99:59:59";
+        else return decimalFormat.format(hour) + ":" + decimalFormat.format(minute) + ":" + decimalFormat.format(second);
     }
 
     /**

@@ -178,7 +178,7 @@ public class DownloadListFragment extends BaseFragment {
                     statusText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DownloadManager.stopTask(xlTaskInfo.mTaskId);
+                            DownloadManager.removeTask(xlTaskInfo.mTaskId);
                             DownloadManager.startTask(getActivity(), xlTaskInfo);
                         }
                     });
@@ -236,6 +236,7 @@ public class DownloadListFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         DownloadManager.removeTask(xlTaskInfo.mTaskId);
+                        DownloadManager.startTask(getActivity(), xlTaskInfo);
                         setDownloadStatus(Constant.STATUS_1, helper, xlTaskInfo);
                     }
                 });
@@ -281,7 +282,7 @@ public class DownloadListFragment extends BaseFragment {
                 statusText.setText("重试");
                 break;
             case Constant.STATUS_1:// 下载中
-                helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed));
+                helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSpeed) + "/s");
                 helper.setText(R.id.txt_download_size, ValueUtil.formatFileSize(xlTaskInfo.mDownloadSize) + " / " + ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 long downloadTime;
                 if (xlTaskInfo.mFileSize - xlTaskInfo.mDownloadSize > 0 && xlTaskInfo.mDownloadSpeed > 0) {

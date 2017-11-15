@@ -54,7 +54,7 @@ public class DownloadManager {
     public static final String TAG = "DownloadManager";
     public static final CompositeDisposable disposables = new CompositeDisposable();
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo, final boolean isInitDownload) {
-        return addNormalTask(context, link, isPlayVideo, isInitDownload, null, null);
+        return addNormalTask(context, link, isPlayVideo, isInitDownload, false, null, null);
     }
 
     /**
@@ -66,7 +66,7 @@ public class DownloadManager {
      * @return
      */
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo,
-                                     final boolean isInitDownload, Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+                                     final boolean isInitDownload, final boolean isStartApp, Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try {
             if (link == null) return -1;
@@ -83,9 +83,9 @@ public class DownloadManager {
             }
             if (link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent")) {
                 if (link.startsWith("magnet:?")) {
-                    taskId = addMagnetTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isInitDownload, nextCall, errorCall);
+                    taskId = addMagnetTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isInitDownload, isStartApp, nextCall, errorCall);
                 } else {
-                    taskId = addMagnetTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isInitDownload, nextCall, errorCall);
+                    taskId = addMagnetTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isInitDownload, isStartApp, nextCall, errorCall);
                 }
                 if (NetUtil.getNetWorkState(context) == NetUtil.NETWORK_MOBILE){
                     ToastUtil.showMessage("资源开始下载\n当前为移动网络，请注意您的流量");
@@ -93,7 +93,7 @@ public class DownloadManager {
                     ToastUtil.showMessage("资源开始下载");
                 }
             } else {
-                taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, nextCall, errorCall);
+                taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isStartApp, nextCall, errorCall);
             }
             XLTaskInfo xLTaskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
             xLTaskInfo.sourceUrl = link;
@@ -111,7 +111,7 @@ public class DownloadManager {
     }
 
     public static long addTorrentTask(final String sourceUrl, final String torrentPath, final String savePath, List<Integer> indexs, final boolean isInitDownload) {
-        return addTorrentTask(sourceUrl, torrentPath, savePath, indexs, isInitDownload, null, null);
+        return addTorrentTask(sourceUrl, torrentPath, savePath, indexs, isInitDownload, false, null, null);
     }
 
     /**
@@ -123,7 +123,7 @@ public class DownloadManager {
      * @return
      * @throws Exception
      */
-    public static long addTorrentTask(final String sourceUrl, final String torrentPath, final String savePath, List<Integer> indexs, final boolean isInitDownload,
+    public static long addTorrentTask(final String sourceUrl, final String torrentPath, final String savePath, List<Integer> indexs, final boolean isInitDownload, final boolean isStartApp,
                                       final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         if (TextUtils.isEmpty(torrentPath) || indexs == null) return -1;
         long taskId = -1;
@@ -172,35 +172,36 @@ public class DownloadManager {
                         case "0":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_0");
                             if (xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize) {
+                                mD.dispose();
                                 xlTaskInfo.timestamp = System.currentTimeMillis();
                                 xlTaskInfo.mTaskStatus = 2;
-                                mD.dispose();
                             }else {
                                 xlTaskInfo.mDownloadSpeed = 0;
                             }
                             break;
                         case "1":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_1");
+                            if (isStartApp) stopTask(xlTaskInfo.mTaskId);
                             break;
                         case "2":
+                            mD.dispose();
                             LoggerHelper.info(TAG, "TORRENT_STATUS_2");
                             xlTaskInfo.timestamp = System.currentTimeMillis();
-                            mD.dispose();
                             break;
                         case "3":
+                            mD.dispose();
                             LoggerHelper.info(TAG, "TORRENT_STATUS_3");
                             xlTaskInfo.timestamp = System.currentTimeMillis();
                             ToastUtil.showMessage("资源下载失败");
-                            mD.dispose();
                             break;
                         case "4":
+                            mD.dispose();
                             LoggerHelper.info(TAG, "TORRENT_STATUS_4");
                             xlTaskInfo.mDownloadSpeed = 0;
-                            mD.dispose();
                             break;
                         default:
-                            LoggerHelper.info(TAG, "TORRENT_STATUS_DEFAULT");
                             mD.dispose();
+                            LoggerHelper.info(TAG, "TORRENT_STATUS_DEFAULT");
                             break;
                     }
                     for (int i = 0; i < newIndexs.size(); i++) {
@@ -247,7 +248,7 @@ public class DownloadManager {
      * @throws Exception
      */
     public static long addMagnetTask(final String url, final String savePath, String fileName,
-                                     final Context context, final boolean isPlayVideo, final boolean isInitDownload,
+                                     final Context context, final boolean isPlayVideo, final boolean isInitDownload, final boolean isStartApp,
                                      final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try {
@@ -273,8 +274,8 @@ public class DownloadManager {
                         case "0":
                             LoggerHelper.info(TAG, "MAGNET_STATUS_0");
                             if (xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize) {
-                                xlTaskInfo.timestamp = System.currentTimeMillis();
                                 mD.dispose();
+                                xlTaskInfo.timestamp = System.currentTimeMillis();
                                 if (!isInitDownload && loadingDialog.isShowing()) {
                                     loadingDialog.dismiss();
                                 } else if (!loadingDialog.isShowing()) {
@@ -284,13 +285,14 @@ public class DownloadManager {
                             break;
                         case "1":
                             LoggerHelper.info(TAG, "MAGNET_STATUS_1");
+                            if (isStartApp) stopTask(xlTaskInfo.mTaskId);
                             if (!isInitDownload && !loadingDialog.isShowing()) {
                                 loadingDialog.show();
                             }
                             break;
                         case "2":
-                            LoggerHelper.info(TAG, "MAGNET_STATUS_2");
                             mD.dispose();
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_2");
                             if (!isInitDownload && loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
                             }
@@ -305,8 +307,8 @@ public class DownloadManager {
                             }
                             break;
                         case "3":
-                            LoggerHelper.info(TAG, "MAGNET_STATUS_3");
                             mD.dispose();
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_3");
                             if (!isInitDownload && loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
                             }
@@ -314,12 +316,12 @@ public class DownloadManager {
                             ToastUtil.showMessage("资源下载失败");
                             break;
                         case "4":
+                            mD.dispose();
                             LoggerHelper.info(TAG, "TORRENT_STATUS_4");
                             xlTaskInfo.mDownloadSpeed = 0;
-                            mD.dispose();
                         default:
-                            LoggerHelper.info(TAG, "MAGNET_STATUS_DEFAULT");
                             mD.dispose();
+                            LoggerHelper.info(TAG, "MAGNET_STATUS_DEFAULT");
                             if (!isInitDownload && loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
                             }
@@ -362,10 +364,6 @@ public class DownloadManager {
         return taskId;
     }
 
-    public static long addThunderTask(String url, String savePath, @Nullable String fileName, Consumer<? super XLTaskInfo> nextCall, Consumer<? super Throwable> errorCall) {
-        return addThunderTask(url, savePath, fileName, null, false, nextCall, errorCall);
-    }
-
     /**
      * 添加迅雷链接任务 支持thunder:// ftp:// ed2k:// http:// https:// 协议
      *
@@ -375,7 +373,7 @@ public class DownloadManager {
      * @return
      */
     public static long addThunderTask(String url, String savePath, @Nullable String fileName,
-                                      final Context context, final boolean isPlayVideo, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+                                      final Context context, final boolean isPlayVideo, final boolean isStartApp, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try {
             taskId = XLTaskHelper.instance().addThunderTask(url, savePath, fileName);
@@ -404,30 +402,26 @@ public class DownloadManager {
                             if (xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize) {
                                 xlTaskInfo.timestamp = System.currentTimeMillis();
                                 xlTaskInfo.mTaskStatus = 2;
-                                mD.dispose();
                             }else xlTaskInfo.mDownloadSpeed = 0;
                             break;
                         case "1":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_1");
+                            if (isStartApp) stopTask(xlTaskInfo.mTaskId);
                             break;
                         case "2":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_2");
                             xlTaskInfo.timestamp = System.currentTimeMillis();
-                            mD.dispose();
                             break;
                         case "3":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_3");
                             ToastUtil.showMessage("资源下载失败");
                             xlTaskInfo.timestamp = System.currentTimeMillis();
-                            mD.dispose();
                             break;
                         case "4":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_4");
                             xlTaskInfo.mDownloadSpeed = 0;
-                            mD.dispose();
                         default:
                             LoggerHelper.info(TAG, "THUNDER_STATUS_DEFAULT");
-                            mD.dispose();
                             break;
                     }
                     updateXLTaskInfo(xlTaskInfo);
@@ -585,7 +579,8 @@ public class DownloadManager {
         for (int i = 0; i < xLTaskInfos.size(); i++) {
             if ((!TextUtils.isEmpty(xLTaskInfo.mFileName) && !TextUtils.isEmpty(xLTaskInfos.get(i).mFileName)
                     && xLTaskInfos.get(i).mFileName.equals(xLTaskInfo.mFileName))
-                    || xLTaskInfo.mTaskId == xLTaskInfos.get(i).mTaskId) {
+                    || (xLTaskInfo.mTaskId == xLTaskInfos.get(i).mTaskId && (TextUtils.isEmpty(xLTaskInfo.mFileName) && !TextUtils.isEmpty(xLTaskInfos.get(i).mFileName)
+                    || !TextUtils.isEmpty(xLTaskInfo.mFileName) && TextUtils.isEmpty(xLTaskInfos.get(i).mFileName)))) {
                 xLTaskInfos.get(i).mAddedHighSourceState = xLTaskInfo.mAddedHighSourceState;
                 xLTaskInfos.get(i).mAdditionalResCount = xLTaskInfo.mAdditionalResCount;
                 xLTaskInfos.get(i).mAdditionalResDCDNBytes = xLTaskInfo.mAdditionalResDCDNBytes;
@@ -629,34 +624,12 @@ public class DownloadManager {
             for (int i = 0; i < xLTaskInfos.size(); i++) {
                 XLTaskInfo xlTaskInfo = xLTaskInfos.get(i);
                 if (xlTaskInfo.mTaskStatus != 2 && !(xlTaskInfo.mFileSize > 0 && xlTaskInfo.mFileSize == xlTaskInfo.mDownloadSize)) {
-                    Long tempTaskId;
                     if (xlTaskInfo.index >= 0) {
-                        tempTaskId = addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath,
-                                PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), true);
+                        addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath,
+                                PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), true, true, null, null);
                     } else {
-                        tempTaskId = addNormalTask(BaseApplication.appContext, xlTaskInfo.sourceUrl, false, true);
+                        addNormalTask(BaseApplication.appContext, xlTaskInfo.sourceUrl, false, true, true, null, null);
                     }
-                    final Long taskId = tempTaskId;
-                    Observable.timer(1000, TimeUnit.MILLISECONDS)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<Long>() {
-                                @Override
-                                public void onSubscribe(@NonNull Disposable disposable) {
-                                }
-
-                                @Override
-                                public void onNext(@NonNull Long number) {
-                                    stopTask(taskId);
-                                }
-
-                                @Override
-                                public void onError(@NonNull Throwable e) {
-                                }
-
-                                @Override
-                                public void onComplete() {
-                                }
-                            });
                 }
             }
             Collections.sort(DownloadManager.xLTaskInfos, comparator);
@@ -686,8 +659,23 @@ public class DownloadManager {
             DownloadManager.deleteTask(xlTaskInfo.mTaskId, PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
         }
         xLTaskInfos.clear();
-        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, Constant.KEY_DOWNLOAD_XLTASKINFOS,
-                "");
+        SharePreferencesUtil.setStringSharePreferences(BaseApplication.appContext, Constant.KEY_DOWNLOAD_XLTASKINFOS, "[]");
+    }
+
+    public static void stopAllTask(){
+        if (xLTaskInfos != null && !xLTaskInfos.isEmpty()){
+            for (int i = 0; i < xLTaskInfos.size(); i++) {
+                DownloadManager.stopTask(xLTaskInfos.get(i).mTaskId);
+            }
+        }
+    }
+
+    public static void startAllTask(Context context){
+        if (xLTaskInfos != null && !xLTaskInfos.isEmpty()){
+            for (int i = 0; i < xLTaskInfos.size(); i++) {
+                DownloadManager.startTask(context, xLTaskInfos.get(i));
+            }
+        }
     }
 
 }

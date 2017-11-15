@@ -52,12 +52,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 import static com.lxw.videoworld.app.config.Constant.configModel;
 
@@ -367,8 +372,28 @@ public class MainActivity extends BaseActivity {
                     }
                 }, 2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
             } else {
-                finish();
-                System.exit(0);
+                DownloadManager.stopAllTask();
+                Observable.timer(1000, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Long>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable disposable) {
+                            }
+
+                            @Override
+                            public void onNext(@NonNull Long number) {
+                                finish();
+                                System.exit(0);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                            }
+
+                            @Override
+                            public void onComplete() {
+                            }
+                        });
             }
         }
     }

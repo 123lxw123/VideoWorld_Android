@@ -61,6 +61,7 @@
 
                 <TextView
                     android:id="@+id/txt_download_size"
+                    android:layout_marginStart="@dimen/dp_5"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -70,15 +71,15 @@
 
                 <TextView
                     android:id="@+id/txt_download_time"
-                    android:layout_width="@dimen/dp_0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     android:textColor="?com_font_C"
                     android:textSize="@dimen/sp_12" />
 
                 <TextView
                     android:id="@+id/txt_download_status"
+                    android:layout_marginStart="@dimen/dp_10"
                     android:background="@drawable/bg_tab_select"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

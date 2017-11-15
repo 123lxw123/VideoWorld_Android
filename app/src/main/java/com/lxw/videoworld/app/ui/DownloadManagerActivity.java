@@ -112,7 +112,7 @@ public class DownloadManagerActivity extends BaseActivity {
     }
 
     private void initRefresh() {
-        disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
+        disposable = Observable.interval(0, 2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
