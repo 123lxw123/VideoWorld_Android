@@ -101,6 +101,11 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         String str = SharePreferencesUtil.getStringSharePreferences(this, Constant.KEY_SEARCH_HOTWORDS, "");
         hotwords = ValueUtil.string2list(str);
         if (hotwords != null && hotwords.size() > 0) {
+            if (hotwords.size() > 8){
+                for (int i = 8; i < hotwords.size(); i++){
+                    hotwords.remove(i);
+                }
+            }
             recyclerviewKeyword.setLayoutManager(new GridLayoutManager(this, 4));
             hotwordAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_hotword, hotwords) {
                 @Override
