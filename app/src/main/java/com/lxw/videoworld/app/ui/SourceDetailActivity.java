@@ -186,7 +186,7 @@ public class SourceDetailActivity extends BaseActivity {
                         }
                     }
                 });
-            }else imgPlayVideo.setVisibility(View.VISIBLE);
+            }else imgPlayVideo.setVisibility(View.GONE);
             ImageManager.getInstance().loadImage(this, imgPicture, images.get(0));
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getTitle())) {

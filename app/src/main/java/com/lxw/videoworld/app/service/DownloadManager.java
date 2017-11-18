@@ -89,7 +89,7 @@ public class DownloadManager {
                 }
                 if (NetUtil.getNetWorkState(context) == NetUtil.NETWORK_MOBILE){
                     ToastUtil.showMessage("资源开始下载\n当前为移动网络，请注意您的流量");
-                }else {
+                }else if (!isStartApp){
                     ToastUtil.showMessage("资源开始下载");
                 }
             } else {
@@ -141,7 +141,7 @@ public class DownloadManager {
             taskId = XLTaskHelper.instance().addTorrentTask(torrentPath, savePath, indexs);
             if (NetUtil.getNetWorkState(BaseApplication.appContext) == NetUtil.NETWORK_MOBILE){
                 ToastUtil.showMessage("资源开始下载\n当前为移动网络，请注意您的流量");
-            }else {
+            }else if (!isStartApp) {
                 ToastUtil.showMessage("资源开始下载");
             }
             for (int i = 0; i < indexs.size(); i++) {
@@ -400,6 +400,7 @@ public class DownloadManager {
                         case "0":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_0");
                             if (xlTaskInfo.mFileSize > 0 && xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize) {
+                                mD.dispose();
                                 xlTaskInfo.timestamp = System.currentTimeMillis();
                                 xlTaskInfo.mTaskStatus = 2;
                             }else xlTaskInfo.mDownloadSpeed = 0;
@@ -410,18 +411,22 @@ public class DownloadManager {
                             break;
                         case "2":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_2");
+                            mD.dispose();
                             xlTaskInfo.timestamp = System.currentTimeMillis();
                             break;
                         case "3":
                             LoggerHelper.info(TAG, "THUNDER_STATUS_3");
+                            mD.dispose();
                             ToastUtil.showMessage("资源下载失败");
                             xlTaskInfo.timestamp = System.currentTimeMillis();
                             break;
                         case "4":
                             LoggerHelper.info(TAG, "TORRENT_STATUS_4");
+                            mD.dispose();
                             xlTaskInfo.mDownloadSpeed = 0;
                         default:
                             LoggerHelper.info(TAG, "THUNDER_STATUS_DEFAULT");
+                            mD.dispose();
                             break;
                     }
                     updateXLTaskInfo(xlTaskInfo);

@@ -140,9 +140,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     //隐藏加载中进度条
     public void hideProgressBar(){
-        if(progressBar != null && progressBar.isShowing()){
+        if(progressBar != null){
             progressBar.dismiss();
         }
+        progressBar = null;
     }
 
     //toast提示信息

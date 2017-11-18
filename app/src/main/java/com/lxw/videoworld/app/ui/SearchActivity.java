@@ -68,6 +68,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private BaseQuickAdapter<String, BaseViewHolder> hotwordAdapter;
     private List<SearchModel> searchModels = new ArrayList<>();
     private BaseQuickAdapter<SearchModel, BaseViewHolder> searchAdapter;
+    private BaseQuickAdapter.RequestLoadMoreListener loadMoreListener;
     private String keyword;
     private int page = 1;
     private boolean flag_loadmore = false;
@@ -183,7 +184,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             }
         });
         // 加载更多
-        searchAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+        loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 recyclerviewResult.postDelayed(new Runnable() {
@@ -195,7 +196,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
                 }, 0);
             }
-        }, recyclerviewResult);
+        };
+        searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
         searchAdapter.setLoadMoreView(new EmptyLoadMoreView());
         // 动画
         searchAdapter.openLoadAnimation();
@@ -239,6 +241,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                             searchview.clearFocus();
                             flag_loadmore = false;
                             searchAdapter.setEnableLoadMore(true);
+                            searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
                         }
 
                         @Override
@@ -247,6 +250,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                             flag_loadmore = false;
                             searchAdapter.loadMoreFail();
                             searchAdapter.setEnableLoadMore(true);
+                            searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
                         }
 
                         @Override

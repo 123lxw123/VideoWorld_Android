@@ -72,6 +72,7 @@ public class SourceTypeFragment extends BaseFragment {
     private SourceListModel sourceListModel;
     private List<SourceDetailModel> sourceDetails = new ArrayList<>();
     private BaseQuickAdapter<SourceDetailModel, BaseViewHolder> sourceAdapter;
+    private BaseQuickAdapter.RequestLoadMoreListener loadMoreListener;
     private String sourceType;
     private String category;
     private String type;
@@ -212,7 +213,7 @@ public class SourceTypeFragment extends BaseFragment {
                 }
             });
             // 加载更多
-            sourceAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
                 @Override
                 public void onLoadMoreRequested() {
                     recyclerviewSourceType.postDelayed(new Runnable() {
@@ -227,7 +228,8 @@ public class SourceTypeFragment extends BaseFragment {
 
                     }, 500);
                 }
-            }, recyclerviewSourceType);
+            };
+            sourceAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewSourceType);
             // 当列表滑动到倒数第N个Item的时候(默认是1)回调onLoadMoreRequested方法
             sourceAdapter.setPreLoadNumber(7);
             sourceAdapter.setLoadMoreView(new EmptyLoadMoreView());
@@ -299,12 +301,14 @@ public class SourceTypeFragment extends BaseFragment {
                     sourceAdapter.loadMoreFail();
                 }
                 sourceAdapter.setEnableLoadMore(true);
+                sourceAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewSourceType);
             }
 
             @Override
             public void onFailure(BaseResponse<SourceListModel> response) {
                 sourceAdapter.loadMoreFail();
                 sourceAdapter.setEnableLoadMore(true);
+                sourceAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewSourceType);
             }
         }.doRequest();
     }
