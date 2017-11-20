@@ -228,13 +228,12 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                             hideProgressBar();
                             if (list != null && !list.isEmpty()) {
                                 if (flag_loadmore) {
-                                    searchModels.addAll(list);
                                     searchAdapter.addData(list);
                                     searchAdapter.loadMoreComplete();
                                 } else {
                                     searchModels.clear();
                                     searchModels.addAll(list);
-                                    searchAdapter.setNewData(list);
+                                    searchAdapter.setNewData(searchModels);
                                 }
                                 page++;
                             } else if (list == null) ToastUtil.showMessage("");

@@ -146,7 +146,14 @@ public class SourceDetailActivity extends BaseActivity {
     private void initViews() {
 
         images = ValueUtil.string2list(sourceDetailModel.getImages());
-        final List<String> links = ValueUtil.string2list(sourceDetailModel.getLinks());
+        final List<String> tempList = ValueUtil.string2list(sourceDetailModel.getLinks());
+        final List<String> links = new ArrayList<>();
+        if (tempList != null){
+            for (int i = 0; i < tempList.size(); i++){
+                if (!TextUtils.isEmpty(tempList.get(i)));
+                links.add(tempList.get(i));
+            }
+        }
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +188,7 @@ public class SourceDetailActivity extends BaseActivity {
                 imgPlayVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (links != null && links.size() > 0) {
+                        if (links.size() > 0) {
                             DownloadManager.addNormalTask(SourceDetailActivity.this, links.get(0), true, false);
                         }
                     }
@@ -251,7 +258,7 @@ public class SourceDetailActivity extends BaseActivity {
 //            }
             llPicture.setVisibility(View.VISIBLE);
         }
-        if (links != null && links.size() > 0) {
+        if (links.size() > 0) {
             recyclerviewLink.setNestedScrollingEnabled(false);
             recyclerviewLink.setLayoutManager(new LinearLayoutManager(this));
             sourceLinkAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_source_link, links) {

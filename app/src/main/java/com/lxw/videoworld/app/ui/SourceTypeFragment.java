@@ -293,7 +293,6 @@ public class SourceTypeFragment extends BaseFragment {
                         sourceAdapter.setNewData(sourceDetails);
                         llContent.setVisibility(View.VISIBLE);
                     } else {
-                        sourceDetails.addAll(sources);
                         sourceAdapter.addData(sources);
                         sourceAdapter.loadMoreComplete();
                     }
