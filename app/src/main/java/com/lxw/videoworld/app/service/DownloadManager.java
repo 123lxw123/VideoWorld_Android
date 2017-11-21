@@ -24,6 +24,7 @@ import com.xunlei.downloadlib.XLTaskHelper;
 import com.xunlei.downloadlib.parameter.TorrentInfo;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -129,15 +130,14 @@ public class DownloadManager {
         long taskId = -1;
         try {
             final TorrentInfo torrentInfo = XLTaskHelper.instance().getTorrentInfo(torrentPath);
+            final List<Integer> newIndexs = new ArrayList<>();
             if (!isInitDownload) {
                 for (int i = 0; i < indexs.size(); i++) {
                     if (isInDownloadQueue(sourceUrl, torrentInfo.mSubFileInfo[indexs.get(i)].mFileName, indexs.get(i))) {
-                        indexs.remove(i);
                         ToastUtil.showMessage("资源已在下载队列中");
-                    }
+                    } else newIndexs.add(indexs.get(i));
                 }
             }
-            final List<Integer> newIndexs = indexs;
             taskId = XLTaskHelper.instance().addTorrentTask(torrentPath, savePath, indexs);
             if (NetUtil.getNetWorkState(BaseApplication.appContext) == NetUtil.NETWORK_MOBILE){
                 ToastUtil.showMessage("资源开始下载\n当前为移动网络，请注意您的流量");

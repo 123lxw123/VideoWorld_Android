@@ -150,8 +150,8 @@ public class SourceDetailActivity extends BaseActivity {
         final List<String> links = new ArrayList<>();
         if (tempList != null){
             for (int i = 0; i < tempList.size(); i++){
-                if (!TextUtils.isEmpty(tempList.get(i)));
-                links.add(tempList.get(i));
+                if (!TextUtils.isEmpty(tempList.get(i)))
+                    links.add(tempList.get(i));
             }
         }
         buttonShare.setOnClickListener(new View.OnClickListener() {

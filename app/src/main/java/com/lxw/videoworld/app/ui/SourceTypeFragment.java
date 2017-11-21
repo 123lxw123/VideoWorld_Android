@@ -30,6 +30,7 @@ import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
+import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
@@ -139,7 +140,14 @@ public class SourceTypeFragment extends BaseFragment {
             });
 //            // banner
             viewpagerBanner =  new MyHorizontalInfiniteCycleViewPager(getActivity());
-            viewpagerBanner.setId(View.generateViewId());
+            String key = sourceType + category;
+            if (!TextUtils.isEmpty(type)) key = key + type;
+            int id = SharePreferencesUtil.getIntSharePreferences(SourceTypeFragment.this.getContext(), key, -1);
+            if (id == -1){
+                id = (int)(10000000 + Math.random() * 100000000) ;
+                SharePreferencesUtil.setIntSharePreferences(SourceTypeFragment.this.getContext(), key, id);
+            }
+            viewpagerBanner.setId(id);
             int bannerHeight;
             if (category.equals(Constant.CATEGORY_21) || category.equals(Constant.CATEGORY_19)) {
                 bannerHeight = width / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
@@ -153,10 +161,6 @@ public class SourceTypeFragment extends BaseFragment {
             viewpagerBanner.setMinPageScale(0.5F);
             viewpagerBanner.setCenterPageScaleOffset(30.0F);
             viewpagerBanner.setMinPageScaleOffset(5.0F);
-            viewpagerBanner.setFocusable(true);
-            viewpagerBanner.setFocusableInTouchMode(true);
-            viewpagerBanner.setClickable(false);
-            viewpagerBanner.requestFocus();
 //            viewpagerBanner.setOnInfiniteCyclePageTransformListener(...);
             recyclerviewSourceType.setLayoutManager(new GridLayoutManager(SourceTypeFragment.this.getActivity(), Constant.GRIDLAYOUTMANAGER_SPANCOUNT));
             // 列表适配器
@@ -260,23 +264,33 @@ public class SourceTypeFragment extends BaseFragment {
                     List<SourceDetailModel> sources = sourceListModel.getList();
                     if (frag_refresh) {
                         if (sources.size() >= Constant.BANNER_LIMIT) {
-                            sourceBannerFragments.clear();
                             sourceDetails.clear();
                             // banner 数据
-                            for (int i = 0; i < Constant.BANNER_LIMIT; i++) {
-                                SourceBannerFragment fragment = new SourceBannerFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("item", (Serializable) sources.get(i));
-                                fragment.setArguments(bundle);
-                                sourceBannerFragments.add(fragment);
+                            if (sourceBannerFragments.size() == 0){
+                                for (int i = 0; i < Constant.BANNER_LIMIT; i++) {
+                                    SourceBannerFragment fragment = new SourceBannerFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("item", (Serializable) sources.get(i));
+                                    fragment.setArguments(bundle);
+                                    sourceBannerFragments.add(fragment);
+                                }
+                            } else {
+                                for (int i = 0; i < Constant.BANNER_LIMIT; i++) {
+                                    if (sourceBannerFragments.get(i) != null){
+                                        sourceBannerFragments.get(i).refreshUI(sources.get(i));
+                                    }
+                                }
                             }
+
                             // banner 初始化
                             if (sourceBannerFragments.size() > 0) {
-                                if(SourceTypeFragment.this.getParentFragment() != null){
-                                    bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getParentFragment().getFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
-                                }else bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
-                                viewpagerBanner.setAdapter(bannerAdapter);
-                                viewpagerBanner.startAutoScroll(true);
+                                if (bannerAdapter == null){
+                                    if(SourceTypeFragment.this.getParentFragment() != null){
+                                        bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getParentFragment().getFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                    }else bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                    viewpagerBanner.setAdapter(bannerAdapter);
+                                    viewpagerBanner.startAutoScroll(true);
+                                }
                                 if (sourceAdapter.getHeaderLayoutCount() == 0) {
                                     ViewGroup parent = (ViewGroup) viewpagerBanner.getParent();
                                     if (parent != null) {

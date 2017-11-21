@@ -43,12 +43,12 @@
     <application
         android:name=".framework.application.BaseApplication"
         android:allowBackup="true"
-        tools:replace="android:icon"
         android:icon="@drawable/svg_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/svg_launcher"
         android:supportsRtl="true"
-        android:theme="@style/GoldAppTheme">
+        android:theme="@style/GoldAppTheme"
+        tools:replace="android:icon">
 
         <!-- Hotfix2.0 配置 -->
         <meta-data
@@ -118,9 +118,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentAppTheme" />
-        <activity android:name=".app.ui.DownloadManagerActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".app.ui.DownloadManagerActivity"
+            android:screenOrientation="portrait" />
+
         <service android:name=".app.service.BackgroundIntentService" />
+
+        <activity android:name=".app.ui.PreViewActivity"></activity>
     </application>
 
 </manifest>

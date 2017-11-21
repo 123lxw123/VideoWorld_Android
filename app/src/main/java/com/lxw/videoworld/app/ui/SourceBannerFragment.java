@@ -84,6 +84,18 @@ public class SourceBannerFragment extends BaseFragment {
             FrameLayout flPicture = ((FrameLayout) rootView.findViewById(R.id.fl_picture));
             flPicture.getLayoutParams().width = picWidth;
             flPicture.getLayoutParams().height = picHeight;
+            refreshUI(item);
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        return rootView;
+    }
+
+    public void refreshUI(final SourceDetailModel item){
+        this.item = item;
+        if (rootView != null){
             // 图片
             List<String> images = ValueUtil.string2list(item.getImages());
             if (images != null && images.size() > 0) {
@@ -127,11 +139,6 @@ public class SourceBannerFragment extends BaseFragment {
                 }
             });
         }
-        ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null) {
-            parent.removeView(rootView);
-        }
-        return rootView;
     }
 
 }
