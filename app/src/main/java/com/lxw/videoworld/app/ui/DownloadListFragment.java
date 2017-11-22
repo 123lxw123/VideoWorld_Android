@@ -150,6 +150,7 @@ public class DownloadListFragment extends BaseFragment {
     private void setDownloadViewWithStatus(final BaseViewHolder helper, final XLTaskInfo xlTaskInfo) {
         final CardView layout = helper.getView(R.id.cardview_download_item);
         final TextView statusText = helper.getView(R.id.txt_download_status);
+        String downloadType = xlTaskInfo.mFileName.split("\\.")[xlTaskInfo.mFileName.split("\\.").length - 1].toLowerCase();
         switch (xlTaskInfo.mTaskStatus) {
             case 0:
                 if (xlTaskInfo.mDownloadSize == xlTaskInfo.mFileSize && xlTaskInfo.mFileSize > 0) {// 已完成
@@ -161,7 +162,7 @@ public class DownloadListFragment extends BaseFragment {
                             dialog.show();
                         }
                     };
-                    if (isDownloadVideo(xlTaskInfo)) {
+                    if (isDownloadVideo(downloadType)) {
                         statusText.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -169,6 +170,16 @@ public class DownloadListFragment extends BaseFragment {
                                 Intent intent = new Intent(getContext(), PlayVideoActivity.class);
                                 intent.putExtra("url", url);
                                 getContext().startActivity(intent);
+                            }
+                        });
+                    } else if (downloadType.equals("png") || downloadType.equals("jpg") || downloadType.equals("jpeg")){
+                        statusText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String url = Constant.PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName;
+                                Intent intent = new Intent(DownloadListFragment.this.getActivity(), PreViewActivity.class);
+                                intent.putExtra("url", url);
+                                startActivity(intent);
                             }
                         });
                     } else statusText.setOnClickListener(listener);
@@ -217,7 +228,7 @@ public class DownloadListFragment extends BaseFragment {
                         dialog.show();
                     }
                 };
-                if (isDownloadVideo(xlTaskInfo)) {
+                if (isDownloadVideo(downloadType)) {
                     statusText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -225,6 +236,16 @@ public class DownloadListFragment extends BaseFragment {
                             Intent intent = new Intent(getContext(), PlayVideoActivity.class);
                             intent.putExtra("url", url);
                             getContext().startActivity(intent);
+                        }
+                    });
+                } else if (downloadType.equals("png") || downloadType.equals("jpg") || downloadType.equals("jpeg")) {
+                    statusText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String url = Constant.PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName;
+                            Intent intent = new Intent(DownloadListFragment.this.getActivity(), PreViewActivity.class);
+                            intent.putExtra("url", url);
+                            startActivity(intent);
                         }
                     });
                 } else statusText.setOnClickListener(listener1);
@@ -297,10 +318,15 @@ public class DownloadListFragment extends BaseFragment {
                 helper.setText(R.id.txt_download_speed, ValueUtil.formatFileSize(xlTaskInfo.mFileSize));
                 helper.setText(R.id.txt_download_size, "");
                 helper.setText(R.id.txt_download_time, "");
-                if (isDownloadVideo(xlTaskInfo)){
+                String downloadType = xlTaskInfo.mFileName.split("\\.")[xlTaskInfo.mFileName.split("\\.").length - 1].toLowerCase();
+                if (isDownloadVideo(downloadType)){
                     statusText.setTextColor(getResources().getColor(R.color.color_009587));
                     statusText.setBackgroundResource(R.drawable.bg_tab_green);
                     statusText.setText("播放");
+                } else if (downloadType.equals("png") || downloadType.equals("jpg") || downloadType.equals("jpeg")){
+                    statusText.setTextColor(getResources().getColor(R.color.color_009587));
+                    statusText.setBackgroundResource(R.drawable.bg_tab_green);
+                    statusText.setText("预览");
                 } else {
                     statusText.setTextColor(getCustomColor(R.styleable.BaseColor_com_font_C));
                     statusText.setBackgroundDrawable(null);
@@ -327,8 +353,8 @@ public class DownloadListFragment extends BaseFragment {
 
     }
 
-    public boolean isDownloadVideo(XLTaskInfo xlTaskInfo){
-        String downloadType = xlTaskInfo.mFileName.split("\\.")[xlTaskInfo.mFileName.split("\\.").length - 1].toLowerCase();
+    public boolean isDownloadVideo(String downloadType){
+
         boolean isVideo = false;
         for (int i = 0; i < Constant.videos.length; i++){
             if (Constant.videos[i].equals(downloadType)){
