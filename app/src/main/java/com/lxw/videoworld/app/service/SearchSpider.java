@@ -20,7 +20,9 @@ import java.util.List;
 public class SearchSpider {
     public static List<SearchModel> getDiaosiSearchResult(String url){
         try{
-            Document htmlString = Jsoup.connect(url).timeout(20000).get();
+            Document htmlString = Jsoup.connect(url)
+                    .timeout(20000)
+                    .get();
             Elements datas = htmlString.select("ul.mlist > li");
             List<SearchModel> results = new ArrayList<>();
             for (int i = 0; datas != null && i < datas.size(); i++){
@@ -44,7 +46,9 @@ public class SearchSpider {
 
     public static List<SearchModel> getZhongziSearchResult(String url){
         try{
-            Document htmlString = Jsoup.connect(url).timeout(20000).get();
+            Document htmlString = Jsoup.connect(url)
+                    .timeout(20000)
+                    .get();
             Elements datas = htmlString.select("tbody");
             List<SearchModel> results = new ArrayList<>();
             for (int i = 0; datas != null && i < datas.size(); i++){
