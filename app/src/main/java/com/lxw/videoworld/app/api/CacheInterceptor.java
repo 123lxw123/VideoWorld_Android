@@ -1,5 +1,6 @@
 package com.lxw.videoworld.app.api;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lxw.videoworld.framework.http.CacheManager;
@@ -49,13 +50,12 @@ public class CacheInterceptor implements Interceptor {
         }
         String key = sb.toString();
         String cache = CacheManager.getInstance().getCache(key);
-        if (cache == null) {// 没缓存
-            return getResponseAndSaveCache(key, chain, request);
+        if (TextUtils.isEmpty(cache)) {// 没缓存
+            return getResponseAndSaveCache(key, cache, chain, request);
         } else {
             String[] splits = cache.split(SPLIT);
             if (System.currentTimeMillis() - Long.valueOf(splits[1]) > 1000 * 60 * 60 * 6) {// 缓存过期了
-                CacheManager.getInstance().removeCache(key);
-                return getResponseAndSaveCache(key, chain, request);
+                return getResponseAndSaveCache(key, cache, chain, request);
             } else {// 返回缓存
                 return new Response.Builder()
                         .code(200)
@@ -69,7 +69,7 @@ public class CacheInterceptor implements Interceptor {
         }
     }
 
-    public Response getResponseAndSaveCache(String key, Chain chain, Request request) throws IOException {
+    public Response getResponseAndSaveCache(String key, String cache, Chain chain, Request request) throws IOException {
         Response response = chain.proceed(request);
         // 服务器返回正确结果才缓存
         if (response != null && response.code() == 200) {
@@ -82,10 +82,19 @@ public class CacheInterceptor implements Interceptor {
             if (contentType != null) {
                 charset = contentType.charset(Charset.forName("UTF-8"));
             }
-            String cache = buffer.clone().readString(charset) + SPLIT + System.currentTimeMillis();
-
-            CacheManager.getInstance().putCache(key, cache);
+            String newCache =  buffer.clone().readString(charset) + SPLIT + System.currentTimeMillis();
+            CacheManager.getInstance().putCache(key, newCache);
             Log.d(CacheManager.TAG, "put cache-> key:" + key + "-> cache:" + cache);
+        } else if (!TextUtils.isEmpty(cache)){
+            String[] splits = cache.split(SPLIT);
+            response = new Response.Builder()
+                    .code(200)
+                    .message("SUCCESS")
+                    .request(chain.request())
+                    .protocol(Protocol.HTTP_1_0)
+                    .body(ResponseBody.create(MediaType.parse("application/json"), splits[0]))
+                    .addHeader("content-type", "application/json")
+                    .build();
         }
         return response;
     }

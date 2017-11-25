@@ -171,8 +171,10 @@ public class Constant {
     public static final String BASE_ZHONGZI_SEARCH_1 = "http://www.zhongziso.com/list_ctime/keyword/page";// 时间排序
     public static final String BASE_ZHONGZI_SEARCH_2 = "http://www.zhongziso.com/list_click/keyword/page";// 点击
     public static final String BASE_ZHONGZI_SEARCH_3 = "http://www.zhongziso.com/list_length/keyword/page";// 大小
-    public static final String BASE_DIAOSI_SEARCH = "http://www.diaosisou.net/";// 屌丝搜索首页
-    public static final String BASE_DIAOSI_SEARCH_1 = "http://www.diaosisou.net/list/keyword/page/time_d";// 时间排序
-    public static final String BASE_DIAOSI_SEARCH_2 = "http://www.diaosisou.net/list/keyword/page/size_d";// 大小
-    public static final String BASE_DIAOSI_SEARCH_3 = "http://www.diaosisou.net/list/keyword/page/rala_d";// 相关度
+    public static final String BASE_DIAOSI_SEARCH = "http://www.diaosisou.org/";// 屌丝搜索首页
+    public static final String BASE_DIAOSI_SEARCH_1 = "http://www.diaosisou.org/list/keyword/page/time_d";// 时间排序
+    public static final String BASE_DIAOSI_SEARCH_2 = "http://www.diaosisou.org/list/keyword/page/size_d";// 大小
+    public static final String BASE_DIAOSI_SEARCH_3 = "http://www.diaosisou.org/list/keyword/page/rala_d";// 相关度
+
+    public static final String BASE_MAOYAN_MOVIE = "https://box.maoyan.com/promovie/api/box/second.json";
 }

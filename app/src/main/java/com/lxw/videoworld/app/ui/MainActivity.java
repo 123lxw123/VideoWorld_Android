@@ -4,7 +4,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -64,6 +66,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
+import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 import static com.lxw.videoworld.app.config.Constant.configModel;
 
 public class MainActivity extends BaseActivity {
@@ -116,6 +119,10 @@ public class MainActivity extends BaseActivity {
     TextView txtCache;
     @BindView(R.id.ll_clear_cache)
     LinearLayout llClearCache;
+    @BindView(R.id.txt_local_play)
+    TextView txtLocalPlay;
+    @BindView(R.id.img_admire)
+    ImageView imgAdmire;
     private boolean flag_exit = false;
     private boolean flag_back = true;
     private QuickFragmentPageAdapter pagerAdapter;
@@ -166,22 +173,24 @@ public class MainActivity extends BaseActivity {
                     case R.id.action_change_source:
                         switch (Constant.SOURCE_TYPE) {
                             case Constant.SOURCE_TYPE_1:
+                                ToastUtil.showMessage(getString(R.string.txt_change_source_b));
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_2;
                                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
                                         Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_2);
                                 break;
                             case Constant.SOURCE_TYPE_2:
+                                ToastUtil.showMessage(getString(R.string.txt_change_source_c));
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_3;
                                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
                                         Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_3);
                                 break;
                             case Constant.SOURCE_TYPE_3:
+                                ToastUtil.showMessage(getString(R.string.txt_change_source_a));
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_1;
                                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
                                         Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
                                 break;
                         }
-                        ToastUtil.showMessage(getString(R.string.txt_change_source));
                         MainActivity.this.finish();
                         Intent intent2 = MainActivity.this.getIntent();
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
@@ -311,7 +320,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void ok() {
                         super.ok();
-                        File file = new File(Constant.PATH_OFFLINE_DOWNLOAD);
+                        File file = new File(PATH_OFFLINE_DOWNLOAD);
                         String cacheSize = ValueUtil.formatFileSize(FileUtil.getFileSize(file));
                         FileUtil.deleteFile(file);
                         DownloadManager.removeAllXLTaskInfo();
@@ -335,6 +344,15 @@ public class MainActivity extends BaseActivity {
                 if (txtDownloadPathValue.getVisibility() == View.GONE)
                     txtDownloadPathValue.setVisibility(View.VISIBLE);
                 else txtDownloadPathValue.setVisibility(View.GONE);
+            }
+        });
+
+        imgAdmire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PreViewActivity.class);
+                intent.putExtra("isAdmire", true);
+                startActivity(intent);
             }
         });
 
@@ -464,11 +482,11 @@ public class MainActivity extends BaseActivity {
 
     public void setConfig(ConfigModel configModel, boolean flag_dialog) {
 
-        // 保存热搜关键词
-        if (!TextUtils.isEmpty(configModel.getKeyword())) {
-            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant
-                    .KEY_SEARCH_HOTWORDS, configModel.getKeyword());
-        }
+//        // 保存热搜关键词
+//        if (!TextUtils.isEmpty(configModel.getKeyword())) {
+//            SharePreferencesUtil.setStringSharePreferences(MainActivity.this, Constant
+//                    .KEY_SEARCH_HOTWORDS, configModel.getKeyword());
+//        }
 
         // 侧滑菜单
         String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
@@ -542,11 +560,11 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        File file = new File(Constant.PATH_OFFLINE_DOWNLOAD);
+        File file = new File(PATH_OFFLINE_DOWNLOAD);
         txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
     }
 
-    @OnClick({R.id.txt_github, R.id.txt_feedback, R.id.txt_about})
+    @OnClick({R.id.txt_github, R.id.txt_feedback, R.id.txt_about, R.id.txt_local_play})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
             case R.id.txt_github:
@@ -573,8 +591,34 @@ public class MainActivity extends BaseActivity {
                     llAboutContent.setVisibility(View.GONE);
                 }
                 break;
+            case R.id.txt_local_play:
+                // 本地播放
+                Intent intent = new Intent();
+                intent.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);
+                break;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            //
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+                Cursor cursor = getContentResolver().query(uri, null, null,
+                        null, null);
+                cursor.moveToFirst();
+                String path = cursor.getString(1);
+                String url = DownloadManager.getLoclUrl(path);
+                Intent intent = new Intent(MainActivity.this, PlayVideoActivity.class);
+                intent.putExtra("url", url);
+                MainActivity.this.startActivity(intent);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @OnClick({R.id.img_close})

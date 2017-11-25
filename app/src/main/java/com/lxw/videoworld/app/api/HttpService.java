@@ -1,11 +1,11 @@
 package com.lxw.videoworld.app.api;
 
 
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
-import com.lxw.videoworld.app.model.BaseResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -49,4 +49,7 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("userInfo")
     Observable<BaseResponse<String>> addUserInfo(@Field("uid") String uid, @Field("sms") String sms, @Field("contact") String contact, @Field("address") String address, @Field("history") String history);
+
+//    @GET
+//    Observable<BaseResponse<MaoYanMovieModel>> getMaoYanMovies(@Url String url);
 }

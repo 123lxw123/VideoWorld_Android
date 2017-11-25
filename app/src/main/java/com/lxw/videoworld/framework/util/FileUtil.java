@@ -107,7 +107,7 @@ public class FileUtil {
         try {
             Uri uri = Uri.fromFile(new File(path));
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setDataAndType(uri, "*/*");
             context.startActivity(intent);

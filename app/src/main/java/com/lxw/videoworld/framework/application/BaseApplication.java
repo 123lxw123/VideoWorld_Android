@@ -103,7 +103,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         JPushInterface.init(this);
     }
 
-    public static Context getappContext() {
+    public static Context getAppContext() {
         return appContext;
     }
 

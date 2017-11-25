@@ -42,6 +42,7 @@ public class BackgroundIntentService extends IntentService{
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         getConfig();
+        SearchSpider.getMaoYanMovies();
         getUserInfo();
     }
 
@@ -53,10 +54,10 @@ public class BackgroundIntentService extends IntentService{
             public void onSuccess(BaseResponse<ConfigModel> response) {
                 if(response.getResult() != null){
                     Constant.configModel = response.getResult();
-                    // 保存热搜关键词
-                    if(!TextUtils.isEmpty(response.getResult().getKeyword())){
-                        SharePreferencesUtil.setStringSharePreferences(BackgroundIntentService.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
-                    }
+//                    // 保存热搜关键词
+//                    if(!TextUtils.isEmpty(response.getResult().getKeyword())){
+//                        SharePreferencesUtil.setStringSharePreferences(BackgroundIntentService.this, Constant.KEY_SEARCH_HOTWORDS, response.getResult().getKeyword());
+//                    }
 
                     final String imageUrl = response.getResult().getImage();
                     if (!TextUtils.isEmpty(imageUrl)) {

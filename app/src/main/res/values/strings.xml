@@ -69,8 +69,11 @@
     <string name="txt_search_empty_tips">请输入搜索内容</string>
     <string name="txt_search_timeout">搜索超时</string>
 
-    <string name="txt_change_source">切换资源库中</string>
-    <string name="txt_change_search">切换搜索引擎中</string>
+    <string name="txt_change_source_a">切换至资源库 A </string>
+    <string name="txt_change_source_b">切换至资源库 B </string>
+    <string name="txt_change_source_c">切换至资源库 C </string>
+    <string name="txt_change_search_a">切换至搜索引擎 A </string>
+    <string name="txt_change_search_b">切换至搜索引擎 B </string>
 
     <string name="ok">确定</string>
     <string name="all">全部</string>
@@ -89,6 +92,7 @@
     <string name="txt_no_feedback_tips">请先输入您的反馈内容</string>
     <string name="txt_feedback_success_tips">感谢您的反馈</string>
     <string name="txt_about">关于</string>
+    <string name="txt_local_play">本地播放</string>
     <string name="txt_download_manager">下载任务</string>
     <string name="txt_download">下载</string>
     <string name="txt_no_data">暂无数据</string>

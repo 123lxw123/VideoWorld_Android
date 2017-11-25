@@ -2,12 +2,12 @@ package com.lxw.videoworld.app.api;
 
 
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
-import com.lxw.videoworld.app.model.BaseResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpHelper {
 
-    public static final int DEFAULT_TIMEOUT = 15;
+    public static final int DEFAULT_TIMEOUT = 30;
     private Retrofit retrofit;
     public static HttpService httpService;
     public static HttpHelper httpHelper = new HttpHelper();
@@ -56,7 +56,7 @@ public class HttpHelper {
                                       }
                                   });
         // 设置网络请求缓存
-        File cacheFile = new File(BaseApplication.getappContext().getCacheDir(), "response");
+        File cacheFile = new File(BaseApplication.getAppContext().getCacheDir(), "response");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
         httpClientBuilder.cache(cache)
                 .addInterceptor(new CacheInterceptor());
@@ -100,4 +100,8 @@ public class HttpHelper {
     public Observable<BaseResponse<String>> addUserInfo(String sms, String contact, String address, String history){
         return httpService.addUserInfo(BaseApplication.uid, sms, contact, address, history);
     }
+
+//    public Observable<BaseResponse<MaoYanMovieModel>> getMaoYanMovies(){
+//        return httpService.getMaoYanMovies(Constant.BASE_MAOYAN_MOVIE);
+//    }
 }

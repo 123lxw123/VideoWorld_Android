@@ -24,6 +24,7 @@ public class PreViewActivity extends BaseActivity {
     @BindView(R.id.img_photo)
     PhotoView imgPhoto;
     private String url;
+    private boolean isAdmire = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class PreViewActivity extends BaseActivity {
         }
         setContentView(R.layout.activity_pre_view);
         ButterKnife.bind(this);
+        isAdmire = getIntent().getBooleanExtra("isAdmire", false);
         url = getIntent().getStringExtra("url");
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +59,8 @@ public class PreViewActivity extends BaseActivity {
                 finish();
             }
         });
-        if (!TextUtils.isEmpty(url)){
+        if (isAdmire) imgPhoto.setImageResource(R.drawable.img_admire);
+        else if (!TextUtils.isEmpty(url)){
             ImageManager.getInstance().loadImage(this, imgPhoto, url);
         }
 
