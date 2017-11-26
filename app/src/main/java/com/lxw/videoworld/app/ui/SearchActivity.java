@@ -2,8 +2,6 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,15 +22,11 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
-import com.lxw.videoworld.app.model.SearchListModel;
 import com.lxw.videoworld.app.model.SearchModel;
-import com.lxw.videoworld.app.model.SearchResultModel;
 import com.lxw.videoworld.app.service.SearchSpider;
 import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.HttpManager;
-import com.lxw.videoworld.framework.util.GsonUtil;
-import com.lxw.videoworld.framework.util.NetUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
@@ -40,8 +34,6 @@ import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,26 +73,10 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     private BaseQuickAdapter<SearchModel, BaseViewHolder> searchAdapter;
     private BaseQuickAdapter.RequestLoadMoreListener loadMoreListener;
     private String keyword;
-    private Timer timer;
     private int page = 1;
     private boolean flag_loadmore = false;
     private String searchType = Constant.STATUS_0;
-    private final int IMG_SEARCH = 1000;
-    private final int IMG_SEARCH_RESULT = 1001;
-    private final int IMG_SEARCH_TIMEOUT = 1002;// 搜索超时
     private final int INTERVAL = 0; //输入时间间隔为2000毫秒
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == IMG_SEARCH) {
-                getSearch();
-            } else if (msg.what == IMG_SEARCH_RESULT) {
-                getSearchResult();
-            } else if (msg.what == IMG_SEARCH_TIMEOUT) {
-                ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_timeout));
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +106,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         String str = SharePreferencesUtil.getStringSharePreferences(this, Constant.KEY_SEARCH_HOTWORDS, "");
         hotwords = ValueUtil.string2list(str);
         if (hotwords != null && hotwords.size() > 0) {
-            if (hotwords.size() > 8){
+            if (hotwords.size() > 8) {
                 List<String> tempList = new ArrayList<>();
-                for (int i = 0; i < 8; i++){
+                for (int i = 0; i < 8; i++) {
                     tempList.add(hotwords.remove(i));
                 }
                 hotwords = tempList;
@@ -269,13 +245,18 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                             } else if (list == null) ToastUtil.showMessage("");
                             searchview.clearFocus();
                             flag_loadmore = false;
-                            searchAdapter.setEnableLoadMore(true);
-                            searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
+                            if (list != null && list.size() > 0 && list.size() < 5){
+                                searchAdapter.setEnableLoadMore(false);
+                            } else  {
+                                searchAdapter.setEnableLoadMore(true);
+                                searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
+                            }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             hideProgressBar();
+                            ToastUtil.showMessage("搜索失败");
                             flag_loadmore = false;
                             searchAdapter.loadMoreFail();
                             searchAdapter.setEnableLoadMore(true);
@@ -369,104 +350,52 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     public void doSearch() {
         if (!flag_loadmore) {
+            searchAdapter.setNewData(null);
             page = 1;
         }
-        if (NetUtil.isWifi(SearchActivity.this)){
-            getSpiderResult();
-        } else{
-            if (mHandler.hasMessages(IMG_SEARCH)) {
-                mHandler.removeMessages(IMG_SEARCH);
-            }
-            mHandler.sendEmptyMessageDelayed(IMG_SEARCH, INTERVAL);
-        }
-
+        getSearchResult();
     }
 
-    private void getSearch() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+    private void getSearchResult() {
+
         if (!TextUtils.isEmpty(keyword) && keyword.trim().length() > 0) {
             keyword = keyword.trim();
             closeKeyboard();
             showProgressBar();
-            new HttpManager<String>(SearchActivity.this, HttpHelper.getInstance().getSearch(getSearchUrl(), keyword, Constant.SEARCH_TYPE), false) {
+            new HttpManager<List<SearchModel>>(SearchActivity.this, HttpHelper.getInstance().getSearchResult(getSearchUrl(), keyword, Constant.SEARCH_TYPE), false, false) {
 
                 @Override
-                public void onSuccess(BaseResponse<String> response) {
-                    if (timer == null) {
-                        timer = new Timer();
-                    }
-                    timer.schedule(new TimerTask() {
-                        private int count = 0;
-
-                        @Override
-                        public void run() {
-                            if (count < HttpHelper.DEFAULT_TIMEOUT) {
-                                count++;
-                                mHandler.sendEmptyMessage(IMG_SEARCH_RESULT);
-                            } else {
-                                // 超时
-                                hideProgressBar();
-                                flag_loadmore = false;
-                                timer.cancel();
-                                timer = null;
-                                mHandler.sendEmptyMessage(IMG_SEARCH_TIMEOUT);
-                            }
-                        }
-                    }, 1000, 1000);
-                }
-
-                @Override
-                public void onFailure(BaseResponse<String> response) {
+                public void onSuccess(BaseResponse<List<SearchModel>> response) {
                     hideProgressBar();
-                    flag_loadmore = false;
-                }
-            }.doRequest();
-        } else {
-//            ToastUtil.showMessage(SearchActivity.this, getString(R.string.txt_search_empty_tips));
-        }
-    }
-
-    private void getSearchResult() {
-        new HttpManager<SearchResultModel>(SearchActivity.this, HttpHelper.getInstance().getSearchResult(getSearchUrl()), false, false) {
-
-            @Override
-            public void onSuccess(BaseResponse<SearchResultModel> response) {
-                hideProgressBar();
-                if (timer != null) {
-                    timer.cancel();
-                    timer = null;
-                }
-                if (response.getResult() != null) {
-                    String list = response.getResult().getList();
-                    SearchListModel searchListModel = GsonUtil.json2Bean(list, SearchListModel.class);
-                    if (searchListModel != null && searchListModel.getList() != null) {
+                    List<SearchModel> results = response.getResult();
+                    if (results != null && results.size() > 0) {
                         if (flag_loadmore) {
-                            searchModels.addAll(searchListModel.getList());
-                            searchAdapter.addData(searchListModel.getList());
+                            searchModels.addAll(results);
+                            searchAdapter.addData(results);
                             searchAdapter.loadMoreComplete();
                         } else {
                             searchModels.clear();
-                            searchModels.addAll(searchListModel.getList());
-                            searchAdapter.setNewData(searchListModel.getList());
+                            searchModels.addAll(results);
+                            searchAdapter.setNewData(results);
                         }
                         page++;
                     }
+                    searchview.clearFocus();
+                    flag_loadmore = false;
+                    if (results != null && results.size() > 0 && results.size() < 5){
+                        searchAdapter.setEnableLoadMore(false);
+                    } else {
+                        searchAdapter.setEnableLoadMore(true);
+                        searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
+                    }
                 }
-                searchview.clearFocus();
-                flag_loadmore = false;
-                searchAdapter.setEnableLoadMore(true);
-                searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
-            }
 
-            @Override
-            public void onFailure(BaseResponse<SearchResultModel> response) {
-                searchAdapter.setEnableLoadMore(true);
-                searchAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewResult);
-            }
-        }.doRequest();
+                @Override
+                public void onFailure(BaseResponse<List<SearchModel>> response) {
+                    getSpiderResult();
+                }
+            }.doRequest();
+        }
     }
 
     @Override
@@ -511,14 +440,5 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-        super.onDestroy();
     }
 }

@@ -3,9 +3,11 @@ package com.lxw.videoworld.app.api;
 
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
-import com.lxw.videoworld.app.model.SearchResultModel;
+import com.lxw.videoworld.app.model.SearchModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -30,12 +32,8 @@ public interface HttpService {
       @Field("type") String type, @Field("start") String start, @Field("limit") String limit);
 
     @FormUrlEncoded
-    @POST("search")
-    Observable<BaseResponse<String>> getSearch(@Field("uid") String uid, @Field("url") String url, @Field("keyword") String keyword, @Field("searchType") String searchType);
-
-    @FormUrlEncoded
-    @POST("searchResult")
-    Observable<BaseResponse<SearchResultModel>> getSearchResult(@Field("uid") String uid, @Field("url") String url);
+    @POST("spiderResult")
+    Observable<BaseResponse<List<SearchModel>>> getSearchResult(@Field("uid") String uid, @Field("url") String url, @Field("keyword") String keyword, @Field("searchType") String searchType);
 
     @FormUrlEncoded
     @POST("feedback")

@@ -259,7 +259,7 @@ public class SourceTypeFragment extends BaseFragment {
             public void onSuccess(BaseResponse<SourceListModel> response) {
                 sourceListModel = response.getResult();
 
-                if (sourceListModel != null && sourceListModel.getList() != null) {
+                if (sourceListModel != null && sourceListModel.getList() != null && sourceListModel.getList().size() > 0) {
                     page++;
                     List<SourceDetailModel> sources = sourceListModel.getList();
                     if (frag_refresh) {

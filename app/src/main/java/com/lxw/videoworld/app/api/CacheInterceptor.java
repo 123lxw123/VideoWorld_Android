@@ -70,7 +70,12 @@ public class CacheInterceptor implements Interceptor {
     }
 
     public Response getResponseAndSaveCache(String key, String cache, Chain chain, Request request) throws IOException {
-        Response response = chain.proceed(request);
+        Response response = null;
+        try{
+            response = chain.proceed(request);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         // 服务器返回正确结果才缓存
         if (response != null && response.code() == 200) {
             ResponseBody responseBody = response.body();

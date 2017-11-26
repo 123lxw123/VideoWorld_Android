@@ -4,13 +4,14 @@ package com.lxw.videoworld.app.api;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
-import com.lxw.videoworld.app.model.SearchResultModel;
+import com.lxw.videoworld.app.model.SearchModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -81,12 +82,8 @@ public class HttpHelper {
         return httpService.getList(sourceType, category, type, start, limit);
     }
 
-    public Observable<BaseResponse<String>> getSearch(String url, String keyword, String searchType){
-        return httpService.getSearch(BaseApplication.uid, url, keyword, searchType);
-    }
-
-    public Observable<BaseResponse<SearchResultModel>> getSearchResult(String url){
-        return httpService.getSearchResult(BaseApplication.uid, url);
+    public Observable<BaseResponse<List<SearchModel>>> getSearchResult(String url, String keyword, String searchType){
+        return httpService.getSearchResult(BaseApplication.uid, url, keyword, searchType);
     }
 
     public Observable<BaseResponse<String>> addFeedback(String feedback){
