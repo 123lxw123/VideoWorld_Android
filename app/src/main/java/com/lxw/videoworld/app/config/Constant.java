@@ -19,6 +19,7 @@ public class Constant {
     public static final String SOURCE_TYPE_1 = "1";// 飘花电影
     public static final String SOURCE_TYPE_2 = "2";// 猫扑电影
     public static final String SOURCE_TYPE_3 = "3";// 阳光电影
+    public static final String SOURCE_TYPE_4 = "4";// 最新资源
 
     public static String SEARCH_TYPE;
     public static final String SEARCH_TYPE_1 = "1";// 种子搜索
@@ -142,9 +143,10 @@ public class Constant {
     public static final String CATEGORY_12 = "dongman";
     public static final String CATEGORY_13 = "zongyijiemu";
 
-    public static final String CATEGORY_14 = "dy";
-    public static final String CATEGORY_15 = "ds";
-    public static final String CATEGORY_16 = "dm";
+    public static final String CATEGORY_14 = "dy";// 电影
+    public static final String CATEGORY_15 = "ds";// 电视剧
+    public static final String CATEGORY_16 = "dm";// 动漫
+    public static final String CATEGORY_23 = "zy";// 综艺
 
 
     public static final String CATEGORY_17 = "gndy";// 电影
@@ -166,6 +168,23 @@ public class Constant {
     public static final String TYPE_9 = "jingdianyouxifabu";// 经典游戏
     public static final String TYPE_10 = "remenyouxi";// 热门游戏
     public static final String TYPE_11 = "zuixinyouxifabu";// 最新游戏
+    // 最新资源
+    public static final String TYPE_12 = "动作片";
+    public static final String TYPE_13 = "喜剧片";
+    public static final String TYPE_14 = "剧情片";
+    public static final String TYPE_15 = "爱情片";
+    public static final String TYPE_16 = "科幻片";
+    public static final String TYPE_17 = "战争片";
+    public static final String TYPE_18 = "恐怖片";
+    public static final String TYPE_19 = "记录片";
+    public static final String TYPE_20 = "伦理片";
+
+    public static final String TYPE_21 = "国产剧";
+    public static final String TYPE_22 = "港台剧";
+    public static final String TYPE_23 = "欧美剧";
+    public static final String TYPE_24 = "日剧";
+    public static final String TYPE_25 = "韩剧";
+    public static final String TYPE_26 = "泰剧";
 
     //    搜索
     public static final String BASE_ZHONGZI_SEARCH_1 = "http://www.zhongziso.com/list_ctime/keyword/page";// 时间排序

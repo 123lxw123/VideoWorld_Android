@@ -147,6 +147,40 @@ public class SourceCategoryFragment extends BaseFragment {
                 }
 
                 break;
+            case Constant.SOURCE_TYPE_4:
+                if (tab.equals(Constant.TAB_1)) {
+                    fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).get())
+                            .add(getString(R.string.txt_type1), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_12).get())
+                            .add(getString(R.string.txt_type2), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_13).get())
+                            .add(getString(R.string.txt_type5), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_14).get())
+                            .add(getString(R.string.txt_type3), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_15).get())
+                            .add(getString(R.string.txt_type4), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_16).get())
+                            .add(getString(R.string.txt_type8), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_17).get())
+                            .add(getString(R.string.txt_type9), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_18).get())
+                            .add(getString(R.string.txt_type20), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_19).get())
+                            .add(getString(R.string.txt_type21), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_14).putString("type", Constant.TYPE_20).get())
+                            .create();
+                } else if (tab.equals(Constant.TAB_2)) {
+                    fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).get())
+                            .add(getString(R.string.txt_type22), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).putString("type", Constant.TYPE_21).get())
+                            .add(getString(R.string.txt_type23), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).putString("type", Constant.TYPE_22).get())
+                            .add(getString(R.string.txt_type24), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).putString("type", Constant.TYPE_23).get())
+                            .add(getString(R.string.txt_type25), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).putString("type", Constant.TYPE_24).get())
+                            .add(getString(R.string.txt_type26), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).putString("type", Constant.TYPE_25).get())
+                            .add(getString(R.string.txt_type27), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_4).putString("category", Constant.CATEGORY_15).putString("type", Constant.TYPE_26).get())
+                            .create();
+                } else if (tab.equals(Constant.TAB_5)) {
+                    fragmentPagerItems = FragmentPagerItems.with(this.getActivity())
+                            .add(getString(R.string.txt_type0), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).get())
+                            .add(getString(R.string.txt_type16), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_11).get())
+                            .add(getString(R.string.txt_type15), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_10).get())
+                            .add(getString(R.string.txt_type14), SourceTypeFragment.class, new Bundler().putString("sourceType", Constant.SOURCE_TYPE_3).putString("category", Constant.CATEGORY_21).putString("type", Constant.TYPE_9).get())
+                            .create();
+                }
+
+                break;
         }
         return fragmentPagerItems;
     }

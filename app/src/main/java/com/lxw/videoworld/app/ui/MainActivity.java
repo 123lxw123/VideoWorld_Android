@@ -185,6 +185,12 @@ public class MainActivity extends BaseActivity {
                                         Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_3);
                                 break;
                             case Constant.SOURCE_TYPE_3:
+                                ToastUtil.showMessage(getString(R.string.txt_change_source_d));
+                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_4;
+                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_4);
+                                break;
+                            case Constant.SOURCE_TYPE_4:
                                 ToastUtil.showMessage(getString(R.string.txt_change_source_a));
                                 Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_1;
                                 SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
@@ -438,6 +444,13 @@ public class MainActivity extends BaseActivity {
                 createSourceCategoryFragment(Constant.TAB_2);
                 createSourceCategoryFragment(Constant.TAB_3);
                 createSourceTypeFragment(Constant.SOURCE_TYPE_3, Constant.CATEGORY_20, null);
+                createSourceCategoryFragment(Constant.TAB_5);
+                break;
+            case Constant.SOURCE_TYPE_4:
+                createSourceCategoryFragment(Constant.TAB_1);
+                createSourceCategoryFragment(Constant.TAB_2);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_4, Constant.CATEGORY_23, null);
+                createSourceTypeFragment(Constant.SOURCE_TYPE_4, Constant.CATEGORY_16, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
         }
