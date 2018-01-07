@@ -19,6 +19,7 @@ import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.widget.OnTransitionListener;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -80,9 +81,10 @@ public class PlayVideoActivity extends BaseActivity {
     }
 
     private void init() {
+        GSYVideoManager.instance().setTimeOut(30000, false);
         //增加封面
         ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 //        imageView.setImageResource(R.mipmap.xxx1);
         videoPlayer.setThumbImageView(imageView);
 
@@ -100,6 +102,7 @@ public class PlayVideoActivity extends BaseActivity {
         orientationUtils = new OrientationUtils(this, videoPlayer);
 
         //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+        videoPlayer.getFullscreenButton().setScaleType(ImageView.ScaleType.FIT_CENTER);
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +120,8 @@ public class PlayVideoActivity extends BaseActivity {
 
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(true);
+        // 滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
+        videoPlayer.setSeekRatio(5);
 
         //设置返回按键功能
         videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {

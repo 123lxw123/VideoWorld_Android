@@ -150,8 +150,10 @@ public class SourceDetailActivity extends BaseActivity {
         final List<String> links = new ArrayList<>();
         if (tempList != null){
             for (int i = 0; i < tempList.size(); i++){
-                if (!TextUtils.isEmpty(tempList.get(i)))
-                    links.add(tempList.get(i));
+                if (!TextUtils.isEmpty(tempList.get(i)) && !TextUtils.isEmpty(tempList.get(i).trim()))
+                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)){
+                        if (tempList.get(i).contains("m3u8")) links.add(tempList.get(i).trim());
+                    }else links.add(tempList.get(i).trim());
             }
         }
         buttonShare.setOnClickListener(new View.OnClickListener() {
@@ -183,14 +185,18 @@ public class SourceDetailActivity extends BaseActivity {
             }
             imgPicture.getLayoutParams().height = picHeight;
             viewEmpty.getLayoutParams().height = picHeight;
-            if (!sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
+            if (!sourceDetailModel.getCategory().equals(Constant.CATEGORY_21) && links.size() > 0) {
                 imgPlayVideo.setVisibility(View.VISIBLE);
                 imgPlayVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (links.size() > 0) {
-                            DownloadManager.addNormalTask(SourceDetailActivity.this, links.get(0), true, false);
-                        }
+                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
+                        Intent intent = new Intent(SourceDetailActivity.this, PlayVideoActivity.class);
+                        intent.putExtra("url", links.get(0));
+                        startActivity(intent);
+                    } else {
+                        DownloadManager.addNormalTask(SourceDetailActivity.this, links.get(0), true, false);
+                    }
                     }
                 });
             }else imgPlayVideo.setVisibility(View.GONE);
@@ -264,7 +270,9 @@ public class SourceDetailActivity extends BaseActivity {
             sourceLinkAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_source_link, links) {
                 @Override
                 protected void convert(BaseViewHolder helper, String item) {
-                    helper.setText(R.id.txt_link, item);
+                    if (links.size() > 3){
+                        helper.setText(R.id.txt_link, "( " + (helper.getAdapterPosition() + 1) + " ) " + item);
+                    } else helper.setText(R.id.txt_link, item);
                 }
             };
             sourceLinkAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -272,7 +280,11 @@ public class SourceDetailActivity extends BaseActivity {
                 @Override
                 public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
-                    if (sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
+                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)){
+                        Intent intent = new Intent(SourceDetailActivity.this, PlayVideoActivity.class);
+                        intent.putExtra("url", (String) adapter.getData().get(position));
+                        startActivity(intent);
+                    } else if (sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
                         SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailActivity.this, (String) adapter.getData().get(position), false);
                         dialog.show();
                     } else {

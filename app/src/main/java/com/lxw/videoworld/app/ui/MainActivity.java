@@ -2,6 +2,7 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -67,6 +69,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
+import static com.lxw.videoworld.app.config.Constant.SOURCE_TYPE_1;
+import static com.lxw.videoworld.app.config.Constant.SOURCE_TYPE_2;
+import static com.lxw.videoworld.app.config.Constant.SOURCE_TYPE_3;
+import static com.lxw.videoworld.app.config.Constant.SOURCE_TYPE_4;
+import static com.lxw.videoworld.app.config.Constant.THEME_TYPE;
+import static com.lxw.videoworld.app.config.Constant.THEME_TYPE_1;
+import static com.lxw.videoworld.app.config.Constant.THEME_TYPE_2;
+import static com.lxw.videoworld.app.config.Constant.THEME_TYPE_3;
 import static com.lxw.videoworld.app.config.Constant.configModel;
 
 public class MainActivity extends BaseActivity {
@@ -171,38 +181,68 @@ public class MainActivity extends BaseActivity {
                         break;
 
                     case R.id.action_change_source:
-                        switch (Constant.SOURCE_TYPE) {
-                            case Constant.SOURCE_TYPE_1:
-                                ToastUtil.showMessage(getString(R.string.txt_change_source_b));
-                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_2;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_2);
+                        int checked = -1;
+                        switch (Constant.SOURCE_TYPE){
+                            case SOURCE_TYPE_4:
+                                checked = 0;
                                 break;
-                            case Constant.SOURCE_TYPE_2:
-                                ToastUtil.showMessage(getString(R.string.txt_change_source_c));
-                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_3;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_3);
+                            case SOURCE_TYPE_1:
+                                checked = 1;
                                 break;
-                            case Constant.SOURCE_TYPE_3:
-                                ToastUtil.showMessage(getString(R.string.txt_change_source_d));
-                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_4;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_4);
+                            case SOURCE_TYPE_2:
+                                checked = 2;
                                 break;
-                            case Constant.SOURCE_TYPE_4:
-                                ToastUtil.showMessage(getString(R.string.txt_change_source_a));
-                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_1;
-                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
+                            case SOURCE_TYPE_3:
+                                checked = 3;
                                 break;
                         }
-                        MainActivity.this.finish();
-                        Intent intent2 = MainActivity.this.getIntent();
-                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
-                                .FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent2);
-                        overridePendingTransition(0, 0);
+                        final int position = checked;
+                        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                                .setSingleChoiceItems(new String[]{"资源库A (在线播放)", "资源库B (边下边播)", "资源库C (边下边播)", "资源库D (边下边播)"},
+                                        position, new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (which == position) {
+                                            dialog.dismiss();
+                                            return;
+                                        }
+                                        switch (which) {
+                                            case 0:
+                                                Constant.SOURCE_TYPE = SOURCE_TYPE_4;
+                                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                        Constant.KEY_SOURCE_TYPE, SOURCE_TYPE_4);
+                                                ToastUtil.showMessage(getString(R.string.txt_change_source_a));
+                                                break;
+                                            case 1:
+                                                Constant.SOURCE_TYPE = Constant.SOURCE_TYPE_1;
+                                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                        Constant.KEY_SOURCE_TYPE, Constant.SOURCE_TYPE_1);
+                                                ToastUtil.showMessage(getString(R.string.txt_change_source_b));
+                                                break;
+                                            case 2:
+                                                Constant.SOURCE_TYPE = SOURCE_TYPE_2;
+                                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                        Constant.KEY_SOURCE_TYPE, SOURCE_TYPE_2);
+                                                ToastUtil.showMessage(getString(R.string.txt_change_source_c));
+                                                break;
+                                            case 3:
+                                                Constant.SOURCE_TYPE = SOURCE_TYPE_3;
+                                                SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                        Constant.KEY_SOURCE_TYPE, SOURCE_TYPE_3);
+                                                ToastUtil.showMessage(getString(R.string.txt_change_source_d));
+                                                break;
+                                        }
+                                        MainActivity.this.finish();
+                                        Intent intent2 = MainActivity.this.getIntent();
+                                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                                                .FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent2);
+                                        overridePendingTransition(0, 0);
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                        dialog.show();
                         break;
                 }
                 return true;
@@ -264,29 +304,59 @@ public class MainActivity extends BaseActivity {
         llChangeTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (Constant.THEME_TYPE) {
-                    case Constant.THEME_TYPE_1:
-                        Constant.THEME_TYPE = Constant.THEME_TYPE_2;
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_2);
+                int checked = -1;
+                switch (THEME_TYPE){
+                    case THEME_TYPE_1:
+                        checked = 0;
                         break;
-                    case Constant.THEME_TYPE_2:
-                        Constant.THEME_TYPE = Constant.THEME_TYPE_3;
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_3);
+                    case THEME_TYPE_2:
+                        checked = 1;
                         break;
-                    case Constant.THEME_TYPE_3:
-                        Constant.THEME_TYPE = Constant.THEME_TYPE_1;
-                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
+                    case THEME_TYPE_3:
+                        checked = 2;
                         break;
                 }
-                MainActivity.this.finish();
-                Intent intent = MainActivity.this.getIntent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
-                        .FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
+                final int position = checked;
+                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                        .setSingleChoiceItems(new String[]{"至尊黑", "魂动红", "魅惑蓝"}, position, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == position) {
+                                    dialog.dismiss();
+                                    return;
+                                }
+                                switch (which) {
+                                    case 0:
+                                        THEME_TYPE = Constant.THEME_TYPE_1;
+                                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
+                                        break;
+                                    case 1:
+                                        THEME_TYPE = THEME_TYPE_2;
+                                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                Constant.KEY_THEME_TYPE, THEME_TYPE_2);
+                                        break;
+                                    case 2:
+                                        THEME_TYPE = THEME_TYPE_3;
+                                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
+                                                Constant.KEY_THEME_TYPE, THEME_TYPE_3);
+                                        break;
+                                }
+                                MainActivity.this.finish();
+                                Intent intent = MainActivity.this.getIntent();
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                                        .FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                overridePendingTransition(0, 0);
+                                dialog.dismiss();
+                            }
+                        }).create();
+                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerlayout.closeDrawers();
+                }
+                dialog.show();
+
             }
         });
 
@@ -432,25 +502,25 @@ public class MainActivity extends BaseActivity {
                 createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_12, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
-            case Constant.SOURCE_TYPE_2:
-                createSourceTypeFragment(Constant.SOURCE_TYPE_2, Constant.CATEGORY_14, null);
-                createSourceTypeFragment(Constant.SOURCE_TYPE_2, Constant.CATEGORY_15, null);
+            case SOURCE_TYPE_2:
+                createSourceTypeFragment(SOURCE_TYPE_2, Constant.CATEGORY_14, null);
+                createSourceTypeFragment(SOURCE_TYPE_2, Constant.CATEGORY_15, null);
                 createSourceCategoryFragment(Constant.TAB_3);
-                createSourceTypeFragment(Constant.SOURCE_TYPE_2, Constant.CATEGORY_16, null);
+                createSourceTypeFragment(SOURCE_TYPE_2, Constant.CATEGORY_16, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
-            case Constant.SOURCE_TYPE_3:
+            case SOURCE_TYPE_3:
                 createSourceCategoryFragment(Constant.TAB_1);
                 createSourceCategoryFragment(Constant.TAB_2);
                 createSourceCategoryFragment(Constant.TAB_3);
-                createSourceTypeFragment(Constant.SOURCE_TYPE_3, Constant.CATEGORY_20, null);
+                createSourceTypeFragment(SOURCE_TYPE_3, Constant.CATEGORY_20, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
-            case Constant.SOURCE_TYPE_4:
+            case SOURCE_TYPE_4:
                 createSourceCategoryFragment(Constant.TAB_1);
                 createSourceCategoryFragment(Constant.TAB_2);
-                createSourceTypeFragment(Constant.SOURCE_TYPE_4, Constant.CATEGORY_23, null);
-                createSourceTypeFragment(Constant.SOURCE_TYPE_4, Constant.CATEGORY_16, null);
+                createSourceTypeFragment(SOURCE_TYPE_4, Constant.CATEGORY_23, null);
+                createSourceTypeFragment(SOURCE_TYPE_4, Constant.CATEGORY_16, null);
                 createSourceCategoryFragment(Constant.TAB_5);
                 break;
         }
