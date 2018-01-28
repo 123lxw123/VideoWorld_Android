@@ -135,3 +135,5 @@
 -keep class com.tencent.mm.sdk.** {*;}
 # jsoup
 -keep class org.jsoup.** {*;}
+# SweetAlert
+-keep class cn.pedant.** { *; }

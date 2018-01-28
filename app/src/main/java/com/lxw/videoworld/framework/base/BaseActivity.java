@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.framework.activitystack.ActivityStack;
@@ -20,7 +21,6 @@ import com.lxw.videoworld.framework.log.LoggerHelper;
 
 import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by lxw9047 on 2016/10/12.
@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /** 是否旋转屏幕 **/
     private boolean isAllowScreenRoate = Constant.isAllowScreenRoate;
     /** activity 加载中进度条 **/
-    private SweetAlertDialog progressBar;
+    private MaterialDialog progressBar;
     /** activity标签 **/
     private String activityTag = "";
 
@@ -83,10 +83,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 //            contentView.setPadding(0, getStatusBarHeight(this), 0, 0);
         }
 
-        progressBar = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        progressBar.getProgressHelper().setBarColor(getCustomColor(R.styleable.BaseColor_com_assist_A));
-        progressBar.setTitleText("Loading");
-        progressBar.setCancelable(true);
+        progressBar = new MaterialDialog.Builder(this)
+                .title("Loading")
+                .cancelable(true)
+                .progress(true, 70)
+                .titleColor(getCustomColor(R.styleable.BaseColor_com_font_A))
+                .backgroundColor(getResources().getColor(R.color.color_FFFFFF))
+                .widgetColor(getCustomColor(R.styleable.BaseColor_com_assist_A))
+                .build();
     }
 
     @Override
@@ -128,10 +132,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     //显示加载中进度条
     public void showProgressBar(){
         if(progressBar == null){
-            progressBar = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-            progressBar.getProgressHelper().setBarColor(getCustomColor(R.styleable.BaseColor_com_assist_A));
-            progressBar.setTitleText("Loading");
-            progressBar.setCancelable(true);
+            progressBar = new MaterialDialog.Builder(this)
+                    .title("Loading")
+                    .cancelable(true)
+                    .progress(true, 70)
+                    .titleColor(getCustomColor(R.styleable.BaseColor_com_font_A))
+                    .backgroundColor(getResources().getColor(R.color.color_FFFFFF))
+                    .widgetColor(getCustomColor(R.styleable.BaseColor_com_assist_A))
+                    .build();
         }
         if(!progressBar.isShowing()){
             progressBar.show();
@@ -176,11 +184,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public SweetAlertDialog getProgressBar() {
+    public MaterialDialog getProgressBar() {
         return progressBar;
     }
 
-    public void setProgressBar(SweetAlertDialog progressBar) {
+    public void setProgressBar(MaterialDialog progressBar) {
         this.progressBar = progressBar;
     }
 }

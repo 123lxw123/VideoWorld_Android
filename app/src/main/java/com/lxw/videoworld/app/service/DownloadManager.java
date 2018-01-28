@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
@@ -30,7 +31,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -255,16 +255,20 @@ public class DownloadManager {
             taskId = XLTaskHelper.instance().addMagnetTask(url, savePath, fileName);
             getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
                 Disposable mD = null;
-                SweetAlertDialog loadingDialog;
+                MaterialDialog loadingDialog;
 
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
                     mD = d;
                     disposables.add(d);
-                    loadingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-                    loadingDialog.getProgressHelper().setBarColor(ValueUtil.getCustomColor(context, R.styleable.BaseColor_com_assist_A));
-                    loadingDialog.setTitleText("Loading");
-                    loadingDialog.setCancelable(true);
+                    loadingDialog = new MaterialDialog.Builder(context)
+                            .title("Loading")
+                            .cancelable(true)
+                            .progress(true, 70)
+                            .titleColor(ValueUtil.getCustomColor(context, R.styleable.BaseColor_com_font_A))
+                            .backgroundColor(context.getResources().getColor(R.color.color_FFFFFF))
+                            .widgetColor(ValueUtil.getCustomColor(context, R.styleable.BaseColor_com_assist_A))
+                            .build();
                 }
 
                 @Override

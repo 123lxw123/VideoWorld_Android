@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -235,7 +234,7 @@ public class MainActivity extends BaseActivity {
                                         }
                                         MainActivity.this.finish();
                                         Intent intent2 = MainActivity.this.getIntent();
-                                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
+                                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent
                                                 .FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent2);
                                         overridePendingTransition(0, 0);
@@ -345,8 +344,7 @@ public class MainActivity extends BaseActivity {
                                 }
                                 MainActivity.this.finish();
                                 Intent intent = MainActivity.this.getIntent();
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat
-                                        .FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 overridePendingTransition(0, 0);
                                 dialog.dismiss();

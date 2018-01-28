@@ -4,11 +4,10 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.6.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         // realm
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0"
@@ -21,6 +20,7 @@ allprojects {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url "http://maven.aliyun.com/nexus/content/repositories/releases" }
+        google()
     }
 }
 

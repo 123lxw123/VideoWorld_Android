@@ -22,12 +22,11 @@ apply plugin: 'maven'
 version = "1.0.2"
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.2"
     }
@@ -42,7 +41,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleDependency
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
 }
 
 def siteUrl = 'https://github.com/DevLight-Mobile-Agency/InfiniteCycleViewPager'
