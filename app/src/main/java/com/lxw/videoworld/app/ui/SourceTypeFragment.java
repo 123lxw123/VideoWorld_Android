@@ -3,10 +3,14 @@ package com.lxw.videoworld.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import com.lxw.videoworld.app.adapter.QuickFragmentPageAdapter;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
+import com.lxw.videoworld.app.model.SelectorModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
@@ -54,6 +59,10 @@ public class SourceTypeFragment extends BaseFragment {
     RecyclerView recyclerviewSourceType;
     @BindView(R.id.refresh_source_type)
     SwipeRefreshLayout refreshSourceType;
+    @BindView(R.id.recyclerview_selector)
+    RecyclerView recyclerviewSelector;
+    @BindView(R.id.drawerlayout_selector)
+    DrawerLayout drawerlayoutSelector;
     Unbinder unbinder;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
@@ -77,11 +86,15 @@ public class SourceTypeFragment extends BaseFragment {
     private String sourceType;
     private String category;
     private String type;
+    private String tab;
     private boolean frag_refresh = true;
     private boolean flag_init = true;// 首次加载
     private int page = 0;
     private int picWidth;
     private int picHeight;
+
+    private BaseQuickAdapter<SelectorModel, BaseViewHolder> selectorAdapter;
+    private List<SelectorModel> selectors = new ArrayList<>();
 
     public SourceTypeFragment() {
         // Required empty public constructor
@@ -91,9 +104,7 @@ public class SourceTypeFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initVariable();
-        sourceType = getArguments().getString("sourceType");
-        category = getArguments().getString("category");
-        type = getArguments().getString("type");
+        tab = getArguments().getString("tab");
     }
 
     @Override
@@ -108,21 +119,16 @@ public class SourceTypeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (rootView == null && !TextUtils.isEmpty(sourceType) && !TextUtils.isEmpty(category)) {
+        if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_source_type, null);
             unbinder = ButterKnife.bind(this, rootView);
             // 计算列表 Item 图片展示宽高 比例 4:3
             WindowManager wm = this.getActivity().getWindowManager();
             int width = wm.getDefaultDisplay().getWidth();
-            int height = wm.getDefaultDisplay().getHeight();
+            final int height = wm.getDefaultDisplay().getHeight();
             picWidth = (width - ValueUtil.dip2px(getActivity(), recyclerviewSourceType.getPaddingLeft() + recyclerviewSourceType.getPaddingRight()) -
                     ValueUtil.dip2px(getActivity(), (Constant.GRIDLAYOUTMANAGER_SPANCOUNT - 1) * 10)) / Constant.GRIDLAYOUTMANAGER_SPANCOUNT;
-            if (!category.equals(Constant.CATEGORY_21) && !category.equals(Constant.CATEGORY_19)) {
-                picHeight = picWidth * 4 / 3;
-            } else {
-                picHeight = picWidth * 3 / 4;
-            }
-
+            picHeight = picWidth * 4 / 3;
             // 下拉刷新
             refreshSourceType.setColorSchemeColors(((BaseActivity)getActivity()).getCustomColor(R.styleable.BaseColor_com_main_A));
             refreshSourceType.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -149,11 +155,7 @@ public class SourceTypeFragment extends BaseFragment {
             }
             viewpagerBanner.setId(id);
             int bannerHeight;
-            if (category.equals(Constant.CATEGORY_21) || category.equals(Constant.CATEGORY_19)) {
-                bannerHeight = width / 2  + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
-            } else {
-                bannerHeight = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
-            }
+            bannerHeight = height / 2 + ValueUtil.dip2px(getActivity(), 10) + ValueUtil.sp2px(getActivity(), 20) * 2;
             viewpagerBanner.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , bannerHeight));
             viewpagerBanner.setScrollDuration(3000);
             viewpagerBanner.setMediumScaled(true);
@@ -240,6 +242,43 @@ public class SourceTypeFragment extends BaseFragment {
             // 动画
             sourceAdapter.openLoadAnimation();
             recyclerviewSourceType.setAdapter(sourceAdapter);
+            // 筛选器
+            createSelector();
+            recyclerviewSelector.setLayoutManager(new LinearLayoutManager(getContext()));
+            selectorAdapter = new BaseQuickAdapter<SelectorModel, BaseViewHolder>(R.layout.item_selector, selectors) {
+                @Override
+                protected void convert(BaseViewHolder helper, SelectorModel item) {
+                    helper.setText(R.id.selector, item.getTitle());
+                    helper.addOnClickListener(R.id.content);
+                    if (item.isSelected()) helper.setTextColor(R.id.selector, getCustomColor(R.styleable.BaseColor_com_assist_A));
+                    else helper.setTextColor(R.id.selector, getCustomColor(R.styleable.BaseColor_com_font_A));
+                }
+            };
+            selectorAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                @Override
+                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                    if (drawerlayoutSelector.isDrawerOpen(GravityCompat.END)) {
+                        drawerlayoutSelector.closeDrawers();
+                    }
+                    SelectorModel selectorModel = (SelectorModel) adapter.getData().get(position);
+                    if (!selectorModel.isSelected()) {
+                        sourceType = selectorModel.getSourceType();
+                        category = selectorModel.getCategory();
+                        type = selectorModel.getType();
+                        for (int i = 0; i < adapter.getData().size(); i++) {
+                            ((SelectorModel) adapter.getData().get(i)).setSelected(i == position);
+                        }
+                        selectorAdapter.notifyDataSetChanged();
+                        sourceAdapter.getData().clear();
+                        sourceAdapter.notifyDataSetChanged();
+                        ViewGroup parent = (ViewGroup) viewpagerBanner.getParent();
+                        if (parent != null) parent.removeView(viewpagerBanner);
+                        getList(sourceType, category, type, "0", Constant.LIST_LIMIT + BANNER_LIMIT + "", true);
+                    }
+                }
+            });
+            recyclerviewSelector.setAdapter(selectorAdapter);
+
         }
         if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -249,6 +288,165 @@ public class SourceTypeFragment extends BaseFragment {
         }
 
         return rootView;
+    }
+
+    public void createSelector() {
+        // 筛选器
+        selectors.clear();
+        switch (Constant.SOURCE_TYPE) {
+            case Constant.SOURCE_TYPE_1:
+                switch (tab) {
+                    case Constant.TAB_1:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_1, Constant.TAB_1, Constant.TYPE_0));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type1), Constant.SOURCE_TYPE_1, Constant.CATEGORY_1, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type2), Constant.SOURCE_TYPE_1, Constant.CATEGORY_2, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type3), Constant.SOURCE_TYPE_1, Constant.CATEGORY_3, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type4), Constant.SOURCE_TYPE_1, Constant.CATEGORY_4, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type5), Constant.SOURCE_TYPE_1, Constant.CATEGORY_5, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type6), Constant.SOURCE_TYPE_1, Constant.CATEGORY_6, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type7), Constant.SOURCE_TYPE_1, Constant.CATEGORY_7, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type8), Constant.SOURCE_TYPE_1, Constant.CATEGORY_8, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type9), Constant.SOURCE_TYPE_1, Constant.CATEGORY_9, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type10), Constant.SOURCE_TYPE_1, Constant.CATEGORY_10, null));
+                        sourceType = Constant.SOURCE_TYPE_1;
+                        category = Constant.TAB_1;
+                        type = Constant.TYPE_0;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_2:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_1, Constant.CATEGORY_11, null));
+                        sourceType = Constant.SOURCE_TYPE_1;
+                        category = Constant.CATEGORY_11;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_3:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type17), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_6));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type18), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_7));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type19), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_9));
+                        sourceType = Constant.SOURCE_TYPE_3;
+                        category = Constant.CATEGORY_19;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_4:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_1, Constant.CATEGORY_12, null));
+                        sourceType = Constant.SOURCE_TYPE_1;
+                        category = Constant.CATEGORY_12;
+                        selectors.get(0).setSelected(true);
+                        break;
+                }
+                break;
+            case Constant.SOURCE_TYPE_2:
+                switch (tab) {
+                    case Constant.TAB_1:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_2, Constant.CATEGORY_14, null));
+                        sourceType = Constant.SOURCE_TYPE_2;
+                        category = Constant.CATEGORY_14;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_2:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_2, Constant.CATEGORY_15, null));
+                        sourceType = Constant.SOURCE_TYPE_2;
+                        category = Constant.CATEGORY_15;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_3:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type17), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_6));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type18), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_7));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type19), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_9));
+                        sourceType = Constant.SOURCE_TYPE_3;
+                        category = Constant.CATEGORY_19;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_4:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_2, Constant.CATEGORY_16, null));
+                        sourceType = Constant.SOURCE_TYPE_2;
+                        category = Constant.CATEGORY_16;
+                        selectors.get(0).setSelected(true);
+                        break;
+                }
+                break;
+            case Constant.SOURCE_TYPE_3:
+                switch (tab) {
+                    case Constant.TAB_1:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_3, Constant.CATEGORY_17, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type16), Constant.SOURCE_TYPE_3, Constant.CATEGORY_17, Constant.TYPE_2));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type14), Constant.SOURCE_TYPE_3, Constant.CATEGORY_17, Constant.TYPE_1));
+                        sourceType = Constant.SOURCE_TYPE_3;
+                        category = Constant.CATEGORY_17;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_2:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_3, Constant.CATEGORY_18, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type11), Constant.SOURCE_TYPE_3, Constant.CATEGORY_18, Constant.TYPE_3));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type12), Constant.SOURCE_TYPE_3, Constant.CATEGORY_18, Constant.TYPE_5));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type13), Constant.SOURCE_TYPE_3, Constant.CATEGORY_18, Constant.TYPE_4));
+                        sourceType = Constant.SOURCE_TYPE_3;
+                        category = Constant.CATEGORY_18;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_3:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type17), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_6));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type18), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_7));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type19), Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, Constant.TYPE_9));
+                        sourceType = Constant.SOURCE_TYPE_3;
+                        category = Constant.CATEGORY_19;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_4:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_3, Constant.CATEGORY_20, null));
+                        sourceType = Constant.SOURCE_TYPE_3;
+                        category = Constant.CATEGORY_20;
+                        selectors.get(0).setSelected(true);
+                        break;
+                }
+                break;
+            case Constant.SOURCE_TYPE_4:
+                switch (tab) {
+                    case Constant.TAB_1:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type1), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_12));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type2), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_13));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type5), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_14));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type3), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_15));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type4), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_16));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type8), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_17));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type9), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_18));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type20), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_19));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type21), Constant.SOURCE_TYPE_4, Constant.CATEGORY_14, Constant.TYPE_20));
+                        sourceType = Constant.SOURCE_TYPE_4;
+                        category = Constant.CATEGORY_14;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_2:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, null));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type22), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, Constant.TYPE_21));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type23), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, Constant.TYPE_22));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type24), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, Constant.TYPE_23));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type25), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, Constant.TYPE_24));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type26), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, Constant.TYPE_25));
+                        selectors.add(new SelectorModel(getString(R.string.txt_type27), Constant.SOURCE_TYPE_4, Constant.CATEGORY_15, Constant.TYPE_26));
+                        sourceType = Constant.SOURCE_TYPE_4;
+                        category = Constant.CATEGORY_15;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_3:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_4, Constant.CATEGORY_23, null));
+                        sourceType = Constant.SOURCE_TYPE_4;
+                        category = Constant.CATEGORY_23;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_4:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_4, Constant.CATEGORY_16, null));
+                        sourceType = Constant.SOURCE_TYPE_4;
+                        category = Constant.CATEGORY_16;
+                        selectors.get(0).setSelected(true);
+                        break;
+                }
+                break;
+        }
     }
 
     public void getList(String sourceType, String category, String type, String start, String limit, boolean flag_dialog) {
@@ -346,6 +544,10 @@ public class SourceTypeFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (rootView == null) {
             return;
+        }
+        drawerlayoutSelector.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.END);
+        if (drawerlayoutSelector.isDrawerOpen(GravityCompat.END)) {
+            drawerlayoutSelector.closeDrawers();
         }
         hasCreateView = true;
         if (isVisibleToUser) {

@@ -2,6 +2,7 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lxw.videoworld.R;
-import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.image.ImageManager;
@@ -67,6 +67,11 @@ public class SourceBannerFragment extends BaseFragment {
         item = (SourceDetailModel) getArguments().getSerializable("item");
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,11 +81,7 @@ public class SourceBannerFragment extends BaseFragment {
             WindowManager wm = this.getActivity().getWindowManager();
             picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3;
             picHeight = wm.getDefaultDisplay().getHeight() / 2;
-            if (!TextUtils.isEmpty(item.getCategory()) && (item.getCategory().equals(Constant.CATEGORY_21) || item.getCategory().equals(Constant.CATEGORY_19))) {
-                picHeight = wm.getDefaultDisplay().getWidth() * 1 / 2;
-            } else {
-                picWidth = picHeight * 3 / 4;
-            }
+            picWidth = picHeight * 3 / 4;
             FrameLayout flPicture = ((FrameLayout) rootView.findViewById(R.id.fl_picture));
             flPicture.getLayoutParams().width = picWidth;
             flPicture.getLayoutParams().height = picHeight;
