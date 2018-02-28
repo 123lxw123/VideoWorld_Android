@@ -257,7 +257,7 @@ public class SourceTypeFragment extends BaseFragment {
             selectorAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
                 @Override
                 public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                    if (drawerlayoutSelector.isDrawerOpen(GravityCompat.END)) {
+                    if (drawerlayoutSelector.isDrawerOpen(GravityCompat.START)) {
                         drawerlayoutSelector.closeDrawers();
                     }
                     SelectorModel selectorModel = (SelectorModel) adapter.getData().get(position);
@@ -545,8 +545,8 @@ public class SourceTypeFragment extends BaseFragment {
         if (rootView == null) {
             return;
         }
-        drawerlayoutSelector.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.END);
-        if (drawerlayoutSelector.isDrawerOpen(GravityCompat.END)) {
+        drawerlayoutSelector.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.START);
+        if (drawerlayoutSelector.isDrawerOpen(GravityCompat.START)) {
             drawerlayoutSelector.closeDrawers();
         }
         hasCreateView = true;

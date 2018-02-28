@@ -25,6 +25,7 @@ import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SearchModel;
 import com.lxw.videoworld.app.service.SearchSpider;
 import com.lxw.videoworld.app.widget.SourceLinkDialog;
+import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
@@ -35,6 +36,8 @@ import com.lxw.videoworld.framework.widget.EmptyLoadMoreView;
 import java.util.ArrayList;
 import java.util.List;
 
+import abc.abc.abc.nm.sp.SpotListener;
+import abc.abc.abc.nm.sp.SpotManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
@@ -84,6 +87,34 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         initViews();
+        setUpAd();
+    }
+
+    private void setUpAd() {
+        if (BaseApplication.isFirstSearchPage) BaseApplication.isFirstSearchPage = false;
+        else {
+            SpotManager.getInstance(this).showSpot(this, new SpotListener() {
+                @Override
+                public void onShowSuccess() {
+
+                }
+
+                @Override
+                public void onShowFailed(int i) {
+
+                }
+
+                @Override
+                public void onSpotClosed() {
+
+                }
+
+                @Override
+                public void onSpotClicked(boolean b) {
+
+                }
+            });
+        }
     }
 
     private void initViews() {
@@ -438,7 +469,35 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     }
 
     @Override
+    public void onBackPressed() {
+        if (SpotManager.getInstance(this).isSpotShowing()) {
+            SpotManager.getInstance(this).hideSpot();
+        } else super.onBackPressed();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 插屏广告
+        SpotManager.getInstance(this).onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // 插屏广告
+        SpotManager.getInstance(this).onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 插屏广告
+        SpotManager.getInstance(this).onDestroy();
     }
 }

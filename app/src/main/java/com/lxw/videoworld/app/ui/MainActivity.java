@@ -28,6 +28,7 @@ import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.service.BackgroundIntentService;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.service.NetBroadcastReceiver;
 import com.lxw.videoworld.framework.application.BaseApplication;
@@ -40,6 +41,7 @@ import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.widget.CustomDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +49,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import abc.abc.abc.AdManager;
+import abc.abc.abc.nm.sp.SpotListener;
+import abc.abc.abc.nm.sp.SpotManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -128,6 +133,9 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setUpAd();
+        getConfig();
+        createFolder();
         initViews();
         if (Constant.configModel != null) {
             setConfig(Constant.configModel, false);
@@ -135,6 +143,35 @@ public class MainActivity extends BaseActivity {
             getConfig(false);
         }
         setJpushAliasAndTags();
+
+    }
+
+    private void setUpAd() {
+        if (BaseApplication.isFirstHomePage) BaseApplication.isFirstHomePage = false;
+        else {
+            AdManager.getInstance(this).init(BaseApplication.appId, BaseApplication.appSecret, true);
+            SpotManager.getInstance(this).showSpot(this, new SpotListener() {
+                @Override
+                public void onShowSuccess() {
+
+                }
+
+                @Override
+                public void onShowFailed(int i) {
+
+                }
+
+                @Override
+                public void onSpotClosed() {
+
+                }
+
+                @Override
+                public void onSpotClicked(boolean b) {
+
+                }
+            });
+        }
     }
 
     private void setJpushAliasAndTags() {
@@ -429,40 +466,45 @@ public class MainActivity extends BaseActivity {
      * 双击退出程序
      */
     private void exitByDoubleClick() {
-            Timer tExit = null;
-            if (!flag_exit) {
-                flag_exit = true;
-                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-                tExit = new Timer();
-                tExit.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        flag_exit = false;//取消退出
-                    }
-                }, 2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
-            } else {
-                DownloadManager.stopAllTask();
-                Observable.timer(1000, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Long>() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable disposable) {
-                            }
+        if (SpotManager.getInstance(this).isSpotShowing()) {
+            SpotManager.getInstance(this).hideSpot();
+            return;
+        }
+        Timer tExit = null;
+        if (!flag_exit) {
+            flag_exit = true;
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            tExit = new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    flag_exit = false;//取消退出
+                }
+            }, 2000);// 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+        } else {
+            DownloadManager.stopAllTask();
+            Observable.timer(1000, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Long>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable disposable) {
+                        }
 
-                            @Override
-                            public void onNext(@NonNull Long number) {
-                                finish();
-                                System.exit(0);
-                            }
+                        @Override
+                        public void onNext(@NonNull Long number) {
+                            SpotManager.getInstance(MainActivity.this).onAppExit();
+                            finish();
+                            System.exit(0);
+                        }
 
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                            }
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                        }
 
-                            @Override
-                            public void onComplete() {
-                            }
-                        });
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
         }
     }
 
@@ -643,6 +685,25 @@ public class MainActivity extends BaseActivity {
 //
 //    }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SpotManager.getInstance(this).onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SpotManager.getInstance(this).onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SpotManager.getInstance(this).onDestroy();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
@@ -696,4 +757,22 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
+
+    private void createFolder() {
+        File folder1 = new File(Constant.PATH_SPLASH_PICTURE);
+        File folder2 = new File(Constant.PATH_OFFLINE_DOWNLOAD);
+        if(!folder1.exists())
+        { //如果该文件夹不存在，则进行创建
+            folder1.mkdirs();//创建文件夹
+        }
+        if(!folder2.exists())
+        { //如果该文件夹不存在，则进行创建
+            folder2.mkdirs();//创建文件夹
+        }
+    }
+
+    private void getConfig() {
+        Intent startIntent = new Intent(MainActivity.this, BackgroundIntentService.class);
+        startService(startIntent);
+    }
 }

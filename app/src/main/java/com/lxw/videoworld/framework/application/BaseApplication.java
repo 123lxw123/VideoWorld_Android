@@ -20,6 +20,7 @@ import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
 import java.util.concurrent.TimeUnit;
 
+import abc.abc.abc.AdManager;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -36,8 +37,12 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     public static String uid;// 手机唯一标识
     public static Context appContext;// 全局Context
     public static int appStartCount;// app启动次数
+    public static boolean isFirstHomePage = true;
+    public static boolean isFirstSearchPage = true;
     private final String APP_START_COUNT = "APP_START_COUNT";
     private String versionName;
+    public static String appId = "a21eba392a5c6257";
+    public static String appSecret = "e5bf305a1d2881fa";
 
     @Override
     public void onCreate() {
@@ -101,6 +106,8 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         // Jpush 初始化
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        // 有米
+        AdManager.getInstance(getAppContext()).init(appId, appSecret, true);
     }
 
     public static Context getAppContext() {
