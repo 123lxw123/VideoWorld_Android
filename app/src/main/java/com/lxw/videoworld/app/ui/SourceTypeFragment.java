@@ -163,6 +163,7 @@ public class SourceTypeFragment extends BaseFragment {
             viewpagerBanner.setMinPageScale(0.5F);
             viewpagerBanner.setCenterPageScaleOffset(30.0F);
             viewpagerBanner.setMinPageScaleOffset(5.0F);
+            viewpagerBanner.setOffscreenPageLimit(Constant.BANNER_LIMIT - 1);
 //            viewpagerBanner.setOnInfiniteCyclePageTransformListener(...);
             recyclerviewSourceType.setLayoutManager(new GridLayoutManager(SourceTypeFragment.this.getActivity(), Constant.GRIDLAYOUTMANAGER_SPANCOUNT));
             // 列表适配器
@@ -278,7 +279,6 @@ public class SourceTypeFragment extends BaseFragment {
                 }
             });
             recyclerviewSelector.setAdapter(selectorAdapter);
-
         }
         if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -486,6 +486,7 @@ public class SourceTypeFragment extends BaseFragment {
                                     if(SourceTypeFragment.this.getParentFragment() != null){
                                         bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getParentFragment().getFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
                                     }else bannerAdapter = new QuickFragmentPageAdapter(SourceTypeFragment.this.getChildFragmentManager(), sourceBannerFragments, new String[sourceBannerFragments.size()]);
+                                    viewpagerBanner.setOffscreenPageLimit(Constant.BANNER_LIMIT - 1);
                                     viewpagerBanner.setAdapter(bannerAdapter);
                                     viewpagerBanner.startAutoScroll(true);
                                 }

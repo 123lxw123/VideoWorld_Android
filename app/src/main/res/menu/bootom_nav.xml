@@ -30,5 +30,5 @@
         android:enabled="true"
         app:showAsAction="always"
         android:title="@string/txt_tab5"
-        android:icon="@drawable/svg_game"/>
+        android:icon="@drawable/svg_home"/>
 </menu>

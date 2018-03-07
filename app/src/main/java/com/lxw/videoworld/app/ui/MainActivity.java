@@ -76,52 +76,12 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView navigationbarMain;
     @BindView(R.id.toobar_main)
     Toolbar toobarMain;
-//    @BindView(R.id.txt_version)
-//    TextView txtVersion;
-//    @BindView(R.id.txt_change_theme)
-//    TextView txtChangeThemem;
-//    @BindView(R.id.txt_github)
-//    TextView txtGitHub;
-//    @BindView(R.id.txt_QQ)
-//    TextView txtQQ;
-//    @BindView(R.id.txt_feedback)
-//    TextView txtFeedback;
-//    @BindView(R.id.txt_about)
-//    TextView txtAbout;
-//    @BindView(R.id.txt_about_content)
-    TextView txtAboutContent;
     @BindView(R.id.txt_notice)
     TextView txtNotice;
     @BindView(R.id.img_close)
     ImageView imgClose;
     @BindView(R.id.ll_notice)
     LinearLayout llNotice;
-//    @BindView(R.id.drawerlayout)
-//    DrawerLayout drawerlayout;
-//    @BindView(R.id.switch_allow_4G)
-//    Switch switchAllow4G;
-//    @BindView(R.id.ll_change_theme)
-//    LinearLayout llChangeTheme;
-//    @BindView(R.id.txt_allow_4G)
-//    TextView txtAllow4G;
-//    @BindView(R.id.ll_version)
-//    LinearLayout llVersion;
-//    @BindView(R.id.ll_about_content)
-//    LinearLayout llAboutContent;
-//    @BindView(R.id.ll_QQ)
-//    LinearLayout llQQ;
-//    @BindView(R.id.txt_download_path)
-//    TextView txtDownloadPath;
-//    @BindView(R.id.txt_download_path_value)
-//    TextView txtDownloadPathValue;
-//    @BindView(R.id.txt_cache)
-//    TextView txtCache;
-//    @BindView(R.id.ll_clear_cache)
-//    LinearLayout llClearCache;
-//    @BindView(R.id.txt_local_play)
-//    TextView txtLocalPlay;
-//    @BindView(R.id.img_admire)
-//    ImageView imgAdmire;
     private boolean flag_exit = false;
     private boolean flag_back = true;
     private QuickFragmentPageAdapter pagerAdapter;
@@ -192,9 +152,6 @@ public class MainActivity extends BaseActivity {
                     case R.id.action_download_manager:
                         Intent intent = new Intent(MainActivity.this, DownloadManagerActivity.class);
                         startActivity(intent);
-//                        if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                            drawerlayout.closeDrawers();
-//                        }
                         break;
                     case R.id.action_search:
                         Intent intent1 = new Intent(MainActivity.this, SearchActivity.class);
@@ -297,155 +254,7 @@ public class MainActivity extends BaseActivity {
         createFragment();
         pagerAdapter = new QuickFragmentPageAdapter(getSupportFragmentManager(), fragments, tabs);
         viewpagerMain.setAdapter(pagerAdapter);
-//        viewpagerMain.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                ((SourceTypeFragment) fragments.get(0)).setUpDrawerLayout();
-//            }
-//        });
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerlayout, toobarMain,
-//                R.string.txt_copy_link, R.string.txt_copy_link);
-//        drawerlayout.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        boolean isAllow4G = SharePreferencesUtil.getBooleanSharePreferences(MainActivity.this, Constant.KEY_IS_ALLOW_4G, false);
-//        switchAllow4G.setChecked(!isAllow4G);
-//        switchAllow4G.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                SharePreferencesUtil.setBooleanSharePreferences(MainActivity.this, Constant.KEY_IS_ALLOW_4G, !isChecked);
-//            }
-//        });
-//
-//        llChangeTheme.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int checked = -1;
-//                switch (THEME_TYPE){
-//                    case THEME_TYPE_1:
-//                        checked = 0;
-//                        break;
-//                    case THEME_TYPE_2:
-//                        checked = 1;
-//                        break;
-//                    case THEME_TYPE_3:
-//                        checked = 2;
-//                        break;
-//                }
-//                final int position = checked;
-//                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-//                        .setSingleChoiceItems(new String[]{"至尊黑", "魂动红", "魅惑蓝"}, position, new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (which == position) {
-//                                    dialog.dismiss();
-//                                    return;
-//                                }
-//                                switch (which) {
-//                                    case 0:
-//                                        THEME_TYPE = Constant.THEME_TYPE_1;
-//                                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-//                                                Constant.KEY_THEME_TYPE, Constant.THEME_TYPE_1);
-//                                        break;
-//                                    case 1:
-//                                        THEME_TYPE = THEME_TYPE_2;
-//                                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-//                                                Constant.KEY_THEME_TYPE, THEME_TYPE_2);
-//                                        break;
-//                                    case 2:
-//                                        THEME_TYPE = THEME_TYPE_3;
-//                                        SharePreferencesUtil.setStringSharePreferences(MainActivity.this,
-//                                                Constant.KEY_THEME_TYPE, THEME_TYPE_3);
-//                                        break;
-//                                }
-//                                MainActivity.this.finish();
-//                                Intent intent = MainActivity.this.getIntent();
-//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                startActivity(intent);
-//                                overridePendingTransition(0, 0);
-//                                dialog.dismiss();
-//                            }
-//                        }).create();
-//                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                    drawerlayout.closeDrawers();
-//                }
-//                dialog.show();
-//
-//            }
-//        });
-//
-//        // 复制群号
-//        llQQ.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!TextUtils.isEmpty(txtQQ.getText())) {
-//                    ClipboardManager clip = (ClipboardManager) MainActivity.this.getSystemService
-//                            (Context.CLIPBOARD_SERVICE);
-//                    clip.setText(txtQQ.getText());
-//                    if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                        drawerlayout.closeDrawers();
-//                    }
-//                    ToastUtil.showMessage("已复制群号");
-//                }
-//            }
-//        });
-//
-//        llVersion.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getConfig(true);
-//                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                    drawerlayout.closeDrawers();
-//                }
-//            }
-//        });
-//
-//        llClearCache.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                    drawerlayout.closeDrawers();
-//                }
-//                CustomDialog customDialog = new CustomDialog(MainActivity.this, "清理缓存", "清理缓存将会删除所有下载记录以及下载路径中的所有文件，确定要清理缓存？", "立即清理", "取消") {
-//                    @Override
-//                    public void ok() {
-//                        super.ok();
-//                        File file = new File(PATH_OFFLINE_DOWNLOAD);
-//                        String cacheSize = ValueUtil.formatFileSize(FileUtil.getFileSize(file));
-//                        FileUtil.deleteFile(file);
-//                        DownloadManager.removeAllXLTaskInfo();
-//                        txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
-//                        ToastUtil.showMessage("已清理缓存：" + cacheSize);
-//                    }
-//
-//                    @Override
-//                    public void cancel() {
-//                        super.cancel();
-//                    }
-//                };
-//                customDialog.show();
-//            }
-//        });
-//
-//        txtDownloadPathValue.setText("../VideoWorld/download");
-//        txtDownloadPath.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (txtDownloadPathValue.getVisibility() == View.GONE)
-//                    txtDownloadPathValue.setVisibility(View.VISIBLE);
-//                else txtDownloadPathValue.setVisibility(View.GONE);
-//            }
-//        });
-//
-//        imgAdmire.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, PreViewActivity.class);
-//                intent.putExtra("isAdmire", true);
-//                startActivity(intent);
-//            }
-//        });
+        viewpagerMain.setOffscreenPageLimit(4);
 
         // 监听网络变化
         NetBroadcastReceiver netBroadcastReceiver = new NetBroadcastReceiver();
@@ -514,32 +323,7 @@ public class MainActivity extends BaseActivity {
         createSourceTypeFragment(Constant.TAB_2);
         createSourceTypeFragment(Constant.TAB_3);
         createSourceTypeFragment(Constant.TAB_4);
-//        switch (Constant.SOURCE_TYPE) {
-//            case Constant.SOURCE_TYPE_1:
-//                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.TAB_1, Constant.TYPE_0);
-//                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_11, null);
-//                createSourceTypeFragment(Constant.SOURCE_TYPE_3, Constant.CATEGORY_19, null);
-//                createSourceTypeFragment(Constant.SOURCE_TYPE_1, Constant.CATEGORY_12, null);
-//                break;
-//            case SOURCE_TYPE_2:
-//                createSourceTypeFragment(SOURCE_TYPE_2, Constant.CATEGORY_14, null);
-//                createSourceTypeFragment(SOURCE_TYPE_2, Constant.CATEGORY_15, null);
-//                createSourceTypeFragment(SOURCE_TYPE_3, Constant.CATEGORY_19, null);
-//                createSourceTypeFragment(SOURCE_TYPE_2, Constant.CATEGORY_16, null);
-//                break;
-//            case SOURCE_TYPE_3:
-//                createSourceTypeFragment(SOURCE_TYPE_3, Constant.CATEGORY_17, null);
-//                createSourceTypeFragment(SOURCE_TYPE_3, Constant.CATEGORY_18, null);
-//                createSourceTypeFragment(SOURCE_TYPE_3, Constant.CATEGORY_19, null);
-//                createSourceTypeFragment(SOURCE_TYPE_3, Constant.CATEGORY_20, null);
-//                break;
-//            case SOURCE_TYPE_4:
-//                createSourceTypeFragment(SOURCE_TYPE_4, Constant.CATEGORY_14, null);
-//                createSourceTypeFragment(SOURCE_TYPE_4, Constant.CATEGORY_15, null);
-//                createSourceTypeFragment(SOURCE_TYPE_4, Constant.CATEGORY_23, null);
-//                createSourceTypeFragment(SOURCE_TYPE_4, Constant.CATEGORY_16, null);
-//                break;
-//        }
+        fragments.add(new SettingsFragment());
     }
 
     public void createSourceTypeFragment(String tab) {
@@ -571,17 +355,6 @@ public class MainActivity extends BaseActivity {
 
     public void setConfig(ConfigModel configModel, boolean flag_dialog) {
 
-//        // 侧滑菜单
-//        String versionName = ManifestUtil.getApkVersionName(MainActivity.this);
-//        txtVersion.setText(versionName);
-//
-//        if (!TextUtils.isEmpty(configModel.getQQ1())) {
-//            txtQQ.setText(configModel.getQQ1());
-//        }
-//        if (!TextUtils.isEmpty(configModel.getIntro())) {
-//            txtAboutContent.setText(configModel.getIntro());
-//        }
-//
         // 公告
         if (!TextUtils.isEmpty(configModel.getNotice())) {
             String localNotice = SharePreferencesUtil.getStringSharePreferences(MainActivity
@@ -641,52 +414,6 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-//        File file = new File(PATH_OFFLINE_DOWNLOAD);
-//        txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
-    }
-
-//    @OnClick({R.id.txt_github, R.id.txt_feedback, R.id.txt_about, R.id.txt_local_play})
-//    public void setTextViewOnClick(TextView tv) {
-//        switch (tv.getId()) {
-//            case R.id.txt_github:
-//                Intent intent2 = new Intent(MainActivity.this, CommonWebActivity.class);
-//                intent2.putExtra("url", "https://github.com/123lxw123");
-//                startActivity(intent2);
-//                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                    drawerlayout.closeDrawers();
-//                }
-//                break;
-//            case R.id.txt_feedback:
-//                // 反馈
-//                if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
-//                    drawerlayout.closeDrawers();
-//                }
-//                Intent intent3 = new Intent(MainActivity.this, FeedbackActivity.class);
-//                startActivity(intent3);
-//                break;
-//            case R.id.txt_about:
-//                // 关于
-//                if (llAboutContent.getVisibility() == View.GONE) {
-//                    llAboutContent.setVisibility(View.VISIBLE);
-//                } else {
-//                    llAboutContent.setVisibility(View.GONE);
-//                }
-//                break;
-//            case R.id.txt_local_play:
-//                // 本地播放
-//                Intent intent = new Intent();
-//                intent.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(intent, 1);
-//                break;
-//        }
-//
-//    }
-
-
-    @Override
     protected void onPause() {
         super.onPause();
         SpotManager.getInstance(this).onPause();
@@ -721,10 +448,6 @@ public class MainActivity extends BaseActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public Toolbar getToobarMain() {
-        return toobarMain;
     }
 
     @OnClick({R.id.img_close})
