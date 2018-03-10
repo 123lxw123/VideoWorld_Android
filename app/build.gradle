@@ -37,6 +37,7 @@ android {
             minifyEnabled false
         }
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
@@ -45,35 +46,20 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     // retrofit
-
     // glide
-
     // okhttp
-
     // RxJava RxAndroid
-
     // photoview
-
     // materialdialog
-
     // kenburnsview
-
     // logger
-
     // gson
-
     // butterknife
-
     // BaseRecyclerViewAdapterHelper
-
     // weixin
-
     //hotfix
-
     // jpush
-
     // smarttablayout
-
     // infinitecycleviewpager
     compile project(path: ':infinitecycleviewpager')
     compile project(path: ':thunder')
