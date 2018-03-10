@@ -265,13 +265,12 @@
                     android:text="GitHub\nhttps://github.com/123lxw123"
                     android:textColor="?attr/com_font_C"
                     android:textSize="@dimen/sp_16"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_0.5"
-                    android:background="?attr/com_wm_bg"
-                    android:visibility="gone"/>
+                    android:background="?attr/com_wm_bg" />
 
                 <TextView
                     android:id="@+id/txt_about_content"
