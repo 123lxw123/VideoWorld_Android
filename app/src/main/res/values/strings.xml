@@ -103,7 +103,8 @@
     <string name="txt_feedback_success_tips">感谢您的反馈</string>
     <string name="txt_about">关于</string>
     <string name="txt_local_play">本地播放</string>
-    <string name="txt_download_manager">下载任务</string>
+    <string name="txt_download_manager">下载中心</string>
+    <string name="txt_selector">筛选</string>
     <string name="txt_download">下载</string>
     <string name="txt_no_data">暂无数据</string>
     <string name="txt_load_more">加载更多中…</string>

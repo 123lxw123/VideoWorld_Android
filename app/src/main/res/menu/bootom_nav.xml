@@ -26,7 +26,7 @@
         android:title="@string/txt_tab4"
         android:icon="@drawable/svg_anime"/>
 
-    <item android:id="@+id/bottom_nav_game"
+    <item android:id="@+id/bottom_nav_home"
         android:enabled="true"
         app:showAsAction="always"
         android:title="@string/txt_tab5"

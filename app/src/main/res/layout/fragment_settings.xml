@@ -18,6 +18,18 @@
             android:background="?attr/com_wm_bg"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/txt_download"
+                android:layout_marginTop="@dimen/dp_0.5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/selector_item_bg"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_15"
+                android:text="@string/txt_download_manager"
+                android:textColor="?attr/com_font_A"
+                android:textSize="@dimen/sp_16" />
+
             <LinearLayout
                 android:id="@+id/ll_change_theme"
                 android:layout_width="match_parent"
@@ -265,12 +277,13 @@
                     android:text="GitHub\nhttps://github.com/123lxw123"
                     android:textColor="?attr/com_font_C"
                     android:textSize="@dimen/sp_16"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_0.5"
-                    android:background="?attr/com_wm_bg" />
+                    android:background="?attr/com_wm_bg"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/txt_about_content"

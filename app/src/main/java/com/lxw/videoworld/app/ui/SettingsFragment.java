@@ -308,9 +308,13 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.txt_github, R.id.txt_feedback, R.id.txt_about, R.id.txt_local_play})
+    @OnClick({R.id.txt_download, R.id.txt_github, R.id.txt_feedback, R.id.txt_about, R.id.txt_local_play})
     public void setTextViewOnClick(TextView tv) {
         switch (tv.getId()) {
+            case R.id.txt_download:
+                Intent intent1 = new Intent(SettingsFragment.this.getContext(), DownloadManagerActivity.class);
+                startActivity(intent1);
+                break;
             case R.id.txt_github:
                 Intent intent2 = new Intent(getContext(), CommonWebActivity.class);
                 intent2.putExtra("url", "https://github.com/123lxw123");
