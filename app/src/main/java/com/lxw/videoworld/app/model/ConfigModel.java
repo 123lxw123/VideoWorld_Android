@@ -18,6 +18,7 @@ public class ConfigModel implements Serializable{
     private String email;
     private String QQ1;
     private String QQ2;
+    private String alipayCommand;
     private long time;
 
     public String getId() {
@@ -122,5 +123,13 @@ public class ConfigModel implements Serializable{
 
     public void setQQ2(String QQ2) {
         this.QQ2 = QQ2;
+    }
+
+    public String getAlipayCommand() {
+        return alipayCommand;
+    }
+
+    public void setAlipayCommand(String alipayCommand) {
+        this.alipayCommand = alipayCommand;
     }
 }
