@@ -63,17 +63,6 @@ public class SplashActivity extends BaseActivity {
                 Log.d("SplashActivity", "onRequestFailed");
             }
         });
-        SpotManager.getInstance(this).requestSpot(new SpotRequestListener() {
-            @Override
-            public void onRequestSuccess() {
-                Log.d("SplashActivity", "onRequestSuccess");
-            }
-
-            @Override
-            public void onRequestFailed(int i) {
-                Log.d("SplashActivity", "onRequestFailed");
-            }
-        });
         SplashViewSettings splashViewSettings = new SplashViewSettings();
         splashViewSettings.setTargetClass(MainActivity.class);
         splashViewSettings.setSplashViewContainer(content);
