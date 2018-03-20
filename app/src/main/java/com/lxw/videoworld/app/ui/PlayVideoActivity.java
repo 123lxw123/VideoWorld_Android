@@ -20,9 +20,13 @@ import com.lxw.videoworld.framework.util.StatusBarUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.widget.OnTransitionListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +40,7 @@ public class PlayVideoActivity extends BaseActivity {
     public final static String TRANSITION = "TRANSITION";
 
     @BindView(R.id.video_player)
-    StandardGSYVideoPlayer videoPlayer;
+    ListGSYVideoPlayer videoPlayer;
 
     OrientationUtils orientationUtils;
 
@@ -44,6 +48,7 @@ public class PlayVideoActivity extends BaseActivity {
 
     private Transition transition;
     private String url;
+    private List<String> urlList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +78,23 @@ public class PlayVideoActivity extends BaseActivity {
         ButterKnife.bind(this);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         url = getIntent().getStringExtra("url");
-        if(TextUtils.isEmpty(url)){
+        urlList = getIntent().getStringArrayListExtra("urlList");
+        if (urlList == null) urlList = new ArrayList<>();
+        if(TextUtils.isEmpty(url) && urlList.size() == 0){
             url = "";
             ToastUtil.showMessage("无效链接");
-        }
+        } else if (TextUtils.isEmpty(url) && !TextUtils.isEmpty(urlList.get(0))) url = urlList.get(0);
+        else if (TextUtils.isEmpty(url)) url = "";
         init();
     }
 
     private void init() {
         GSYVideoManager.instance().setTimeOut(30000, false);
         //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//        ImageView imageView = new ImageView(this);
+//        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 //        imageView.setImageResource(R.mipmap.xxx1);
-        videoPlayer.setThumbImageView(imageView);
+//        videoPlayer.setThumbImageView(imageView);
 
         //增加title
 //        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
@@ -133,7 +141,13 @@ public class PlayVideoActivity extends BaseActivity {
         //全屏
         videoPlayer.setIfCurrentIsFullscreen(false);
         // 播放
-        videoPlayer.setUp(url, false, "");
+        if (urlList.indexOf(url) >= 0) {
+            List<GSYVideoModel> list = new ArrayList<>();
+            for (int i = 0; i < urlList.size(); i++){
+                list.add(new GSYVideoModel(urlList.get(i), "(" + (i + 1) +") " + urlList.get(i)));
+            }
+            videoPlayer.setUp(list, false, urlList.indexOf(url));
+        } else videoPlayer.setUp(url, false, "");
         //过渡动画
         initTransition();
     }

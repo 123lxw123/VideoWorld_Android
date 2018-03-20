@@ -152,7 +152,7 @@ public class SourceDetailFragment extends BaseFragment {
 
         images = ValueUtil.string2list(sourceDetailModel.getImages());
         final List<String> tempList = ValueUtil.string2list(sourceDetailModel.getLinks());
-        final List<String> links = new ArrayList<>();
+        final ArrayList<String> links = new ArrayList<>();
         if (tempList != null){
             for (int i = 0; i < tempList.size(); i++){
                 if (!TextUtils.isEmpty(tempList.get(i)) && !TextUtils.isEmpty(tempList.get(i).trim()))
@@ -198,6 +198,7 @@ public class SourceDetailFragment extends BaseFragment {
                     if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
                         Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
                         intent.putExtra("url", links.get(0));
+                        intent.putStringArrayListExtra("urlList", links);
                         startActivity(intent);
                     } else {
                         DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false);
@@ -288,6 +289,7 @@ public class SourceDetailFragment extends BaseFragment {
                     if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)){
                         Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
                         intent.putExtra("url", (String) adapter.getData().get(position));
+                        intent.putStringArrayListExtra("urlList", links);
                         startActivity(intent);
                     } else if (sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
                         SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailFragment.this.getActivity(), (String) adapter.getData().get(position), false);
