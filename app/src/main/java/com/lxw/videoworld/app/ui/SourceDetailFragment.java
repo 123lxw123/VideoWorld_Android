@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -308,6 +309,7 @@ public class SourceDetailFragment extends BaseFragment {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 imgPicture.scrollBy(0, (scrollY - oldScrollY) / 2);
+                Log.d("scrollView", imgPicture.getHeight() + "====" + scrollY);
             }
         });
 

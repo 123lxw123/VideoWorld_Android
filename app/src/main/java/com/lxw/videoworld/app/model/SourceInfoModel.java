@@ -7,8 +7,20 @@ import java.io.Serializable;
  */
 
 public class SourceInfoModel implements Serializable {
+
+    public SourceInfoModel(){
+
+    }
+
+    public SourceInfoModel(String key, String value, boolean isSelected){
+        this.key = key;
+        this.value = value;
+        this.isSelected = isSelected;
+    }
+
     private String key;
     private String value;
+    private boolean isSelected;
 
     public String getKey() {
         return key;
@@ -24,5 +36,13 @@ public class SourceInfoModel implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:background="@drawable/selector_item_bg"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_60"
+    android:layout_marginTop="@dimen/dp_0.5">
+
+    <TextView
+        android:id="@+id/selector"
+        android:textSize="@dimen/sp_16"
+        android:textColor="?attr/com_font_A"
+        android:layout_marginStart="@dimen/dp_15"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -5,7 +5,11 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.transition.Transition;
 import android.view.View;
@@ -14,7 +18,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.model.SourceInfoModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
@@ -41,6 +48,12 @@ public class PlayVideoActivity extends BaseActivity {
 
     @BindView(R.id.video_player)
     ListGSYVideoPlayer videoPlayer;
+    @BindView(R.id.recyclerview_source_links)
+    RecyclerView recyclerviewSourceLinks;
+    @BindView(R.id.drawerlayout_source_links)
+    DrawerLayout drawerlayoutSourceLinks;
+
+    private BaseQuickAdapter<SourceInfoModel, BaseViewHolder> sourceLinkAdapter;
 
     OrientationUtils orientationUtils;
 
@@ -80,28 +93,18 @@ public class PlayVideoActivity extends BaseActivity {
         url = getIntent().getStringExtra("url");
         urlList = getIntent().getStringArrayListExtra("urlList");
         if (urlList == null) urlList = new ArrayList<>();
-        if(TextUtils.isEmpty(url) && urlList.size() == 0){
+        if (TextUtils.isEmpty(url) && urlList.size() == 0) {
             url = "";
             ToastUtil.showMessage("无效链接");
-        } else if (TextUtils.isEmpty(url) && !TextUtils.isEmpty(urlList.get(0))) url = urlList.get(0);
+        } else if (TextUtils.isEmpty(url) && !TextUtils.isEmpty(urlList.get(0)))
+            url = urlList.get(0);
         else if (TextUtils.isEmpty(url)) url = "";
-        init();
+        if (urlList.isEmpty()) urlList.add(url);
+        setUpView();
     }
 
-    private void init() {
+    private void setUpView() {
         GSYVideoManager.instance().setTimeOut(30000, false);
-        //增加封面
-//        ImageView imageView = new ImageView(this);
-//        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//        imageView.setImageResource(R.mipmap.xxx1);
-//        videoPlayer.setThumbImageView(imageView);
-
-        //增加title
-//        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-//        videoPlayer.getTitleTextView().setText("测试视频");
-        //videoPlayer.setShowPauseCover(false);
-
-        //videoPlayer.setSpeed(2f);
 
         //设置返回键
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
@@ -123,7 +126,7 @@ public class PlayVideoActivity extends BaseActivity {
         //videoPlayer.setDialogVolumeProgressBar(getResources().getDrawable(R.drawable.video_new_volume_progress_bg));
         //videoPlayer.setDialogProgressBar(getResources().getDrawable(R.drawable.video_new_progress));
         //videoPlayer.setBottomShowProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_seekbar_progress),
-                //getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
+        //getResources().getDrawable(R.drawable.video_new_seekbar_thumb));
         //videoPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
 
         //是否可以滑动调整
@@ -140,11 +143,52 @@ public class PlayVideoActivity extends BaseActivity {
         });
         //全屏
         videoPlayer.setIfCurrentIsFullscreen(false);
+
+        List<SourceInfoModel> sourceList = new ArrayList<>();
+        for (int i = 0; i < urlList.size(); i++){
+            boolean isSelected = i == urlList.indexOf(url);
+            sourceList.add(new SourceInfoModel("(" + (i + 1) +") " + urlList.get(i),  urlList.get(i), isSelected));
+        }
+        recyclerviewSourceLinks.setLayoutManager(new LinearLayoutManager(PlayVideoActivity.this));
+        sourceLinkAdapter = new BaseQuickAdapter<SourceInfoModel, BaseViewHolder>(R.layout.item_link_selector, sourceList) {
+            @Override
+            protected void convert(final BaseViewHolder helper, final SourceInfoModel item) {
+                helper.setText(R.id.selector, item.getKey());
+                helper.addOnClickListener(R.id.content);
+                if (item.isSelected()) {
+                    helper.setTextColor(R.id.selector, getCustomColor(R.styleable.BaseColor_com_assist_A));
+                } else
+                    helper.setTextColor(R.id.selector, getCustomColor(R.styleable.BaseColor_com_font_A));
+            }
+        };
+        sourceLinkAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (drawerlayoutSourceLinks.isDrawerOpen(GravityCompat.END)) {
+                    drawerlayoutSourceLinks.closeDrawers();
+                }
+                SourceInfoModel sourceInfoModel = (SourceInfoModel) adapter.getData().get(position);
+                if (!sourceInfoModel.isSelected()) {
+                    for (int i = 0; i < adapter.getData().size(); i++) {
+                        ((SourceInfoModel) adapter.getData().get(i)).setSelected(i == position);
+                    }
+                    adapter.notifyDataSetChanged();
+                    List<GSYVideoModel> list = new ArrayList<>();
+                    for (int i = 0; i < urlList.size(); i++) {
+                        list.add(new GSYVideoModel(urlList.get(i), ""));
+                    }
+                    videoPlayer.setUp(list, false, urlList.indexOf(url));
+                    initTransition();
+                }
+            }
+        });
+        recyclerviewSourceLinks.setAdapter(sourceLinkAdapter);
+
         // 播放
         if (urlList.indexOf(url) >= 0) {
             List<GSYVideoModel> list = new ArrayList<>();
-            for (int i = 0; i < urlList.size(); i++){
-                list.add(new GSYVideoModel(urlList.get(i), "(" + (i + 1) +") " + urlList.get(i)));
+            for (int i = 0; i < urlList.size(); i++) {
+                list.add(new GSYVideoModel(urlList.get(i), ""));
             }
             videoPlayer.setUp(list, false, urlList.indexOf(url));
         } else videoPlayer.setUp(url, false, "");
@@ -212,7 +256,7 @@ public class PlayVideoActivity extends BaseActivity {
     private boolean addTransitionListener() {
         transition = getWindow().getSharedElementEnterTransition();
         if (transition != null) {
-            transition.addListener(new OnTransitionListener(){
+            transition.addListener(new OnTransitionListener() {
                 @Override
                 public void onTransitionEnd(Transition transition) {
                     super.onTransitionEnd(transition);

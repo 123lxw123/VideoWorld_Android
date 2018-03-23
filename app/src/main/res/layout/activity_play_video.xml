@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_play"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerlayout_source_links"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
@@ -11,4 +11,11 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true" />
 
-</RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_source_links"
+        android:layout_gravity="end"
+        android:background="?attr/com_wm_bg"
+        android:layout_width="@dimen/dp_300"
+        android:layout_height="match_parent"/>
+
+</android.support.v4.widget.DrawerLayout>
