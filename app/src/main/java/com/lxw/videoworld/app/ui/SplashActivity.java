@@ -2,7 +2,6 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -16,10 +15,6 @@ import com.lxw.videoworld.framework.util.StatusBarUtil;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import abc.abc.abc.nm.sp.SplashViewSettings;
-import abc.abc.abc.nm.sp.SpotListener;
-import abc.abc.abc.nm.sp.SpotManager;
-import abc.abc.abc.nm.sp.SpotRequestListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
@@ -42,51 +37,10 @@ public class SplashActivity extends BaseActivity {
         StatusBarUtil.hideNavigationBar(this);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        setUpAd();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SpotManager.getInstance(this).onDestroy();
-    }
-
-    private void setUpAd() {
-        SpotManager.getInstance(this).requestSpot(new SpotRequestListener() {
-            @Override
-            public void onRequestSuccess() {
-                Log.d("SplashActivity", "onRequestSuccess");
-            }
-
-            @Override
-            public void onRequestFailed(int i) {
-                Log.d("SplashActivity", "onRequestFailed");
-            }
-        });
-        SplashViewSettings splashViewSettings = new SplashViewSettings();
-        splashViewSettings.setTargetClass(MainActivity.class);
-        splashViewSettings.setSplashViewContainer(content);
-        SpotManager.getInstance(this).showSplash(this, splashViewSettings, new SpotListener() {
-            @Override
-            public void onShowSuccess() {
-                Log.d("SplashActivity", "onShowSuccess");
-            }
-
-            @Override
-            public void onShowFailed(int i) {
-                Log.d("SplashActivity", "onShowFailed");
-            }
-
-            @Override
-            public void onSpotClosed() {
-                Log.d("SplashActivity", "onSpotClosed");
-            }
-
-            @Override
-            public void onSpotClicked(boolean b) {
-                Log.d("SplashActivity", "onSpotClicked");
-            }
-        });
+        getConfig();
+        createFolder();
+        setSplashPicture();
+        jumpToNext();
     }
 
     private void createFolder() {
@@ -111,7 +65,7 @@ public class SplashActivity extends BaseActivity {
     //跳转到主页
     public void jumpToNext() {
 
-        Observable.timer(4000, TimeUnit.MILLISECONDS)
+        Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
