@@ -29,7 +29,7 @@ import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SourceDetailModel;
-import com.lxw.videoworld.app.model.SourceInfoModel;
+import com.lxw.videoworld.app.model.KeyValueModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseFragment;
@@ -90,8 +90,8 @@ public class SourceDetailFragment extends BaseFragment {
     private int picHeight;
     private List<String> images;
     private SourceDetailModel sourceDetailModel;
-    private List<SourceInfoModel> sourceInfoModels = new ArrayList<>();
-    private BaseQuickAdapter<SourceInfoModel, BaseViewHolder> sourceInfoAdapter;
+    private List<KeyValueModel> keyValueModels = new ArrayList<>();
+    private BaseQuickAdapter<KeyValueModel, BaseViewHolder> sourceInfoAdapter;
     private BaseQuickAdapter<String, BaseViewHolder> sourceLinkAdapter;
 
     private String url;
@@ -214,12 +214,12 @@ public class SourceDetailFragment extends BaseFragment {
             txtTitle.setVisibility(View.VISIBLE);
         }
 
-        if (sourceInfoModels.size() > 0) {
+        if (keyValueModels.size() > 0) {
             recyclerviewInfo.setLayoutManager(new LinearLayoutManager(SourceDetailFragment.this.getContext()));
             recyclerviewInfo.setNestedScrollingEnabled(false);
-            sourceInfoAdapter = new BaseQuickAdapter<SourceInfoModel, BaseViewHolder>(R.layout.item_source_info, sourceInfoModels) {
+            sourceInfoAdapter = new BaseQuickAdapter<KeyValueModel, BaseViewHolder>(R.layout.item_source_info, keyValueModels) {
                 @Override
-                protected void convert(BaseViewHolder helper, SourceInfoModel item) {
+                protected void convert(BaseViewHolder helper, KeyValueModel item) {
                     helper.setText(R.id.txt_key, item.getKey());
                     helper.setText(R.id.txt_value, item.getValue());
                 }
@@ -322,137 +322,137 @@ public class SourceDetailFragment extends BaseFragment {
 
     private void initDatas() {
         if (!TextUtils.isEmpty(sourceDetailModel.getDate())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
+            KeyValueModel keyValueModel = new KeyValueModel();
             try {
                 String date = sourceDetailModel.getDate().substring(0, 4) + "-" + sourceDetailModel.getDate().substring(4, 6) + "-" + sourceDetailModel.getDate().substring(6, 8);
-                sourceInfoModel.setKey(getString(R.string.txt_date));
-                sourceInfoModel.setValue(date);
-                sourceInfoModels.add(sourceInfoModel);
+                keyValueModel.setKey(getString(R.string.txt_date));
+                keyValueModel.setValue(date);
+                keyValueModels.add(keyValueModel);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getName())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_name));
-            sourceInfoModel.setValue(sourceDetailModel.getName());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_name));
+            keyValueModel.setValue(sourceDetailModel.getName());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getTranslateName())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_translate_name));
-            sourceInfoModel.setValue(sourceDetailModel.getTranslateName());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_translate_name));
+            keyValueModel.setValue(sourceDetailModel.getTranslateName());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getYear())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_year));
-            sourceInfoModel.setValue(sourceDetailModel.getYear());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_year));
+            keyValueModel.setValue(sourceDetailModel.getYear());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getArea())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_area));
-            sourceInfoModel.setValue(sourceDetailModel.getArea());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_area));
+            keyValueModel.setValue(sourceDetailModel.getArea());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getStyle())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_style));
-            sourceInfoModel.setValue(sourceDetailModel.getStyle());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_style));
+            keyValueModel.setValue(sourceDetailModel.getStyle());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getLanguage())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_language));
-            sourceInfoModel.setValue(sourceDetailModel.getLanguage());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_language));
+            keyValueModel.setValue(sourceDetailModel.getLanguage());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getSubtitles())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_subtitles));
-            sourceInfoModel.setValue(sourceDetailModel.getSubtitles());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_subtitles));
+            keyValueModel.setValue(sourceDetailModel.getSubtitles());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getReleaseDate())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_release_date));
-            sourceInfoModel.setValue(sourceDetailModel.getReleaseDate());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_release_date));
+            keyValueModel.setValue(sourceDetailModel.getReleaseDate());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getImdbScore())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_imdb_score));
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_imdb_score));
             if (!TextUtils.isEmpty(sourceDetailModel.getImdbIntro())) {
-                sourceInfoModel.setValue(sourceDetailModel.getImdbScore() + " (" + sourceDetailModel.getImdbIntro() + ")");
+                keyValueModel.setValue(sourceDetailModel.getImdbScore() + " (" + sourceDetailModel.getImdbIntro() + ")");
             } else {
-                sourceInfoModel.setValue(sourceDetailModel.getImdbScore());
+                keyValueModel.setValue(sourceDetailModel.getImdbScore());
             }
-            sourceInfoModels.add(sourceInfoModel);
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getDoubanScore())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_douban_score));
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_douban_score));
             if (!TextUtils.isEmpty(sourceDetailModel.getDoubanIntro())) {
-                sourceInfoModel.setValue(sourceDetailModel.getDoubanScore() + " (" + sourceDetailModel.getDoubanIntro() + ")");
+                keyValueModel.setValue(sourceDetailModel.getDoubanScore() + " (" + sourceDetailModel.getDoubanIntro() + ")");
             } else {
-                sourceInfoModel.setValue(sourceDetailModel.getDoubanScore());
+                keyValueModel.setValue(sourceDetailModel.getDoubanScore());
             }
-            sourceInfoModels.add(sourceInfoModel);
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getFileFormat())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_file_format));
-            sourceInfoModel.setValue(sourceDetailModel.getFileFormat());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_file_format));
+            keyValueModel.setValue(sourceDetailModel.getFileFormat());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getFileSize())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_file_size));
-            sourceInfoModel.setValue(sourceDetailModel.getFileSize());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_file_size));
+            keyValueModel.setValue(sourceDetailModel.getFileSize());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getFileAmounts())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_file_amounts));
-            sourceInfoModel.setValue(sourceDetailModel.getFileAmounts());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_file_amounts));
+            keyValueModel.setValue(sourceDetailModel.getFileAmounts());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getFileLength())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_file_length));
-            sourceInfoModel.setValue(sourceDetailModel.getFileLength());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_file_length));
+            keyValueModel.setValue(sourceDetailModel.getFileLength());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getAuthor())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_author));
-            sourceInfoModel.setValue(sourceDetailModel.getAuthor());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_author));
+            keyValueModel.setValue(sourceDetailModel.getAuthor());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getDirector())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_director));
-            sourceInfoModel.setValue(sourceDetailModel.getDirector());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_director));
+            keyValueModel.setValue(sourceDetailModel.getDirector());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getPerformer())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_performer));
-            sourceInfoModel.setValue(sourceDetailModel.getPerformer());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_performer));
+            keyValueModel.setValue(sourceDetailModel.getPerformer());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getAwards())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_awards));
-            sourceInfoModel.setValue(sourceDetailModel.getAwards());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_awards));
+            keyValueModel.setValue(sourceDetailModel.getAwards());
+            keyValueModels.add(keyValueModel);
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getEpisodes())) {
-            SourceInfoModel sourceInfoModel = new SourceInfoModel();
-            sourceInfoModel.setKey(getString(R.string.txt_episodes));
-            sourceInfoModel.setValue(sourceDetailModel.getEpisodes());
-            sourceInfoModels.add(sourceInfoModel);
+            KeyValueModel keyValueModel = new KeyValueModel();
+            keyValueModel.setKey(getString(R.string.txt_episodes));
+            keyValueModel.setValue(sourceDetailModel.getEpisodes());
+            keyValueModels.add(keyValueModel);
         }
         WindowManager wm = this.getActivity().getWindowManager();
         width = wm.getDefaultDisplay().getWidth();

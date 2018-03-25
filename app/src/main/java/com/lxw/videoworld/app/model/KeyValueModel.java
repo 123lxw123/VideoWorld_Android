@@ -6,13 +6,18 @@ import java.io.Serializable;
  * Created by Zion on 2017/6/13.
  */
 
-public class SourceInfoModel implements Serializable {
+public class KeyValueModel implements Serializable {
 
-    public SourceInfoModel(){
+    public KeyValueModel(){
 
     }
 
-    public SourceInfoModel(String key, String value, boolean isSelected){
+    public KeyValueModel(String key, String value){
+        this.key = key;
+        this.value = value;
+    }
+
+    public KeyValueModel(String key, String value, boolean isSelected){
         this.key = key;
         this.value = value;
         this.isSelected = isSelected;

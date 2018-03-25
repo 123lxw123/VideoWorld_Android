@@ -7,21 +7,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
+import com.lxw.videoworld.app.model.KeyValueModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.DownloadUtil;
@@ -33,10 +35,12 @@ import com.lxw.videoworld.framework.util.ValueUtil;
 import com.lxw.videoworld.framework.widget.CustomDialog;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 import static com.lxw.videoworld.app.config.Constant.THEME_TYPE;
@@ -47,45 +51,12 @@ import static com.lxw.videoworld.app.config.Constant.configModel;
 
 public class SettingsFragment extends Fragment {
 
+    @BindView(R.id.recyclerview_settings)
+    RecyclerView recyclerviewSettings;
+    private BaseQuickAdapter<KeyValueModel, BaseViewHolder> adapter;
+    private List<KeyValueModel> settings = new ArrayList<>();
+    Unbinder unbinder;
     private View rootView;
-    @BindView(R.id.txt_version)
-    TextView txtVersion;
-    @BindView(R.id.txt_change_theme)
-    TextView txtChangeThemem;
-    @BindView(R.id.txt_github)
-    TextView txtGitHub;
-    @BindView(R.id.txt_QQ)
-    TextView txtQQ;
-    @BindView(R.id.txt_feedback)
-    TextView txtFeedback;
-    @BindView(R.id.txt_about)
-    TextView txtAbout;
-    @BindView(R.id.txt_about_content)
-    TextView txtAboutContent;
-    @BindView(R.id.switch_allow_4G)
-    Switch switchAllow4G;
-    @BindView(R.id.ll_change_theme)
-    LinearLayout llChangeTheme;
-    @BindView(R.id.txt_allow_4G)
-    TextView txtAllow4G;
-    @BindView(R.id.ll_version)
-    LinearLayout llVersion;
-    @BindView(R.id.ll_about_content)
-    LinearLayout llAboutContent;
-    @BindView(R.id.ll_QQ)
-    LinearLayout llQQ;
-    @BindView(R.id.txt_download_path)
-    TextView txtDownloadPath;
-    @BindView(R.id.txt_download_path_value)
-    TextView txtDownloadPathValue;
-    @BindView(R.id.txt_cache)
-    TextView txtCache;
-    @BindView(R.id.ll_clear_cache)
-    LinearLayout llClearCache;
-    @BindView(R.id.txt_local_play)
-    TextView txtLocalPlay;
-    @BindView(R.id.img_admire)
-    ImageView imgAdmire;
     private boolean flag_back = true;
 
     @Override
@@ -94,132 +65,151 @@ public class SettingsFragment extends Fragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_settings, container, false);
             ButterKnife.bind(this, rootView);
-            boolean isAllow4G = SharePreferencesUtil.getBooleanSharePreferences(SettingsFragment.this.getContext(), Constant.KEY_IS_ALLOW_4G, false);
-            switchAllow4G.setChecked(!isAllow4G);
-            switchAllow4G.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            settings.clear();
+            settings.add(new KeyValueModel("下载中心", ""));
+            settings.add(new KeyValueModel("主题切换", ""));
+            settings.add(new KeyValueModel("本地播放", ""));
+            settings.add(new KeyValueModel("缓存清理", ValueUtil.formatFileSize(FileUtil.getFileSize(new File(PATH_OFFLINE_DOWNLOAD)))));
+            settings.add(new KeyValueModel("版本更新", ManifestUtil.getApkVersionName(SettingsFragment.this.getContext())));
+            settings.add(new KeyValueModel("和谐Q群", "126257036"));
+            settings.add(new KeyValueModel("移动网络暂停下载", ""));
+            settings.add(new KeyValueModel("赞赏", ""));
+            settings.add(new KeyValueModel("反馈", ""));
+            adapter = new BaseQuickAdapter<KeyValueModel, BaseViewHolder>(R.layout.item_setting, settings) {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SharePreferencesUtil.setBooleanSharePreferences(SettingsFragment.this.getContext(), Constant.KEY_IS_ALLOW_4G, !isChecked);
-                }
-            });
-
-            llChangeTheme.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int checked = -1;
-                    switch (THEME_TYPE) {
-                        case THEME_TYPE_1:
-                            checked = 0;
-                            break;
-                        case THEME_TYPE_2:
-                            checked = 1;
-                            break;
-                        case THEME_TYPE_3:
-                            checked = 2;
-                            break;
+                protected void convert(BaseViewHolder helper, KeyValueModel item) {
+                    helper.setText(R.id.txt_key, item.getKey())
+                            .setText(R.id.txt_value, item.getValue());
+                    helper.setVisible(R.id.img_go_to, !item.getKey().equals("移动网络暂停下载"))
+                            .setVisible(R.id.switch_allow_4G, item.getKey().equals("移动网络暂停下载"));
+                    helper.getView(R.id.ll_content).setClickable(!item.getKey().equals("移动网络暂停下载"));
+                    if (item.getKey().equals("移动网络暂停下载")) {
+                        boolean isAllow4G = SharePreferencesUtil.getBooleanSharePreferences(SettingsFragment.this.getContext(), Constant.KEY_IS_ALLOW_4G, false);
+                        ((Switch) helper.getView(R.id.switch_allow_4G)).setChecked(!isAllow4G);
+                        ((Switch) helper.getView(R.id.switch_allow_4G)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                SharePreferencesUtil.setBooleanSharePreferences(SettingsFragment.this.getContext(), Constant.KEY_IS_ALLOW_4G, !isChecked);
+                            }
+                        });
                     }
-                    final int position = checked;
-                    AlertDialog dialog = new AlertDialog.Builder(SettingsFragment.this.getContext())
-                            .setSingleChoiceItems(new String[]{"至尊黑", "魂动红", "魅惑蓝"}, position, new DialogInterface.OnClickListener() {
+                }
+            };
+            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
+                    switch (((KeyValueModel) adapter.getData().get(position)).getKey()) {
+                        case "下载中心":
+                            Intent intent1 = new Intent(SettingsFragment.this.getContext(), DownloadManagerActivity.class);
+                            startActivity(intent1);
+                            break;
+                        case "主题切换":
+                            int checked = -1;
+                            switch (THEME_TYPE) {
+                                case THEME_TYPE_1:
+                                    checked = 0;
+                                    break;
+                                case THEME_TYPE_2:
+                                    checked = 1;
+                                    break;
+                                case THEME_TYPE_3:
+                                    checked = 2;
+                                    break;
+                            }
+                            final int index = checked;
+                            AlertDialog dialog = new AlertDialog.Builder(SettingsFragment.this.getContext())
+                                    .setSingleChoiceItems(new String[]{"至尊黑", "魂动红", "魅惑蓝"}, index, new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (which == index) {
+                                                dialog.dismiss();
+                                                return;
+                                            }
+                                            switch (which) {
+                                                case 0:
+                                                    THEME_TYPE = THEME_TYPE_1;
+                                                    SharePreferencesUtil.setStringSharePreferences(SettingsFragment.this.getContext(),
+                                                            Constant.KEY_THEME_TYPE, THEME_TYPE_1);
+                                                    break;
+                                                case 1:
+                                                    THEME_TYPE = THEME_TYPE_2;
+                                                    SharePreferencesUtil.setStringSharePreferences(SettingsFragment.this.getContext(),
+                                                            Constant.KEY_THEME_TYPE, THEME_TYPE_2);
+                                                    break;
+                                                case 2:
+                                                    THEME_TYPE = THEME_TYPE_3;
+                                                    SharePreferencesUtil.setStringSharePreferences(SettingsFragment.this.getContext(),
+                                                            Constant.KEY_THEME_TYPE, THEME_TYPE_3);
+                                                    break;
+                                            }
+                                            SettingsFragment.this.getActivity().finish();
+                                            Intent intent = SettingsFragment.this.getActivity().getIntent();
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
+                                            getActivity().overridePendingTransition(0, 0);
+                                            dialog.dismiss();
+                                        }
+                                    }).create();
+                            dialog.show();
+                            break;
+                        case "本地播放":
+                            Intent intent2 = new Intent();
+                            intent2.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
+                            intent2.setAction(Intent.ACTION_GET_CONTENT);
+                            startActivityForResult(intent2, 1);
+                            break;
+                        case "缓存清理":
+                            CustomDialog customDialog = new CustomDialog(SettingsFragment.this.getActivity(), "清理缓存", "清理缓存将会删除所有下载记录以及下载路径中的所有文件，确定要清理缓存？", "立即清理", "取消") {
+                                @Override
+                                public void ok() {
+                                    super.ok();
+                                    File file = new File(PATH_OFFLINE_DOWNLOAD);
+                                    String cacheSize = ValueUtil.formatFileSize(FileUtil.getFileSize(file));
+                                    FileUtil.deleteFile(file);
+                                    DownloadManager.removeAllXLTaskInfo();
+                                    List<KeyValueModel> datas = adapter.getData();
+                                    for (int i = 0; i < datas.size(); i++) {
+                                        if (datas.get(i).getKey().equals("缓存清理")) {
+                                            datas.get(i).setValue(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                    ToastUtil.showMessage("已清理缓存：" + cacheSize);
+                                }
 
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (which == position) {
-                                        dialog.dismiss();
-                                        return;
-                                    }
-                                    switch (which) {
-                                        case 0:
-                                            THEME_TYPE = THEME_TYPE_1;
-                                            SharePreferencesUtil.setStringSharePreferences(SettingsFragment.this.getContext(),
-                                                    Constant.KEY_THEME_TYPE, THEME_TYPE_1);
-                                            break;
-                                        case 1:
-                                            THEME_TYPE = THEME_TYPE_2;
-                                            SharePreferencesUtil.setStringSharePreferences(SettingsFragment.this.getContext(),
-                                                    Constant.KEY_THEME_TYPE, THEME_TYPE_2);
-                                            break;
-                                        case 2:
-                                            THEME_TYPE = THEME_TYPE_3;
-                                            SharePreferencesUtil.setStringSharePreferences(SettingsFragment.this.getContext(),
-                                                    Constant.KEY_THEME_TYPE, THEME_TYPE_3);
-                                            break;
-                                    }
-                                    SettingsFragment.this.getActivity().finish();
-                                    Intent intent = SettingsFragment.this.getActivity().getIntent();
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    getActivity().overridePendingTransition(0, 0);
-                                    dialog.dismiss();
+                                public void cancel() {
+                                    super.cancel();
                                 }
-                            }).create();
-                    dialog.show();
-
-                }
-            });
-
-            // 复制群号
-            llQQ.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!TextUtils.isEmpty(txtQQ.getText())) {
-                        ClipboardManager clip = (ClipboardManager) SettingsFragment.this.getContext().getSystemService
-                                (Context.CLIPBOARD_SERVICE);
-                        clip.setText(txtQQ.getText());
-                        ToastUtil.showMessage("已复制群号");
+                            };
+                            customDialog.show();
+                            break;
+                        case "版本更新":
+                            getConfig(true);
+                            break;
+                        case "和谐Q群":
+                            ClipboardManager clip = (ClipboardManager) SettingsFragment.this.getContext().getSystemService
+                                    (Context.CLIPBOARD_SERVICE);
+                            clip.setText("126257036");
+                            ToastUtil.showMessage("已复制群号");
+                            break;
+                        case "移动网络暂停下载":
+                            break;
+                        case "赞赏":
+                            Intent intent3 = new Intent(SettingsFragment.this.getContext(), PreViewActivity.class);
+                            intent3.putExtra("isAdmire", true);
+                            startActivity(intent3);
+                            break;
+                        case "反馈":
+                            Intent intent4 = new Intent(getContext(), FeedbackActivity.class);
+                            startActivity(intent4);
+                            break;
                     }
                 }
             });
-
-            llVersion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getConfig(true);
-                }
-            });
-
-            llClearCache.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CustomDialog customDialog = new CustomDialog(SettingsFragment.this.getActivity(), "清理缓存", "清理缓存将会删除所有下载记录以及下载路径中的所有文件，确定要清理缓存？", "立即清理", "取消") {
-                        @Override
-                        public void ok() {
-                            super.ok();
-                            File file = new File(PATH_OFFLINE_DOWNLOAD);
-                            String cacheSize = ValueUtil.formatFileSize(FileUtil.getFileSize(file));
-                            FileUtil.deleteFile(file);
-                            DownloadManager.removeAllXLTaskInfo();
-                            txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
-                            ToastUtil.showMessage("已清理缓存：" + cacheSize);
-                        }
-
-                        @Override
-                        public void cancel() {
-                            super.cancel();
-                        }
-                    };
-                    customDialog.show();
-                }
-            });
-
-            txtDownloadPathValue.setText("../VideoWorld/download");
-            txtDownloadPath.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (txtDownloadPathValue.getVisibility() == View.GONE)
-                        txtDownloadPathValue.setVisibility(View.VISIBLE);
-                    else txtDownloadPathValue.setVisibility(View.GONE);
-                }
-            });
-
-            imgAdmire.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(SettingsFragment.this.getContext(), PreViewActivity.class);
-                    intent.putExtra("isAdmire", true);
-                    startActivity(intent);
-                }
-            });
+            recyclerviewSettings.setLayoutManager(new LinearLayoutManager(SettingsFragment.this.getContext()));
+            recyclerviewSettings.setAdapter(adapter);
         }
         if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -228,6 +218,7 @@ public class SettingsFragment extends Fragment {
             }
         }
         getConfig(false);
+        unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -251,16 +242,6 @@ public class SettingsFragment extends Fragment {
     }
 
     public void setConfig(ConfigModel configModel, boolean flag_dialog) {
-
-        String versionName = ManifestUtil.getApkVersionName(SettingsFragment.this.getContext());
-        txtVersion.setText(versionName);
-
-        if (!TextUtils.isEmpty(configModel.getQQ1())) {
-            txtQQ.setText(configModel.getQQ1());
-        }
-        if (!TextUtils.isEmpty(configModel.getIntro())) {
-            txtAboutContent.setText(configModel.getIntro());
-        }
 
         // 更新升级
         try {
@@ -308,47 +289,26 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.txt_download, R.id.txt_github, R.id.txt_feedback, R.id.txt_about, R.id.txt_local_play})
-    public void setTextViewOnClick(TextView tv) {
-        switch (tv.getId()) {
-            case R.id.txt_download:
-                Intent intent1 = new Intent(SettingsFragment.this.getContext(), DownloadManagerActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.txt_github:
-                Intent intent2 = new Intent(getContext(), CommonWebActivity.class);
-                intent2.putExtra("url", "https://github.com/123lxw123");
-                startActivity(intent2);
-                break;
-            case R.id.txt_feedback:
-                // 反馈
-                Intent intent3 = new Intent(getContext(), FeedbackActivity.class);
-                startActivity(intent3);
-                break;
-            case R.id.txt_about:
-                // 关于
-                if (llAboutContent.getVisibility() == View.GONE) {
-                    llAboutContent.setVisibility(View.VISIBLE);
-                } else {
-                    llAboutContent.setVisibility(View.GONE);
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (adapter != null && !adapter.getData().isEmpty()) {
+                List<KeyValueModel> datas = adapter.getData();
+                for (int i = 0; i < datas.size(); i++) {
+                    if (datas.get(i).getKey().equals("缓存清理")) {
+                        datas.get(i).setValue(ValueUtil.formatFileSize(FileUtil.getFileSize(new File(PATH_OFFLINE_DOWNLOAD))));
+                        adapter.notifyDataSetChanged();
+                    }
                 }
-                break;
-            case R.id.txt_local_play:
-                // 本地播放
-                Intent intent = new Intent();
-                intent.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);
-                break;
-        }
+            }
 
+        }
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        File file = new File(PATH_OFFLINE_DOWNLOAD);
-        txtCache.setText(ValueUtil.formatFileSize(FileUtil.getFileSize(file)));
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
-
 }

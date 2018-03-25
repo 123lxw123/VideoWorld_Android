@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
-import com.lxw.videoworld.app.model.SourceInfoModel;
+import com.lxw.videoworld.app.model.KeyValueModel;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
@@ -53,7 +53,7 @@ public class PlayVideoActivity extends BaseActivity {
     @BindView(R.id.drawerlayout_source_links)
     DrawerLayout drawerlayoutSourceLinks;
 
-    private BaseQuickAdapter<SourceInfoModel, BaseViewHolder> sourceLinkAdapter;
+    private BaseQuickAdapter<KeyValueModel, BaseViewHolder> sourceLinkAdapter;
 
     OrientationUtils orientationUtils;
 
@@ -144,15 +144,15 @@ public class PlayVideoActivity extends BaseActivity {
         //全屏
         videoPlayer.setIfCurrentIsFullscreen(false);
 
-        List<SourceInfoModel> sourceList = new ArrayList<>();
+        List<KeyValueModel> sourceList = new ArrayList<>();
         for (int i = 0; i < urlList.size(); i++){
             boolean isSelected = i == urlList.indexOf(url);
-            sourceList.add(new SourceInfoModel("(" + (i + 1) +") " + urlList.get(i),  urlList.get(i), isSelected));
+            sourceList.add(new KeyValueModel("(" + (i + 1) +") " + urlList.get(i),  urlList.get(i), isSelected));
         }
         recyclerviewSourceLinks.setLayoutManager(new LinearLayoutManager(PlayVideoActivity.this));
-        sourceLinkAdapter = new BaseQuickAdapter<SourceInfoModel, BaseViewHolder>(R.layout.item_link_selector, sourceList) {
+        sourceLinkAdapter = new BaseQuickAdapter<KeyValueModel, BaseViewHolder>(R.layout.item_link_selector, sourceList) {
             @Override
-            protected void convert(final BaseViewHolder helper, final SourceInfoModel item) {
+            protected void convert(final BaseViewHolder helper, final KeyValueModel item) {
                 helper.setText(R.id.selector, item.getKey());
                 helper.addOnClickListener(R.id.content);
                 if (item.isSelected()) {
@@ -167,10 +167,10 @@ public class PlayVideoActivity extends BaseActivity {
                 if (drawerlayoutSourceLinks.isDrawerOpen(GravityCompat.END)) {
                     drawerlayoutSourceLinks.closeDrawers();
                 }
-                SourceInfoModel sourceInfoModel = (SourceInfoModel) adapter.getData().get(position);
-                if (!sourceInfoModel.isSelected()) {
+                KeyValueModel keyValueModel = (KeyValueModel) adapter.getData().get(position);
+                if (!keyValueModel.isSelected()) {
                     for (int i = 0; i < adapter.getData().size(); i++) {
-                        ((SourceInfoModel) adapter.getData().get(i)).setSelected(i == position);
+                        ((KeyValueModel) adapter.getData().get(i)).setSelected(i == position);
                     }
                     adapter.notifyDataSetChanged();
                     List<GSYVideoModel> list = new ArrayList<>();
