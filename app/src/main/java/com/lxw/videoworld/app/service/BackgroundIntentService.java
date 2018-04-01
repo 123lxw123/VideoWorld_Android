@@ -14,6 +14,7 @@ import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.log.LoggerHelper;
+import com.lxw.videoworld.framework.util.FileUtil;
 import com.lxw.videoworld.framework.util.SharePreferencesUtil;
 import com.lxw.videoworld.framework.util.UserInfoUtil;
 
@@ -44,6 +45,7 @@ public class BackgroundIntentService extends IntentService{
         getConfig();
         SearchSpider.getMaoYanMovies();
         getUserInfo();
+        FileUtil.updateVideoToSystem(this, Constant.PATH_OFFLINE_DOWNLOAD);
     }
 
     public void getConfig(){

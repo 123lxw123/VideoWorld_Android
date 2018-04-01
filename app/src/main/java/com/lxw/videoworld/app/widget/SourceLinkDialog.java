@@ -17,11 +17,14 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.framework.util.ToastUtil;
 
+import java.util.ArrayList;
+
 //分享的dialog
 public class SourceLinkDialog extends AlertDialog {
 
     private Activity context;
     private String link;
+    private ArrayList<String> links;
     private boolean isPlayVideo;
     // 取消按钮
 
@@ -34,10 +37,15 @@ public class SourceLinkDialog extends AlertDialog {
     }
 
     public SourceLinkDialog(Activity context, String link, boolean isPlayVideo) {
+        this(context, link, isPlayVideo, new ArrayList<String>());
+    }
+
+    public SourceLinkDialog(Activity context, String link, boolean isPlayVideo, ArrayList<String> links) {
         super(context);
         this.context = context;
         this.link = link;
         this.isPlayVideo = isPlayVideo;
+        this.links = links;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class SourceLinkDialog extends AlertDialog {
                 @Override
                 public void onClick(View view) {
                     SourceLinkDialog.this.dismiss();
-                    DownloadManager.addNormalTask(context, link, isPlayVideo, false);
+                    DownloadManager.addNormalTask(context, link, isPlayVideo, false, links);
                 }
             });
             ll_thunder.setOnClickListener(new View.OnClickListener() {

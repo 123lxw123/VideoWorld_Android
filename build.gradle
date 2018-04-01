@@ -29,6 +29,6 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = 361
-    versionName = "3.6.1"
+    versionCode = 370
+    versionName = "3.7.0"
 }

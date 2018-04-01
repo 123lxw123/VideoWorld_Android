@@ -55,7 +55,11 @@ public class DownloadManager {
     public static final String TAG = "DownloadManager";
     public static final CompositeDisposable disposables = new CompositeDisposable();
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo, final boolean isInitDownload) {
-        return addNormalTask(context, link, isPlayVideo, isInitDownload, false, null, null);
+        return addNormalTask(context, link, isPlayVideo, isInitDownload, new ArrayList<String>(), false, null, null);
+    }
+
+    public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo, final boolean isInitDownload, final ArrayList<String> links) {
+        return addNormalTask(context, link, isPlayVideo, isInitDownload, links, false, null, null);
     }
 
     /**
@@ -67,8 +71,8 @@ public class DownloadManager {
      * @return
      */
     public static long addNormalTask(final Context context, final String link, final boolean isPlayVideo,
-                                     final boolean isInitDownload, final boolean isStartApp, Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
-        long taskId = -1;
+                                     final boolean isInitDownload, final ArrayList<String> links, final boolean isStartApp, Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+        long taskId;
         try {
             if (link == null) return -1;
             if (!isInitDownload && isInDownloadQueue(link, XLTaskHelper.instance().getFileName(link))) {
@@ -76,8 +80,14 @@ public class DownloadManager {
                 String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                         XLTaskHelper.instance().getFileName(link));
                 if (isPlayVideo && !(link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent"))) {
+                    ArrayList<String> newLinks = new ArrayList<>();
+                    for (int i = 0; i < links.size(); i++) {
+                        if (links.get(i).equals(link)) newLinks.add(localUrl);
+                        else newLinks.add(links.get(i));
+                    }
                     Intent intent = new Intent(context, PlayVideoActivity.class);
                     intent.putExtra("url", localUrl);
+                    intent.putStringArrayListExtra("urlList", newLinks);
                     context.startActivity(intent);
                 }
                 return -1;
@@ -94,7 +104,7 @@ public class DownloadManager {
                     ToastUtil.showMessage("资源开始下载");
                 }
             } else {
-                taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isStartApp, nextCall, errorCall);
+                taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, isPlayVideo, isStartApp, links, nextCall, errorCall);
             }
             XLTaskInfo xLTaskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
             xLTaskInfo.sourceUrl = link;
@@ -377,15 +387,21 @@ public class DownloadManager {
      * @return
      */
     public static long addThunderTask(String url, String savePath, @Nullable String fileName,
-                                      final Context context, final boolean isPlayVideo, final boolean isStartApp, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
+                                      final Context context, final boolean isPlayVideo, final boolean isStartApp, final ArrayList<String> links, final Consumer<? super XLTaskInfo> nextCall, final Consumer<? super Throwable> errorCall) {
         long taskId = -1;
         try {
             taskId = XLTaskHelper.instance().addThunderTask(url, savePath, fileName);
             String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                     XLTaskHelper.instance().getFileName(url));
             if (isPlayVideo) {
+                ArrayList<String> newLinks = new ArrayList<>();
+                for (int i = 0; i < links.size(); i++) {
+                    if (links.get(i).equals(url)) newLinks.add(localUrl);
+                    else newLinks.add(links.get(i));
+                }
                 Intent intent = new Intent(context, PlayVideoActivity.class);
                 intent.putExtra("url", localUrl);
+                intent.putStringArrayListExtra("urlList", newLinks);
                 context.startActivity(intent);
             }
             getDownloadObservable(taskId).subscribe(new Observer<XLTaskInfo>() {
@@ -637,7 +653,7 @@ public class DownloadManager {
                         addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath,
                                 PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), true, true, null, null);
                     } else {
-                        addNormalTask(BaseApplication.appContext, xlTaskInfo.sourceUrl, false, true, true, null, null);
+                        addNormalTask(BaseApplication.appContext, xlTaskInfo.sourceUrl, false, true, new ArrayList<String>(), true, null, null);
                     }
                 }
             }

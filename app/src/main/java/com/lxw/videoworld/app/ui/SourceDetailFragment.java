@@ -202,7 +202,7 @@ public class SourceDetailFragment extends BaseFragment {
                         intent.putStringArrayListExtra("urlList", links);
                         startActivity(intent);
                     } else {
-                        DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false);
+                        DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false, links);
                     }
                     }
                 });
@@ -296,7 +296,7 @@ public class SourceDetailFragment extends BaseFragment {
                         SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailFragment.this.getActivity(), (String) adapter.getData().get(position), false);
                         dialog.show();
                     } else {
-                        SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailFragment.this.getActivity(), (String) adapter.getData().get(position), true);
+                        SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailFragment.this.getActivity(), (String) adapter.getData().get(position), true, links);
                         dialog.show();
                     }
                 }

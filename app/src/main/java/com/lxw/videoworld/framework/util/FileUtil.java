@@ -3,7 +3,6 @@ package com.lxw.videoworld.framework.util;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -12,9 +11,9 @@ import android.text.TextUtils;
 import com.lxw.videoworld.app.config.Constant;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 /**
- *
  * Created by lxw9047 on 2016/10/20.
  */
 
@@ -61,31 +60,6 @@ public class FileUtil {
         }
     }
 
-
-    /**
-     * Gets the corresponding path to a file from the given content:// URI
-     *
-     * @param selectedVideoUri The content:// URI to find the file path from
-     * @param contentResolver  The content resolver to use to perform the query.
-     * @return the file path as a string
-     */
-    public static String getFilePathFromContentUri(Uri selectedVideoUri,
-                                                   ContentResolver contentResolver) {
-        String filePath;
-        String[] filePathColumn = {MediaStore.MediaColumns.DATA};
-
-        Cursor cursor = contentResolver.query(selectedVideoUri, filePathColumn, null, null, null);
-//      也可用下面的方法拿到cursor
-//      Cursor cursor = this.context.managedQuery(selectedVideoUri, filePathColumn, null, null, null);
-
-        cursor.moveToFirst();
-
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        filePath = cursor.getString(columnIndex);
-        cursor.close();
-        return filePath;
-    }
-
     //删除文件/文件夹及子文件
     public static void deleteFile(File file) {
         if (file.exists()) { // 判断文件是否存在
@@ -98,21 +72,6 @@ public class FileUtil {
                 }
             }
             file.delete();
-        }
-    }
-
-    // 打开文件夹
-    public static void openFolder(Context context, String path){
-        if(TextUtils.isEmpty(path)) return;
-        try {
-            Uri uri = Uri.fromFile(new File(path));
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setDataAndType(uri, "*/*");
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -133,6 +92,79 @@ public class FileUtil {
         } else {
             return 0;
         }
+    }
+
+    public static String getFilePath(Context context, Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {MediaStore.MediaColumns.DATA};
+            Cursor cursor;
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+            } catch (Exception e) {
+                // Eat it  Or Log it.
+                e.printStackTrace();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    /**
+     * 将视频插入图库
+     *
+     * @param url 视频路径地址
+     */
+    public static void updateVideoToSystem(Context context, String url) {
+        try {
+            File file = new File(url);
+            //获取ContentResolve对象，来操作插入视频
+            ContentResolver localContentResolver = context.getContentResolver();
+            if (file.exists()) {
+                //如果是目录则递归计算其内容的总大小
+                if (file.isDirectory()) {
+                    File[] children = file.listFiles();
+                    for (File f : children) {
+                        String[] suffixs = f.getPath().split("\\.");
+                        String suffix = suffixs[suffixs.length - 1];
+                        for (int i = 0; i < Constant.videos.length; i++) {
+                            if (Constant.videos[i].equals(suffix)) {
+                                //ContentValues：用于储存一些基本类型的键值对
+                                ContentValues localContentValues = getVideoContentValues(context, f, System.currentTimeMillis());
+                                //insert语句负责插入一条新的纪录，如果插入成功则会返回这条记录的id，如果插入失败会返回-1。
+                                Uri localUri = localContentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, localContentValues);
+                            }
+                        }
+
+                    }
+                } else {//如果是文件则直接返回其大小
+                    //ContentValues：用于储存一些基本类型的键值对
+                    ContentValues localContentValues = getVideoContentValues(context, file, System.currentTimeMillis());
+                    //insert语句负责插入一条新的纪录，如果插入成功则会返回这条记录的id，如果插入失败会返回-1。
+                    Uri localUri = localContentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, localContentValues);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //再往数据库中插入数据的时候将，将要插入的值都放到一个ContentValues的实例当中
+    public static ContentValues getVideoContentValues(Context paramContext, File paramFile, long paramLong) {
+        ContentValues localContentValues = new ContentValues();
+        localContentValues.put("title", paramFile.getName());
+        localContentValues.put("_display_name", paramFile.getName());
+        localContentValues.put("mime_type", "video/3gp");
+        localContentValues.put("datetaken", Long.valueOf(paramLong));
+        localContentValues.put("date_modified", Long.valueOf(paramLong));
+        localContentValues.put("date_added", Long.valueOf(paramLong));
+        localContentValues.put("_data", paramFile.getAbsolutePath());
+        localContentValues.put("_size", Long.valueOf(paramFile.length()));
+        return localContentValues;
     }
 
 }

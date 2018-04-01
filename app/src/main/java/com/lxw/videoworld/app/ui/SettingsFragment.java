@@ -4,6 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -42,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.app.Activity.RESULT_OK;
 import static com.lxw.videoworld.app.config.Constant.PATH_OFFLINE_DOWNLOAD;
 import static com.lxw.videoworld.app.config.Constant.THEME_TYPE;
 import static com.lxw.videoworld.app.config.Constant.THEME_TYPE_1;
@@ -70,7 +72,7 @@ public class SettingsFragment extends Fragment {
             settings.add(new KeyValueModel("主题切换", ""));
             settings.add(new KeyValueModel("本地播放", ""));
             settings.add(new KeyValueModel("缓存清理", ValueUtil.formatFileSize(FileUtil.getFileSize(new File(PATH_OFFLINE_DOWNLOAD)))));
-            settings.add(new KeyValueModel("版本更新", ManifestUtil.getApkVersionName(SettingsFragment.this.getContext())));
+            settings.add(new KeyValueModel("版本更新", "V " + ManifestUtil.getApkVersionName(SettingsFragment.this.getContext())));
             settings.add(new KeyValueModel("和谐Q群", "126257036"));
             settings.add(new KeyValueModel("移动网络暂停下载", ""));
             settings.add(new KeyValueModel("赞赏", ""));
@@ -154,9 +156,10 @@ public class SettingsFragment extends Fragment {
                             dialog.show();
                             break;
                         case "本地播放":
+                            FileUtil.updateVideoToSystem(getContext(), Constant.PATH_OFFLINE_DOWNLOAD);
                             Intent intent2 = new Intent();
-                            intent2.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
-                            intent2.setAction(Intent.ACTION_GET_CONTENT);
+                            intent2.setAction(Intent.ACTION_PICK);
+                            intent2.setDataAndType(Uri.fromFile(new File(Constant.PATH_OFFLINE_DOWNLOAD)), "video/*");
                             startActivityForResult(intent2, 1);
                             break;
                         case "缓存清理":
@@ -304,6 +307,26 @@ public class SettingsFragment extends Fragment {
             }
 
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            //
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    String path = FileUtil.getFilePath(SettingsFragment.this.getContext(), uri);
+                    String url = DownloadManager.getLoclUrl(path);
+                    Intent intent = new Intent(SettingsFragment.this.getContext(), PlayVideoActivity.class);
+                    intent.putExtra("url", url);
+                    SettingsFragment.this.getActivity().startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -117,6 +117,7 @@
             android:name=".app.ui.PlayVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/TranslucentAppTheme" />
         <activity
             android:name=".app.ui.DownloadManagerActivity"

@@ -1,6 +1,7 @@
 package com.lxw.videoworld.app.ui;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.model.KeyValueModel;
+import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
@@ -61,7 +63,7 @@ public class PlayVideoActivity extends BaseActivity {
 
     private Transition transition;
     private String url;
-    private List<String> urlList;
+    private ArrayList<String> urlList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,16 +171,21 @@ public class PlayVideoActivity extends BaseActivity {
                 }
                 KeyValueModel keyValueModel = (KeyValueModel) adapter.getData().get(position);
                 if (!keyValueModel.isSelected()) {
-                    for (int i = 0; i < adapter.getData().size(); i++) {
-                        ((KeyValueModel) adapter.getData().get(i)).setSelected(i == position);
+                    String positionUrl = ((KeyValueModel) adapter.getData().get(position)).getValue().trim();
+                    if (positionUrl.startsWith("ftp") || positionUrl.startsWith("thunder") || positionUrl.startsWith("ed2k") || positionUrl.startsWith("magnet")){
+                        DownloadManager.addNormalTask(PlayVideoActivity.this, positionUrl, true, false, urlList);
+                    }else {
+                        for (int i = 0; i < adapter.getData().size(); i++) {
+                            ((KeyValueModel) adapter.getData().get(i)).setSelected(i == position);
+                        }
+                        adapter.notifyDataSetChanged();
+                        List<GSYVideoModel> list = new ArrayList<>();
+                        for (int i = 0; i < urlList.size(); i++) {
+                            list.add(new GSYVideoModel(urlList.get(i), ""));
+                        }
+                        videoPlayer.setUp(list, false, urlList.indexOf(url));
+                        initTransition();
                     }
-                    adapter.notifyDataSetChanged();
-                    List<GSYVideoModel> list = new ArrayList<>();
-                    for (int i = 0; i < urlList.size(); i++) {
-                        list.add(new GSYVideoModel(urlList.get(i), ""));
-                    }
-                    videoPlayer.setUp(list, false, urlList.indexOf(url));
-                    initTransition();
                 }
             }
         });
@@ -196,6 +203,21 @@ public class PlayVideoActivity extends BaseActivity {
         initTransition();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        url = intent.getStringExtra("url");
+        urlList = intent.getStringArrayListExtra("urlList");
+        if (urlList == null) urlList = new ArrayList<>();
+        if (TextUtils.isEmpty(url) && urlList.size() == 0) {
+            url = "";
+            ToastUtil.showMessage("无效链接");
+        } else if (TextUtils.isEmpty(url) && !TextUtils.isEmpty(urlList.get(0)))
+            url = urlList.get(0);
+        else if (TextUtils.isEmpty(url)) url = "";
+        if (urlList.isEmpty()) urlList.add(url);
+        setUpView();
+    }
 
     @Override
     protected void onPause() {
