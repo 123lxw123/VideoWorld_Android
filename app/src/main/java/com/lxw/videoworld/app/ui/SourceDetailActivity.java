@@ -46,6 +46,12 @@ public class SourceDetailActivity extends BaseActivity {
             viewpagerDetail.setAdapter(new QuickFragmentPageAdapter<SourceDetailFragment>(getSupportFragmentManager(), fragments, titles));
         } else {
             sourceDetailModel = (SourceDetailModel) getIntent().getSerializableExtra("sourceDetailModel");
+            List<SourceDetailModel> detailModels = new ArrayList<>();
+            if (Constant.detailModels!= null) {
+                for(int i = 0; i < Constant.detailModels.size(); i++) {
+                    detailModels.add(Constant.detailModels.get(i));
+                }
+            }
             viewpagerDetail.setAdapter(new SourceDetailFragmentPageAdapter(getSupportFragmentManager(), Constant.detailModels));
             int index = 0;
             for (int i = 0; i < Constant.detailModels.size(); i++) {

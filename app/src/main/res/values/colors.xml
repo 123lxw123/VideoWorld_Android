@@ -82,6 +82,8 @@
     <color name="color_CBCBCB">#CBCBCB</color>
     <color name="color_3385FF">#3385FF</color>
     <color name="color_FFE791">#FFE791</color>
+    <color name="color_212121">#212121</color>
+    <color name="color_979797">#979797</color>
     <color name="color_4D000000">#4D000000</color>
 
     <drawable name="drawable_white">#ffffff</drawable>
