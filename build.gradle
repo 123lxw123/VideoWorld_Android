@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         // realm
+        classpath "io.realm:realm-gradle-plugin:5.0.1"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0"
     }
