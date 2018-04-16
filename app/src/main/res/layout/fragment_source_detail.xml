@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fl_content"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -69,12 +71,6 @@
                     android:background="@null"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/dp_20">
-
-                    <EditText
-                        android:id="@+id/edit_empty"
-                        android:layout_width="1px"
-                        android:layout_height="1px"
-                        android:visibility="visible" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"

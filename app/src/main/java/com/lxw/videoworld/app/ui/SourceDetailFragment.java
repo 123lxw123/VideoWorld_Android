@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,8 +27,8 @@ import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
-import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.KeyValueModel;
+import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseFragment;
@@ -79,8 +78,6 @@ public class SourceDetailFragment extends BaseFragment {
     View viewEmpty;
     @BindView(R.id.img_expand_close)
     ImageView imgExpandClose;
-    @BindView(R.id.edit_empty)
-    EditText editEmpty;
     @BindView(R.id.img_play_video)
     ImageView imgPlayVideo;
     private View rootView;
@@ -313,8 +310,6 @@ public class SourceDetailFragment extends BaseFragment {
             }
         });
 
-        // 顶部获取焦点
-        editEmpty.requestFocus();
         if (picHeight > 0) {
             scrollView.scrollBy(0, picHeight / 2);
         }
