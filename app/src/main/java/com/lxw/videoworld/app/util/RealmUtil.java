@@ -52,6 +52,16 @@ public class RealmUtil {
     }
 
     public static RealmList<RealmObject> queryByStatus(String status, Class<RealmObject> clazz) {
-        RealmResults<RealmObject> results;
+        RealmList<RealmObject> resultList = new RealmList<RealmObject>();
+        RealmResults<RealmObject> results = mRealm.where(clazz).equalTo("status", status).findAll();
+        resultList.addAll(results.subList(0, results.size()));
+        return resultList;
+    }
+
+    public static RealmList<RealmObject> queryByClass(Class<RealmObject> clazz) {
+        RealmList<RealmObject> resultList = new RealmList<RealmObject>();
+        RealmResults<RealmObject> results = mRealm.where(clazz).findAll();
+        resultList.addAll(results.subList(0, results.size()));
+        return resultList;
     }
 }

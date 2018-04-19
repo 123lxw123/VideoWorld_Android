@@ -16,7 +16,8 @@ public class SourceHistoryModel extends RealmObject implements Serializable {
     @PrimaryKey
     private String link;
     private long seek;
-    private String historyStatus;
+    private long total;
+    private String status;
     private long time;
 
     public String getUrl() {
@@ -43,12 +44,20 @@ public class SourceHistoryModel extends RealmObject implements Serializable {
         this.seek = seek;
     }
 
-    public String getHistoryStatus() {
-        return historyStatus;
+    public long getTotal() {
+        return total;
     }
 
-    public void setHistoryStatus(String historyStatus) {
-        this.historyStatus = historyStatus;
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public long getTime() {

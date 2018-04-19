@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
 public class SourceCollectModel extends RealmObject implements Serializable {
     @PrimaryKey
     private String url;
-    private String collectStatus;
+    private String status;
     private long time;
 
     public String getUrl() {
@@ -24,12 +24,12 @@ public class SourceCollectModel extends RealmObject implements Serializable {
         this.url = url;
     }
 
-    public String getCollectStatus() {
-        return collectStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCollectStatus(String collectStatus) {
-        this.collectStatus = collectStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public long getTime() {
