@@ -2,7 +2,6 @@ package com.lxw.videoworld.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.image.ImageManager;
@@ -22,6 +22,7 @@ import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,15 +62,12 @@ public class SourceBannerFragment extends BaseFragment {
     private int picWidth;
     private int picHeight;
 
+    List<SourceDetailModel> detailModels = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         item = (SourceDetailModel) getArguments().getSerializable("item");
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-
     }
 
     @Nullable
@@ -92,6 +90,10 @@ public class SourceBannerFragment extends BaseFragment {
             parent.removeView(rootView);
         }
         return rootView;
+    }
+
+    public void setSourceDetails(List<SourceDetailModel> detailModels) {
+        this.detailModels = detailModels;
     }
 
     public void refreshUI(final SourceDetailModel item){
@@ -134,6 +136,7 @@ public class SourceBannerFragment extends BaseFragment {
             ll_banner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!detailModels.isEmpty()) Constant.detailModels = detailModels;
                     Intent intent = new Intent(SourceBannerFragment.this.getActivity(), SourceDetailActivity.class);
                     intent.putExtra("sourceDetailModel", (Serializable) item);
                     startActivity(intent);

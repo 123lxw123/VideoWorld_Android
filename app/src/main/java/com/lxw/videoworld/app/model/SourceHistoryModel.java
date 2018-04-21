@@ -12,21 +12,12 @@ import io.realm.annotations.PrimaryKey;
 
 public class SourceHistoryModel extends RealmObject implements Serializable {
     @PrimaryKey
-    private String url;
-    @PrimaryKey
     private String link;
+    private SourceDetailModel sourceDetailModel;
     private long seek;
     private long total;
-    private String status;
+    private String status;// 0 已删除  1 正常状态
     private long time;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getLink() {
         return link;
@@ -34,6 +25,14 @@ public class SourceHistoryModel extends RealmObject implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public SourceDetailModel getSourceDetailModel() {
+        return sourceDetailModel;
+    }
+
+    public void setSourceDetailModel(SourceDetailModel sourceDetailModel) {
+        this.sourceDetailModel = sourceDetailModel;
     }
 
     public long getSeek() {

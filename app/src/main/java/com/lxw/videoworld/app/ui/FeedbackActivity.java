@@ -22,7 +22,7 @@ public class FeedbackActivity extends BaseActivity {
 
     @BindView(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.txt_feedback)
+    @BindView(R.id.txt_title)
     TextView txtFeedback;
     @BindView(R.id.edit_feedback)
     EditText editFeedback;

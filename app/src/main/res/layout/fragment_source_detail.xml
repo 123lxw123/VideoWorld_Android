@@ -45,6 +45,15 @@
                 android:layout_marginRight="12dp"
                 android:background="@drawable/ic_share" />
 
+            <Button
+                android:id="@+id/button_collect"
+                android:layout_toStartOf="@id/button_share"
+                android:background="@drawable/svg_collect"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"/>
+
         </RelativeLayout>
 
         <FrameLayout

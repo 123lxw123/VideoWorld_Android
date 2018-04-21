@@ -95,8 +95,10 @@
     <string name="txt_download_path">下载路径</string>
     <string name="txt_version">版本号</string>
     <string name="txt_clear_cache">清理缓存</string>
+    <string name="txt_collect">我的收藏</string>
     <string name="txt_QQ">和谐群</string>
     <string name="txt_feedback">反馈</string>
+    <string name="txt_common_detail">详情</string>
     <string name="txt_feedback_commit">提交</string>
     <string name="txt_feedback_tips">意见、建议、吐槽…畅所欲言</string>
     <string name="txt_no_feedback_tips">请先输入您的反馈内容</string>

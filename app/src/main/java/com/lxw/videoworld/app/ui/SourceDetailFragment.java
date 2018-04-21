@@ -28,8 +28,10 @@ import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.KeyValueModel;
+import com.lxw.videoworld.app.model.SourceCollectModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.service.DownloadManager;
+import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.app.widget.SourceLinkDialog;
 import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.http.HttpManager;
@@ -42,6 +44,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class SourceDetailFragment extends BaseFragment {
@@ -80,6 +83,9 @@ public class SourceDetailFragment extends BaseFragment {
     ImageView imgExpandClose;
     @BindView(R.id.img_play_video)
     ImageView imgPlayVideo;
+    @BindView(R.id.button_collect)
+    Button buttonCollect;
+    Unbinder unbinder;
     private View rootView;
     private boolean flag_expand = false;// 简介展开收起标识
     private int width;
@@ -93,6 +99,8 @@ public class SourceDetailFragment extends BaseFragment {
 
     private String url;
     private String sourceType;
+    private boolean isRefreshDetail;
+    private boolean isCollected = false;
 
     @Nullable
     @Override
@@ -102,13 +110,14 @@ public class SourceDetailFragment extends BaseFragment {
             ButterKnife.bind(this, rootView);
             url = getArguments().getString("url");
             sourceType = getArguments().getString("sourceType");
+            isRefreshDetail = getArguments().getBoolean("isRefreshDetail");
             imgBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     SourceDetailFragment.this.getActivity().finish();
                 }
             });
-            if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
+            if (isRefreshDetail || !TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
                 getSourceDetail();
             } else {
                 sourceDetailModel = (SourceDetailModel) getArguments().getSerializable("sourceDetailModel");
@@ -124,6 +133,7 @@ public class SourceDetailFragment extends BaseFragment {
                 parent.removeView(rootView);
             }
         }
+        unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -136,27 +146,61 @@ public class SourceDetailFragment extends BaseFragment {
                 if (sourceDetailModel != null) {
                     initDatas();
                     initViews();
+                    RealmUtil.copyOrUpdateDetailModel(sourceDetailModel);
                 }
             }
 
             @Override
             public void onFailure(BaseResponse<SourceDetailModel> response) {
-
+                SourceDetailModel sourceDetailModel = RealmUtil.queryDetailModelByUrl(url);
+                if (sourceDetailModel != null) {
+                    initDatas();
+                    initViews();
+                }
             }
         }.doRequest();
     }
 
     private void initViews() {
+        // 收藏
+        final SourceCollectModel resultSourceCollectModel = RealmUtil.queryCollectModelByUrl(sourceDetailModel.getUrl());
+        if (resultSourceCollectModel != null) {
+            if (resultSourceCollectModel.getStatus().equals(Constant.STATUS_0)) {
+                isCollected = false;
+                buttonCollect.setBackgroundResource(R.drawable.svg_collect);
+            } else {
+                isCollected = true;
+                buttonCollect.setBackgroundResource(R.drawable.svg_collected);
+            }
+        }
+        buttonCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isCollected = !isCollected;
+                SourceCollectModel sourceCollectModel = new SourceCollectModel();
+                sourceCollectModel.setUrl(sourceDetailModel.getUrl());
+                sourceDetailModel.setSourceType(Constant.SOURCE_TYPE);
+                sourceCollectModel.setSourceDetailModel(sourceDetailModel);
+                if (isCollected) {
+                    sourceCollectModel.setStatus(Constant.STATUS_1);
+                    buttonCollect.setBackgroundResource(R.drawable.svg_collected);
+                } else {
+                    sourceCollectModel.setStatus(Constant.STATUS_0);
+                    buttonCollect.setBackgroundResource(R.drawable.svg_collect);
+                }
+                RealmUtil.copyOrUpdateCollectModel(sourceCollectModel);
+            }
+        });
 
         images = ValueUtil.string2list(sourceDetailModel.getImages());
         final List<String> tempList = ValueUtil.string2list(sourceDetailModel.getLinks());
         final ArrayList<String> links = new ArrayList<>();
-        if (tempList != null){
-            for (int i = 0; i < tempList.size(); i++){
+        if (tempList != null) {
+            for (int i = 0; i < tempList.size(); i++) {
                 if (!TextUtils.isEmpty(tempList.get(i)) && !TextUtils.isEmpty(tempList.get(i).trim()))
-                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)){
+                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
                         if (tempList.get(i).contains("m3u8")) links.add(tempList.get(i).trim());
-                    }else links.add(tempList.get(i).trim());
+                    } else links.add(tempList.get(i).trim());
             }
         }
         buttonShare.setOnClickListener(new View.OnClickListener() {
@@ -193,17 +237,17 @@ public class SourceDetailFragment extends BaseFragment {
                 imgPlayVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
-                        Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
-                        intent.putExtra("url", links.get(0));
-                        intent.putStringArrayListExtra("urlList", links);
-                        startActivity(intent);
-                    } else {
-                        DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false, links);
-                    }
+                        if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
+                            Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
+                            intent.putExtra("url", links.get(0));
+                            intent.putStringArrayListExtra("urlList", links);
+                            startActivity(intent);
+                        } else {
+                            DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false, links);
+                        }
                     }
                 });
-            }else imgPlayVideo.setVisibility(View.GONE);
+            } else imgPlayVideo.setVisibility(View.GONE);
             ImageManager.getInstance().loadImage(SourceDetailFragment.this.getContext(), imgPicture, images.get(0));
         }
         if (!TextUtils.isEmpty(sourceDetailModel.getTitle())) {
@@ -274,7 +318,7 @@ public class SourceDetailFragment extends BaseFragment {
             sourceLinkAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_source_link, links) {
                 @Override
                 protected void convert(BaseViewHolder helper, String item) {
-                    if (links.size() > 3){
+                    if (links.size() > 3) {
                         helper.setText(R.id.txt_link, "( " + (helper.getAdapterPosition() + 1) + " ) " + item);
                     } else helper.setText(R.id.txt_link, item);
                 }
@@ -284,7 +328,7 @@ public class SourceDetailFragment extends BaseFragment {
                 @Override
                 public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
-                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)){
+                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
                         Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
                         intent.putExtra("url", (String) adapter.getData().get(position));
                         intent.putStringArrayListExtra("urlList", links);
@@ -452,5 +496,11 @@ public class SourceDetailFragment extends BaseFragment {
         WindowManager wm = this.getActivity().getWindowManager();
         width = wm.getDefaultDisplay().getWidth();
         height = wm.getDefaultDisplay().getHeight();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

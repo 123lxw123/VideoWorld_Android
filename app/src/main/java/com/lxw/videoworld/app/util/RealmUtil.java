@@ -1,14 +1,13 @@
 package com.lxw.videoworld.app.util;
 
 import com.lxw.videoworld.app.model.SourceCollectModel;
+import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceHistoryModel;
 
-import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  *
@@ -19,7 +18,11 @@ public class RealmUtil {
 
     private static Realm mRealm = Realm.getDefaultInstance();
 
-    public static void copyToRealmOrUpdate(final RealmObject obj) {
+    public static Realm getInstance() {
+        return mRealm;
+    }
+
+    public static void copyOrUpdateCollectModel(final RealmModel obj) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -32,36 +35,39 @@ public class RealmUtil {
         });
     }
 
-    public static void copyToRealmOrUpdate(final List<RealmObject> list) {
+    public static void copyOrUpdateDetailModel(final SourceDetailModel sourceDetailModel) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if (list != null && !list.isEmpty()){
-                    for(int i = 0; i < list.size(); i++) {
-                        if (list.get(i) instanceof SourceCollectModel) ((SourceCollectModel) list.get(i)).setTime(System.currentTimeMillis());
-                        if (list.get(i) instanceof SourceHistoryModel) ((SourceHistoryModel) list.get(i)).setTime(System.currentTimeMillis());
-                        realm.copyToRealmOrUpdate(list.get(i));
-                    }
+                if (sourceDetailModel != null) {
+                    sourceDetailModel.setTime(System.currentTimeMillis());
+                    realm.copyToRealmOrUpdate(sourceDetailModel);
                 }
             }
         });
     }
 
-    public static RealmObject queryByUrl(String url, Class<RealmObject> clazz) {
-        return mRealm.where(clazz).equalTo("url", url).findFirst();
+    public static SourceCollectModel queryCollectModelByUrl(String url) {
+        return mRealm.where(SourceCollectModel.class).equalTo("url", url).findFirst();
     }
 
-    public static RealmList<RealmObject> queryByStatus(String status, Class<RealmObject> clazz) {
-        RealmList<RealmObject> resultList = new RealmList<RealmObject>();
-        RealmResults<RealmObject> results = mRealm.where(clazz).equalTo("status", status).findAll();
-        resultList.addAll(results.subList(0, results.size()));
-        return resultList;
+    public static RealmResults<SourceCollectModel> queryCollectModelByStatus(String status) {
+        return mRealm.where(SourceCollectModel.class).equalTo("status", status).sort("time", Sort.DESCENDING).findAll();
     }
 
-    public static RealmList<RealmObject> queryByClass(Class<RealmObject> clazz) {
-        RealmList<RealmObject> resultList = new RealmList<RealmObject>();
-        RealmResults<RealmObject> results = mRealm.where(clazz).findAll();
-        resultList.addAll(results.subList(0, results.size()));
-        return resultList;
+    public static void modifyCollectStatusByUrl(String url, String status) {
+        RealmResults<SourceCollectModel> results;
+        if (url == null) results = mRealm.where(SourceCollectModel.class).findAll();
+        else results = mRealm.where(SourceCollectModel.class).equalTo("url", url).findAll();
+        for (int i = 0; i < results.size(); i++) {
+            SourceCollectModel sourceCollectModel = mRealm.copyFromRealm(results.get(i));
+            sourceCollectModel.setStatus(status);
+            copyOrUpdateCollectModel(sourceCollectModel);
+        }
     }
+
+    public static SourceDetailModel queryDetailModelByUrl(String url) {
+        return mRealm.where(SourceDetailModel.class).equalTo("url", url).findFirst();
+    }
+
 }

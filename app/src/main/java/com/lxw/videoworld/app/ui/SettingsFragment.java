@@ -69,6 +69,7 @@ public class SettingsFragment extends Fragment {
             ButterKnife.bind(this, rootView);
             settings.clear();
             settings.add(new KeyValueModel("下载中心", ""));
+            settings.add(new KeyValueModel("我的收藏", ""));
             settings.add(new KeyValueModel("主题切换", ""));
             settings.add(new KeyValueModel("本地播放", ""));
             settings.add(new KeyValueModel("缓存清理", ValueUtil.formatFileSize(FileUtil.getFileSize(new File(PATH_OFFLINE_DOWNLOAD)))));
@@ -104,6 +105,10 @@ public class SettingsFragment extends Fragment {
                         case "下载中心":
                             Intent intent1 = new Intent(SettingsFragment.this.getContext(), DownloadManagerActivity.class);
                             startActivity(intent1);
+                            break;
+                        case "我的收藏":
+                            Intent intent5 = new Intent(SettingsFragment.this.getContext(), CollectActivity.class);
+                            startActivity(intent5);
                             break;
                         case "主题切换":
                             int checked = -1;

@@ -116,8 +116,8 @@
         <activity
             android:name=".app.ui.PlayVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/TranslucentAppTheme" />
         <activity
             android:name=".app.ui.DownloadManagerActivity"
@@ -125,31 +125,36 @@
 
         <service android:name=".app.service.BackgroundIntentService" />
 
-        <activity android:name=".app.ui.PreViewActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".app.ui.PreViewActivity"
+            android:screenOrientation="portrait" />
 
-        <receiver android:name=".app.service.AppInstallReceiver"
+        <receiver
+            android:name=".app.service.AppInstallReceiver"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <!-- 有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider-->
-        <!-- 这里主要为授予有米SDK拥有打开apk安装界面的功能-->
+        <!-- 有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider -->
+        <!-- 这里主要为授予有米SDK拥有打开apk安装界面的功能 -->
         <!-- 请务必修改 android:authorities 为贵应用的标识，一般为 包名.fileProvider -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.lxw.videoworld.fileProvider"
             android:exported="false"
-            android:grantUriPermissions="true" >
-
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider" />
-        </provider >
+        </provider>
+
+        <activity android:name=".app.ui.CollectActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

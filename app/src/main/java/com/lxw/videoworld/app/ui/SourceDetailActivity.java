@@ -25,6 +25,7 @@ public class SourceDetailActivity extends BaseActivity {
 
     private String url;
     private String sourceType;
+    private boolean isRefreshDetail;
     private SourceDetailModel sourceDetailModel;
 
     @Override
@@ -34,11 +35,13 @@ public class SourceDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         url = getIntent().getStringExtra("url");
         sourceType = getIntent().getStringExtra("sourceType");
+        isRefreshDetail = getIntent().getBooleanExtra("isRefreshDetail", false);
         if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
             SourceDetailFragment fragment = new SourceDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putString("url", url);
             bundle.putString("sourceType", sourceType);
+            bundle.putBoolean("isRefreshDetail", isRefreshDetail);
             fragment.setArguments(bundle);
             List<SourceDetailFragment> fragments = new ArrayList<>();
             fragments.add(fragment);
@@ -61,6 +64,4 @@ public class SourceDetailActivity extends BaseActivity {
             viewpagerDetail.setCurrentItem(index, false);
         }
     }
-
-
 }
