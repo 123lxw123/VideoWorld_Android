@@ -36,7 +36,7 @@ public class SourceDetailActivity extends BaseActivity {
         url = getIntent().getStringExtra("url");
         sourceType = getIntent().getStringExtra("sourceType");
         isRefreshDetail = getIntent().getBooleanExtra("isRefreshDetail", false);
-        if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
+        if (!isRefreshDetail && !TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
             SourceDetailFragment fragment = new SourceDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putString("url", url);
@@ -55,11 +55,16 @@ public class SourceDetailActivity extends BaseActivity {
                     detailModels.add(Constant.detailModels.get(i));
                 }
             }
-            viewpagerDetail.setAdapter(new SourceDetailFragmentPageAdapter(getSupportFragmentManager(), Constant.detailModels));
+            viewpagerDetail.setAdapter(new SourceDetailFragmentPageAdapter(getSupportFragmentManager(), detailModels, isRefreshDetail));
             int index = 0;
             for (int i = 0; i < Constant.detailModels.size(); i++) {
-                if (sourceDetailModel.getUrl().equals(Constant.detailModels.get(i).getUrl()))
-                    index = i;
+                if (!TextUtils.isEmpty(url)) {
+                    if (url.equals(Constant.detailModels.get(i).getUrl()))
+                        index = i;
+                } else {
+                    if (sourceDetailModel.getUrl().equals(Constant.detailModels.get(i).getUrl()))
+                        index = i;
+                }
             }
             viewpagerDetail.setCurrentItem(index, false);
         }

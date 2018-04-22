@@ -110,17 +110,17 @@ public class SourceDetailFragment extends BaseFragment {
             ButterKnife.bind(this, rootView);
             url = getArguments().getString("url");
             sourceType = getArguments().getString("sourceType");
-            isRefreshDetail = getArguments().getBoolean("isRefreshDetail");
+            sourceDetailModel = (SourceDetailModel) getArguments().getSerializable("sourceDetailModel");
+            isRefreshDetail = getArguments().getBoolean("isRefreshDetail", false);
             imgBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     SourceDetailFragment.this.getActivity().finish();
                 }
             });
-            if (isRefreshDetail || !TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType)) {
+            if (isRefreshDetail || (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(sourceType) && sourceDetailModel == null)) {
                 getSourceDetail();
             } else {
-                sourceDetailModel = (SourceDetailModel) getArguments().getSerializable("sourceDetailModel");
                 if (sourceDetailModel != null) {
                     initDatas();
                     initViews();
@@ -179,7 +179,6 @@ public class SourceDetailFragment extends BaseFragment {
                 isCollected = !isCollected;
                 SourceCollectModel sourceCollectModel = new SourceCollectModel();
                 sourceCollectModel.setUrl(sourceDetailModel.getUrl());
-                sourceDetailModel.setSourceType(Constant.SOURCE_TYPE);
                 sourceCollectModel.setSourceDetailModel(sourceDetailModel);
                 if (isCollected) {
                     sourceCollectModel.setStatus(Constant.STATUS_1);
@@ -232,6 +231,8 @@ public class SourceDetailFragment extends BaseFragment {
             }
             imgPicture.getLayoutParams().height = picHeight;
             viewEmpty.getLayoutParams().height = picHeight;
+            imgPicture.requestLayout();
+            viewEmpty.requestLayout();
             if (!sourceDetailModel.getCategory().equals(Constant.CATEGORY_21) && links.size() > 0) {
                 imgPlayVideo.setVisibility(View.VISIBLE);
                 imgPlayVideo.setOnClickListener(new View.OnClickListener() {

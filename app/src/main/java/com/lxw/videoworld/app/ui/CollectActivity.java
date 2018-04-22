@@ -96,6 +96,7 @@ public class CollectActivity extends BaseActivity {
         sourceAdapter = new BaseQuickAdapter<SourceDetailModel, BaseViewHolder>(R.layout.item_source_list, sourceDetails) {
             @Override
             protected void convert(BaseViewHolder helper, final SourceDetailModel item) {
+                helper.addOnLongClickListener(R.id.ll_content);
                 // 设置列表 Item 图片、标题展示宽高
                 FrameLayout flPicture = ((FrameLayout) helper.getView(R.id.fl_picture));
                 flPicture.getLayoutParams().width = picWidth;

@@ -16,20 +16,25 @@ import java.util.List;
 
 public class SourceDetailFragmentPageAdapter extends FragmentPagerAdapter {
     private List<SourceDetailModel> mList;
+    private boolean isRefreshDetail;
 
     /**
      * @param fm
      * @param list
      */
-    public SourceDetailFragmentPageAdapter(FragmentManager fm, List<SourceDetailModel> list) {
+    public SourceDetailFragmentPageAdapter(FragmentManager fm, List<SourceDetailModel> list, Boolean isRefreshDetail) {
         super(fm);
         mList = list;
+        this.isRefreshDetail = isRefreshDetail;
     }
 
     @Override
     public Fragment getItem(int position) {
         SourceDetailFragment fragment = new SourceDetailFragment();
         Bundle bundle = new Bundle();
+        bundle.putString("url", mList.get(position).getUrl());
+        bundle.putString("sourceType", mList.get(position).getSourceType());
+        bundle.putBoolean("isRefreshDetail", isRefreshDetail);
         bundle.putSerializable("sourceDetailModel", mList.get(position));
         fragment.setArguments(bundle);
         return fragment;
