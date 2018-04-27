@@ -30,9 +30,10 @@ import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.KeyValueModel;
 import com.lxw.videoworld.app.model.SourceCollectModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.util.RealmUtil;
-import com.lxw.videoworld.app.widget.SourceLinkDialog;
+import com.lxw.videoworld.app.util.StringUtil;
 import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
@@ -146,7 +147,7 @@ public class SourceDetailFragment extends BaseFragment {
                 if (sourceDetailModel != null) {
                     initDatas();
                     initViews();
-                    RealmUtil.copyOrUpdateDetailModel(sourceDetailModel);
+                    RealmUtil.copyOrUpdateModel(sourceDetailModel);
                 }
             }
 
@@ -187,21 +188,12 @@ public class SourceDetailFragment extends BaseFragment {
                     sourceCollectModel.setStatus(Constant.STATUS_0);
                     buttonCollect.setBackgroundResource(R.drawable.svg_collect);
                 }
-                RealmUtil.copyOrUpdateCollectModel(sourceCollectModel);
+                RealmUtil.copyOrUpdateModel(sourceCollectModel);
             }
         });
 
         images = ValueUtil.string2list(sourceDetailModel.getImages());
-        final List<String> tempList = ValueUtil.string2list(sourceDetailModel.getLinks());
-        final ArrayList<String> links = new ArrayList<>();
-        if (tempList != null) {
-            for (int i = 0; i < tempList.size(); i++) {
-                if (!TextUtils.isEmpty(tempList.get(i)) && !TextUtils.isEmpty(tempList.get(i).trim()))
-                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
-                        if (tempList.get(i).contains("m3u8")) links.add(tempList.get(i).trim());
-                    } else links.add(tempList.get(i).trim());
-            }
-        }
+        final ArrayList<String> links = StringUtil.getSourceLinks(sourceDetailModel.getLinks());
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,14 +230,7 @@ public class SourceDetailFragment extends BaseFragment {
                 imgPlayVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
-                            Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
-                            intent.putExtra("url", links.get(0));
-                            intent.putStringArrayListExtra("urlList", links);
-                            startActivity(intent);
-                        } else {
-                            DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false, links);
-                        }
+                        playOrDownloadVideo(links, 0);
                     }
                 });
             } else imgPlayVideo.setVisibility(View.GONE);
@@ -329,18 +314,7 @@ public class SourceDetailFragment extends BaseFragment {
                 @Override
                 public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                     // TODO
-                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
-                        Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
-                        intent.putExtra("url", (String) adapter.getData().get(position));
-                        intent.putStringArrayListExtra("urlList", links);
-                        startActivity(intent);
-                    } else if (sourceDetailModel.getCategory().equals(Constant.CATEGORY_21)) {
-                        SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailFragment.this.getActivity(), (String) adapter.getData().get(position), false);
-                        dialog.show();
-                    } else {
-                        SourceLinkDialog dialog = new SourceLinkDialog(SourceDetailFragment.this.getActivity(), (String) adapter.getData().get(position), true, links);
-                        dialog.show();
-                    }
+                    playOrDownloadVideo(links, position);
                 }
             });
             recyclerviewLink.setAdapter(sourceLinkAdapter);
@@ -357,6 +331,22 @@ public class SourceDetailFragment extends BaseFragment {
 
         if (picHeight > 0) {
             scrollView.scrollBy(0, picHeight / 2);
+        }
+    }
+
+    private void playOrDownloadVideo(ArrayList<String> links, int position) {
+        SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
+        sourceHistoryModel.setLink(links.get(position));
+        sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
+        sourceHistoryModel.setStatus(Constant.STATUS_1);
+        RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+        if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
+            Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
+            intent.putExtra("url", links.get(position));
+            intent.putStringArrayListExtra("urlList", links);
+            startActivity(intent);
+        } else {
+            DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false, links);
         }
     }
 

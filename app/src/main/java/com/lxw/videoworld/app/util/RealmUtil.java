@@ -22,26 +22,15 @@ public class RealmUtil {
         return mRealm;
     }
 
-    public static void copyOrUpdateCollectModel(final RealmModel obj) {
+    public static void copyOrUpdateModel(final RealmModel obj) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 if (obj != null) {
                     if (obj instanceof SourceCollectModel) ((SourceCollectModel) obj).setTime(System.currentTimeMillis());
                     if (obj instanceof SourceHistoryModel) ((SourceHistoryModel) obj).setTime(System.currentTimeMillis());
+                    if (obj instanceof SourceDetailModel) ((SourceDetailModel) obj).setTime(System.currentTimeMillis());
                     realm.copyToRealmOrUpdate(obj);
-                }
-            }
-        });
-    }
-
-    public static void copyOrUpdateDetailModel(final SourceDetailModel sourceDetailModel) {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (sourceDetailModel != null) {
-                    sourceDetailModel.setTime(System.currentTimeMillis());
-                    realm.copyToRealmOrUpdate(sourceDetailModel);
                 }
             }
         });
@@ -62,7 +51,7 @@ public class RealmUtil {
         for (int i = 0; i < results.size(); i++) {
             SourceCollectModel sourceCollectModel = mRealm.copyFromRealm(results.get(i));
             sourceCollectModel.setStatus(status);
-            copyOrUpdateCollectModel(sourceCollectModel);
+            copyOrUpdateModel(sourceCollectModel);
         }
     }
 
@@ -70,4 +59,23 @@ public class RealmUtil {
         return mRealm.where(SourceDetailModel.class).equalTo("url", url).findFirst();
     }
 
+    public static void copyOrUpdateHistoryModel(final SourceHistoryModel obj, final boolean isUpdateProgress) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (obj != null) {
+                    SourceHistoryModel oldSourceHistoryModel = mRealm.where(SourceHistoryModel.class).equalTo("link", obj.getLink()).findFirst();
+                    if (!isUpdateProgress && oldSourceHistoryModel != null) {
+                        obj.setSeek(oldSourceHistoryModel.getSeek());
+                        obj.setTotal(oldSourceHistoryModel.getTotal());
+                    }
+                    realm.copyToRealmOrUpdate(obj);
+                }
+            }
+        });
+    }
+
+    public static RealmResults<SourceHistoryModel> queryHistoryModelByStatus(String status) {
+        return mRealm.where(SourceHistoryModel.class).equalTo("status", status).sort("time", Sort.DESCENDING).findAll();
+    }
 }

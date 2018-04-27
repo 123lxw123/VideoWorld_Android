@@ -96,7 +96,8 @@
     <string name="txt_download_path">下载路径</string>
     <string name="txt_version">版本号</string>
     <string name="txt_clear_cache">清理缓存</string>
-    <string name="txt_collect">我的收藏</string>
+    <string name="txt_collect">收藏记录</string>
+    <string name="txt_history">播放记录</string>
     <string name="txt_QQ">和谐群</string>
     <string name="txt_feedback">反馈</string>
     <string name="txt_common_detail">详情</string>

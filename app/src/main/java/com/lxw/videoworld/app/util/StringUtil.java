@@ -3,6 +3,11 @@ package com.lxw.videoworld.app.util;
 
 import android.text.TextUtils;
 
+import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.framework.util.ValueUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -158,5 +163,19 @@ public class StringUtil {
         }else{
             return oldStr;
         }
+    }
+
+    public static ArrayList<String> getSourceLinks(String linkString) {
+        final List<String> tempList = ValueUtil.string2list(linkString);
+        final ArrayList<String> links = new ArrayList<>();
+        if (tempList != null) {
+            for (int i = 0; i < tempList.size(); i++) {
+                if (!TextUtils.isEmpty(tempList.get(i)) && !TextUtils.isEmpty(tempList.get(i).trim()))
+                    if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
+                        if (tempList.get(i).contains("m3u8")) links.add(tempList.get(i).trim());
+                    } else links.add(tempList.get(i).trim());
+            }
+        }
+        return links;
     }
 }
