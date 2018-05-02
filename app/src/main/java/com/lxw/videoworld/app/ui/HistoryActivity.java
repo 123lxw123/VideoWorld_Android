@@ -1,5 +1,6 @@
 package com.lxw.videoworld.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.ToastUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
+import com.lxw.videoworld.framework.widget.CustomDialog;
 import com.lxw.videoworld.framework.widget.NumberProgressBar;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class HistoryActivity extends BaseActivity {
     Button buttonDelete;
     @BindView(R.id.recyclerview_history)
     RecyclerView recyclerviewHistory;
-    private RealmResults<SourceHistoryModel> historyModels;
+    private List<SourceHistoryModel> historyModels = new ArrayList<>();
     private BaseQuickAdapter<SourceHistoryModel, BaseViewHolder> historyAdapter;
 
     @Override
@@ -44,9 +46,6 @@ public class HistoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         ButterKnife.bind(this);
-        historyModels = RealmUtil.queryHistoryModelByStatus(Constant.STATUS_1);
-        if (historyModels.isEmpty()) ToastUtil.showMessage("暂无播放记录");
-        else setUpView();
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,10 +54,24 @@ public class HistoryActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        historyModels.clear();
+        RealmResults realmResults = RealmUtil.queryHistoryModelByStatus(Constant.STATUS_1);
+        if (realmResults.isEmpty()) ToastUtil.showMessage("暂无播放记录");
+        else {
+            for (int i = 0; i < realmResults.size(); i++) {
+                historyModels.add((SourceHistoryModel) realmResults.get(i));
+            }
+            setUpView();
+        }
+    }
+
     private void setUpView() {
-        historyAdapter = new BaseQuickAdapter<SourceHistoryModel, BaseViewHolder>(R.layout.item_download_manager, null) {
+        historyAdapter = new BaseQuickAdapter<SourceHistoryModel, BaseViewHolder>(R.layout.item_history, historyModels) {
             @Override
-            protected void convert(BaseViewHolder helper, final SourceHistoryModel item) {
+            protected void convert(final BaseViewHolder helper, final SourceHistoryModel item) {
                 List<String> images = ValueUtil.string2list(item.getSourceDetailModel().getImages());
                 if (images != null && !images.isEmpty()) ImageManager.getInstance().loadImage(HistoryActivity.this, (ImageView) helper.getView(R.id.img_picture), images.get(0));
                 helper.setText(R.id.txt_title, item.getSourceDetailModel().getTitle());
@@ -71,13 +84,64 @@ public class HistoryActivity extends BaseActivity {
                 if (index > 0) link = "( " + index + " ) " + link;
                 helper.setText(R.id.txt_link, link);
                 if (item.getTotal() > 0 && item.getSeek() >= 0) {
-                    ((NumberProgressBar) helper.getView(R.id.txt_progress)).setProgress((int) Math.floor(item.getSeek() / item.getTotal()));
+                    ((NumberProgressBar) helper.getView(R.id.txt_progress)).setMax(item.getTotal());
+                    ((NumberProgressBar) helper.getView(R.id.txt_progress)).setProgress(item.getSeek());
                 } else {
                     ((NumberProgressBar) helper.getView(R.id.txt_progress)).setProgress(0);
                 }
+                helper.getView(R.id.cardview_history_item).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(HistoryActivity.this, PlayVideoActivity.class);
+                        intent.putExtra("url", item.getLink());
+                        startActivity(intent);
+                    }
+                });
+                helper.getView(R.id.cardview_history_item).setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        CustomDialog customDialog = new CustomDialog(HistoryActivity.this, "删除播放记录", "将会删除该条播放记录，确定要删除？", "立即删除", "取消") {
+                            @Override
+                            public void ok() {
+                                super.ok();
+                                RealmUtil.modifyHistoryStatusByUrl(item.getLink(), Constant.STATUS_0);
+                                historyAdapter.getData().remove(helper.getAdapterPosition());
+                                historyAdapter.notifyDataSetChanged();
+                                ToastUtil.showMessage("已删除播放记录");
+                            }
+
+                            @Override
+                            public void cancel() {
+                                super.cancel();
+                            }
+                        };
+                        customDialog.show();
+                        return false;
+                    }
+                });
             }
         };
         recyclerviewHistory.setLayoutManager(new LinearLayoutManager(this));
         recyclerviewHistory.setAdapter(historyAdapter);
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomDialog customDialog = new CustomDialog(HistoryActivity.this, "清空播放记录", "清空播放记录将会删除所有播放记录，确定要清空？\n(长按可删除单条记录)", "立即清空", "取消") {
+                    @Override
+                    public void ok() {
+                        super.ok();
+                        RealmUtil.modifyHistoryStatusByUrl(null, Constant.STATUS_0);
+                        historyAdapter.setNewData(null);
+                        ToastUtil.showMessage("已清空播放记录");
+                    }
+
+                    @Override
+                    public void cancel() {
+                        super.cancel();
+                    }
+                };
+                customDialog.show();
+            }
+        });
     }
 }

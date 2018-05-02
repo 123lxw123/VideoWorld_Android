@@ -55,7 +55,7 @@ public class CollectActivity extends BaseActivity {
         for (int i = 0; i < resultSourceDetails.size(); i++) {
             sourceDetails.add(resultSourceDetails.get(i).getSourceDetailModel());
         }
-        if (sourceDetails.isEmpty()) ToastUtil.showMessage("暂无收藏");
+        if (sourceDetails.isEmpty()) ToastUtil.showMessage("暂无收藏记录");
         else initView();
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,13 +69,13 @@ public class CollectActivity extends BaseActivity {
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomDialog customDialog = new CustomDialog(CollectActivity.this, "清空收藏", "清空收藏将会删除所有收藏记录，确定要清空？\n(长按可删除单条记录)", "立即清空", "取消") {
+                CustomDialog customDialog = new CustomDialog(CollectActivity.this, "清空收藏记录", "清空收藏记录将会删除所有收藏记录，确定要清空？\n(长按可删除单条记录)", "立即清空", "取消") {
                     @Override
                     public void ok() {
                         super.ok();
                         RealmUtil.modifyCollectStatusByUrl(null, Constant.STATUS_0);
                         sourceAdapter.setNewData(null);
-                        ToastUtil.showMessage("已清空收藏");
+                        ToastUtil.showMessage("已清空收藏记录");
                     }
 
                     @Override
@@ -152,14 +152,14 @@ public class CollectActivity extends BaseActivity {
         sourceAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
             @Override
             public boolean onItemChildLongClick(final BaseQuickAdapter adapter, View view, final int position) {
-                CustomDialog customDialog = new CustomDialog(CollectActivity.this, "删除收藏", "将会删除该条收藏记录，确定要删除？", "立即删除", "取消") {
+                CustomDialog customDialog = new CustomDialog(CollectActivity.this, "删除收藏记录", "将会删除该条收藏记录，确定要删除？", "立即删除", "取消") {
                     @Override
                     public void ok() {
                         super.ok();
                         RealmUtil.modifyCollectStatusByUrl(((SourceDetailModel) adapter.getData().get(position)).getUrl(), Constant.STATUS_0);
                         sourceAdapter.getData().remove(position);
                         sourceAdapter.notifyDataSetChanged();
-                        ToastUtil.showMessage("已删除收藏");
+                        ToastUtil.showMessage("已删除收藏记录");
                     }
 
                     @Override

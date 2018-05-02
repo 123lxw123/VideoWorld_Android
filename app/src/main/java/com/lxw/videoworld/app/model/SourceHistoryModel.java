@@ -14,8 +14,8 @@ public class SourceHistoryModel extends RealmObject implements Serializable {
     @PrimaryKey
     private String link;
     private SourceDetailModel sourceDetailModel;
-    private long seek;
-    private long total;
+    private int seek;
+    private int total;
     private String status;// 0 已删除  1 正常状态
     private long time;
 
@@ -35,19 +35,19 @@ public class SourceHistoryModel extends RealmObject implements Serializable {
         this.sourceDetailModel = sourceDetailModel;
     }
 
-    public long getSeek() {
+    public int getSeek() {
         return seek;
     }
 
-    public void setSeek(long seek) {
+    public void setSeek(int seek) {
         this.seek = seek;
     }
 
-    public long getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 

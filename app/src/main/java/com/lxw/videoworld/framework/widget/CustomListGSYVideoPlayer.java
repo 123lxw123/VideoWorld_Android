@@ -7,14 +7,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.KeyValueModel;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.util.ColorUtil;
+import com.lxw.videoworld.app.util.RealmUtil;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
@@ -257,6 +261,18 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
                 sourceLinkAdapter.notifyDataSetChanged();
                 recyclerviewSourceLinks.smoothScrollToPosition(i);
             }
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        super.onProgressChanged(seekBar, progress, fromUser);
+        SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
+        if (sourceHistoryModel != null) {
+            sourceHistoryModel.setSeek(seekBar.getProgress());
+            sourceHistoryModel.setTotal(seekBar.getMax());
+            sourceHistoryModel.setStatus(Constant.STATUS_1);
+            RealmUtil.copyOrUpdateModel(sourceHistoryModel);
         }
     }
 

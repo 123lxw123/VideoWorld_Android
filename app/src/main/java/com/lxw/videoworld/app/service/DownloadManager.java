@@ -9,7 +9,10 @@ import android.text.TextUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.SourceDetailModel;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.ui.PlayVideoActivity;
+import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.app.util.XLTaskInfoComparator;
 import com.lxw.videoworld.app.widget.DownloadTorrentDialog;
 import com.lxw.videoworld.framework.application.BaseApplication;
@@ -394,6 +397,22 @@ public class DownloadManager {
             String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                     XLTaskHelper.instance().getFileName(url));
             if (isPlayVideo) {
+                SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
+                SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
+                sourceHistoryModel.setLink(localUrl);
+                sourceHistoryModel.setStatus(Constant.STATUS_1);
+                if (oldSourceHistoryModel != null) {
+                    oldSourceHistoryModel.setStatus(Constant.STATUS_0);
+                    sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
+                }
+                else {
+                    SourceDetailModel sourceDetailModel = new SourceDetailModel();
+                    sourceDetailModel.setTitle(url);
+                    sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
+                }
+                RealmUtil.copyOrUpdateHistoryModel(oldSourceHistoryModel, false);
+                RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+
                 ArrayList<String> newLinks = new ArrayList<>();
                 for (int i = 0; i < links.size(); i++) {
                     if (links.get(i).equals(url)) newLinks.add(localUrl);

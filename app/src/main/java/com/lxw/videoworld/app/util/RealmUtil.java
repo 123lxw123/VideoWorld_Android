@@ -78,4 +78,24 @@ public class RealmUtil {
     public static RealmResults<SourceHistoryModel> queryHistoryModelByStatus(String status) {
         return mRealm.where(SourceHistoryModel.class).equalTo("status", status).sort("time", Sort.DESCENDING).findAll();
     }
+
+    public static void modifyHistoryStatusByUrl(String link, String status) {
+        RealmResults<SourceHistoryModel> results;
+        if (link == null) results = mRealm.where(SourceHistoryModel.class).findAll();
+        else results = mRealm.where(SourceHistoryModel.class).equalTo("link", link).findAll();
+        for (int i = 0; i < results.size(); i++) {
+            SourceHistoryModel sourceHistoryModel = mRealm.copyFromRealm(results.get(i));
+            sourceHistoryModel.setStatus(status);
+            copyOrUpdateModel(sourceHistoryModel);
+        }
+    }
+
+    public static SourceHistoryModel queryHistoryModelByLink(String link) {
+        SourceHistoryModel sourceHistoryModel = mRealm.where(SourceHistoryModel.class).equalTo("link", link).findFirst();
+        if (sourceHistoryModel != null) {
+            sourceHistoryModel = mRealm.copyFromRealm(sourceHistoryModel);
+        }
+        return sourceHistoryModel;
+    }
+
 }
