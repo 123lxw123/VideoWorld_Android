@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
@@ -116,12 +117,11 @@ public class PlayVideoActivity extends BaseActivity {
         //全屏
         videoPlayer.setIfCurrentIsFullscreen(false);
         // 播放记录
-        int seek = RealmUtil.queryHistoryModelByLink(url).getSeek();
-        if (seek > 0) videoPlayer.setSeekOnStart(seek);
+        SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
+        if (sourceHistoryModel != null && sourceHistoryModel.getSeek() > 0) videoPlayer.setSeekOnStart(sourceHistoryModel.getSeek());
         videoPlayer.setUpUrl(url, urlList);
         //过渡动画
         initTransition();
-        videoPlayer.
     }
 
     @Override
@@ -157,6 +157,7 @@ public class PlayVideoActivity extends BaseActivity {
         super.onDestroy();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
+        videoPlayer.cancelTimer();
     }
 
     @Override

@@ -14,7 +14,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.SourceDetailModel;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.service.DownloadManager;
+import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.app.widget.DownloadManagerDialog;
 import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.util.ValueUtil;
@@ -232,7 +235,24 @@ public class DownloadListFragment extends BaseFragment {
                     statusText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
                             String url = DownloadManager.getLoclUrl(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
+
+                            SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(xlTaskInfo.sourceUrl);
+                            SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
+                            sourceHistoryModel.setLink(url);
+                            if (oldSourceHistoryModel != null) {
+                                oldSourceHistoryModel.setStatus(Constant.STATUS_0);
+                                sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
+                            } else {
+                                SourceDetailModel sourceDetailModel = new SourceDetailModel();
+                                sourceDetailModel.setTitle(xlTaskInfo.mFileName);
+                                sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
+                            }
+                            sourceHistoryModel.setStatus(Constant.STATUS_1);
+                            RealmUtil.copyOrUpdateHistoryModel(oldSourceHistoryModel, false);
+                            RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+
                             Intent intent = new Intent(getContext(), PlayVideoActivity.class);
                             intent.putExtra("url", url);
                             getContext().startActivity(intent);

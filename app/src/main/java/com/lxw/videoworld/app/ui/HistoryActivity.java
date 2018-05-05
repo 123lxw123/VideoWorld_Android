@@ -76,7 +76,7 @@ public class HistoryActivity extends BaseActivity {
                 if (images != null && !images.isEmpty()) ImageManager.getInstance().loadImage(HistoryActivity.this, (ImageView) helper.getView(R.id.img_picture), images.get(0));
                 helper.setText(R.id.txt_title, item.getSourceDetailModel().getTitle());
                 int index = 0;
-                List<String> links = StringUtil.getSourceLinks(item.getSourceDetailModel().getLinks());
+                List<String> links = StringUtil.getSourceLinks(item.getSourceDetailModel());
                 for (int i = 0; i < links.size(); i++) {
                     if (item.getLink().equals(links.get(i))) index = i + 1;
                 }

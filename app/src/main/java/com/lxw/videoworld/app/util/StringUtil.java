@@ -4,6 +4,7 @@ package com.lxw.videoworld.app.util;
 import android.text.TextUtils;
 
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.framework.util.ValueUtil;
 
 import java.util.ArrayList;
@@ -165,8 +166,8 @@ public class StringUtil {
         }
     }
 
-    public static ArrayList<String> getSourceLinks(String linkString) {
-        final List<String> tempList = ValueUtil.string2list(linkString);
+    public static ArrayList<String> getSourceLinks(SourceDetailModel sourceDetailModel) {
+        final List<String> tempList = ValueUtil.string2list(sourceDetailModel.getLinks());
         final ArrayList<String> links = new ArrayList<>();
         if (tempList != null) {
             for (int i = 0; i < tempList.size(); i++) {

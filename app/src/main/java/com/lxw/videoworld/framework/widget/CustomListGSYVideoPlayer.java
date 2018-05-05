@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,10 +14,14 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.KeyValueModel;
+import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.util.ColorUtil;
 import com.lxw.videoworld.app.util.RealmUtil;
+import com.lxw.videoworld.framework.application.BaseApplication;
+import com.lxw.videoworld.framework.util.GsonUtil;
+import com.lxw.videoworld.framework.util.NetUtil;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
@@ -27,6 +30,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Zion on 2018/4/15.
@@ -43,6 +48,7 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
     private BaseQuickAdapter<KeyValueModel, BaseViewHolder> sourceLinkAdapter;
     private List<KeyValueModel> sourceList = new ArrayList<>();
     private ArrayList<String> urlList = new ArrayList<>();
+    private Timer timer;
 
     public CustomListGSYVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -254,6 +260,7 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
 
     @Override
     public void onAutoCompletion() {
+        SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
         super.onAutoCompletion();
         if (sourceLinkAdapter.getData().size() > 0) {
             for (int i = 0; i < sourceLinkAdapter.getData().size(); i++) {
@@ -261,23 +268,66 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
                 sourceLinkAdapter.notifyDataSetChanged();
                 recyclerviewSourceLinks.smoothScrollToPosition(i);
             }
+
+            SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
+            sourceHistoryModel.setLink(mOriginUrl);
+            if (oldSourceHistoryModel != null) {
+                sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
+            } else {
+                SourceDetailModel sourceDetailModel = new SourceDetailModel();
+                sourceDetailModel.setTitle(mOriginUrl);
+                if (mUriList != null) sourceDetailModel.setLinks(GsonUtil.bean2json(mUriList));
+                sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
+            }
+            sourceHistoryModel.setStatus(Constant.STATUS_1);
+            RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
         }
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        super.onProgressChanged(seekBar, progress, fromUser);
-        SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
-        if (sourceHistoryModel != null) {
-            sourceHistoryModel.setSeek(seekBar.getProgress());
-            sourceHistoryModel.setTotal(seekBar.getMax());
-            sourceHistoryModel.setStatus(Constant.STATUS_1);
-            RealmUtil.copyOrUpdateModel(sourceHistoryModel);
+    public void onPrepared() {
+        super.onPrepared();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
+                if (sourceHistoryModel != null) {
+                    sourceHistoryModel.setSeek(getCurrentPositionWhenPlaying());
+                    sourceHistoryModel.setTotal(getDuration());
+                    sourceHistoryModel.setStatus(Constant.STATUS_1);
+                    if (sourceHistoryModel.getTotal() - sourceHistoryModel.getSeek() <= 3000)
+                        sourceHistoryModel.setSeek(sourceHistoryModel.getTotal());
+                    RealmUtil.copyOrUpdateModel(sourceHistoryModel);
+                }
+                setNetSpeedText(NetUtil.getNetSpeedText(BaseApplication.getAppContext()));
+            }
+        }, 3000, 3000);
+    }
+
+    public void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
         }
     }
 
     @Override
     public int getLayoutId() {
         return R.layout.view_list_player_contrller;
+    }
+
+    public void setNetSpeedText(final String netSpeedText) {
+        final TextView netSpeed = findViewById(R.id.netSpeed);
+        netSpeed.post(new Runnable() {
+            @Override
+            public void run() {
+                netSpeed.setText(netSpeedText);
+            }
+        });
     }
 }

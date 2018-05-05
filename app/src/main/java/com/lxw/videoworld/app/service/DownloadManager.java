@@ -396,23 +396,24 @@ public class DownloadManager {
             taskId = XLTaskHelper.instance().addThunderTask(url, savePath, fileName);
             String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                     XLTaskHelper.instance().getFileName(url));
-            if (isPlayVideo) {
-                SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
-                SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
-                sourceHistoryModel.setLink(localUrl);
-                sourceHistoryModel.setStatus(Constant.STATUS_1);
-                if (oldSourceHistoryModel != null) {
-                    oldSourceHistoryModel.setStatus(Constant.STATUS_0);
-                    sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
-                }
-                else {
-                    SourceDetailModel sourceDetailModel = new SourceDetailModel();
-                    sourceDetailModel.setTitle(url);
-                    sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
-                }
-                RealmUtil.copyOrUpdateHistoryModel(oldSourceHistoryModel, false);
-                RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
 
+            SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
+            SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
+            sourceHistoryModel.setLink(localUrl);
+            if (oldSourceHistoryModel != null) {
+                oldSourceHistoryModel.setStatus(Constant.STATUS_0);
+                sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
+            } else {
+                SourceDetailModel sourceDetailModel = new SourceDetailModel();
+                sourceDetailModel.setTitle(fileName);
+                sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
+            }
+            if (isPlayVideo) sourceHistoryModel.setStatus(Constant.STATUS_1);
+            else if (sourceHistoryModel.getStatus() == null) sourceHistoryModel.setStatus(Constant.STATUS_0);
+            RealmUtil.copyOrUpdateHistoryModel(oldSourceHistoryModel, false);
+            RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+
+            if (isPlayVideo) {
                 ArrayList<String> newLinks = new ArrayList<>();
                 for (int i = 0; i < links.size(); i++) {
                     if (links.get(i).equals(url)) newLinks.add(localUrl);

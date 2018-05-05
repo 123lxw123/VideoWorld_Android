@@ -193,7 +193,7 @@ public class SourceDetailFragment extends BaseFragment {
         });
 
         images = ValueUtil.string2list(sourceDetailModel.getImages());
-        final ArrayList<String> links = StringUtil.getSourceLinks(sourceDetailModel.getLinks());
+        final ArrayList<String> links = StringUtil.getSourceLinks(sourceDetailModel);
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -340,7 +340,7 @@ public class SourceDetailFragment extends BaseFragment {
         sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
         sourceHistoryModel.setStatus(Constant.STATUS_1);
         RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
-        if (Constant.SOURCE_TYPE.equals(Constant.SOURCE_TYPE_4)) {
+        if (sourceDetailModel != null && sourceDetailModel.getSourceType().equals(Constant.SOURCE_TYPE_4)) {
             Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
             intent.putExtra("url", links.get(position));
             intent.putStringArrayListExtra("urlList", links);

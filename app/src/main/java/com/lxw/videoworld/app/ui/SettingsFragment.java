@@ -25,7 +25,10 @@ import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.ConfigModel;
 import com.lxw.videoworld.app.model.KeyValueModel;
+import com.lxw.videoworld.app.model.SourceDetailModel;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.service.DownloadManager;
+import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.DownloadUtil;
 import com.lxw.videoworld.framework.util.FileUtil;
@@ -328,6 +331,15 @@ public class SettingsFragment extends Fragment {
                     Uri uri = data.getData();
                     String path = FileUtil.getFilePath(SettingsFragment.this.getContext(), uri);
                     String url = DownloadManager.getLoclUrl(path);
+
+                    SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
+                    sourceHistoryModel.setLink(url);
+                    SourceDetailModel sourceDetailModel = new SourceDetailModel();
+                    sourceDetailModel.setTitle(path);
+                    sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
+                    sourceHistoryModel.setStatus(Constant.STATUS_1);
+                    RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+
                     Intent intent = new Intent(SettingsFragment.this.getContext(), PlayVideoActivity.class);
                     intent.putExtra("url", url);
                     SettingsFragment.this.getActivity().startActivity(intent);

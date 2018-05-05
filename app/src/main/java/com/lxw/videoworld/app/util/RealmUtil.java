@@ -5,6 +5,7 @@ import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceHistoryModel;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -18,22 +19,25 @@ public class RealmUtil {
 
     private static Realm mRealm = Realm.getDefaultInstance();
 
-    public static Realm getInstance() {
-        return mRealm;
-    }
-
     public static void copyOrUpdateModel(final RealmModel obj) {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (obj != null) {
-                    if (obj instanceof SourceCollectModel) ((SourceCollectModel) obj).setTime(System.currentTimeMillis());
-                    if (obj instanceof SourceHistoryModel) ((SourceHistoryModel) obj).setTime(System.currentTimeMillis());
-                    if (obj instanceof SourceDetailModel) ((SourceDetailModel) obj).setTime(System.currentTimeMillis());
-                    realm.copyToRealmOrUpdate(obj);
+        try (Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build())) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    if (obj != null) {
+                        if (obj instanceof SourceCollectModel)
+                            ((SourceCollectModel) obj).setTime(System.currentTimeMillis());
+                        if (obj instanceof SourceHistoryModel)
+                            ((SourceHistoryModel) obj).setTime(System.currentTimeMillis());
+                        if (obj instanceof SourceDetailModel)
+                            ((SourceDetailModel) obj).setTime(System.currentTimeMillis());
+                        realm.copyToRealmOrUpdate(obj);
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static SourceCollectModel queryCollectModelByUrl(String url) {
@@ -91,11 +95,14 @@ public class RealmUtil {
     }
 
     public static SourceHistoryModel queryHistoryModelByLink(String link) {
-        SourceHistoryModel sourceHistoryModel = mRealm.where(SourceHistoryModel.class).equalTo("link", link).findFirst();
-        if (sourceHistoryModel != null) {
-            sourceHistoryModel = mRealm.copyFromRealm(sourceHistoryModel);
+        try (Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build())) {
+            SourceHistoryModel sourceHistoryModel = realm.where(SourceHistoryModel.class).equalTo("link", link).findFirst();
+            if (sourceHistoryModel != null) return realm.copyFromRealm(sourceHistoryModel);
+            else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return sourceHistoryModel;
     }
 
 }
