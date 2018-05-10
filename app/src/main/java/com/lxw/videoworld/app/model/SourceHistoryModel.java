@@ -1,5 +1,7 @@
 package com.lxw.videoworld.app.model;
 
+import com.lxw.videoworld.framework.application.BaseApplication;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -13,6 +15,9 @@ import io.realm.annotations.PrimaryKey;
 public class SourceHistoryModel extends RealmObject implements Serializable {
     @PrimaryKey
     private String link;
+    private String localFilePath;
+    private String localUrl;
+    private String uid = BaseApplication.uid;
     private SourceDetailModel sourceDetailModel;
     private int seek;
     private int total;
@@ -25,6 +30,30 @@ public class SourceHistoryModel extends RealmObject implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getLocalUrl() {
+        return localUrl;
+    }
+
+    public void setLocalUrl(String localUrl) {
+        this.localUrl = localUrl;
+    }
+
+    public String getLocalFilePath() {
+        return localFilePath;
+    }
+
+    public void setLocalFilePath(String localFilePath) {
+        this.localFilePath = localFilePath;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public SourceDetailModel getSourceDetailModel() {

@@ -143,8 +143,8 @@ public class CollectActivity extends BaseActivity {
                 // TODO
                 Constant.detailModels = sourceAdapter.getData();
                 Intent intent = new Intent(CollectActivity.this, SourceDetailActivity.class);
-                intent.putExtra("url", sourceDetails.get(position).getUrl());
-                intent.putExtra("sourceType", sourceDetails.get(position).getSourceType());
+                intent.putExtra("url", sourceAdapter.getData().get(position).getUrl());
+                intent.putExtra("sourceType", sourceAdapter.getData().get(position).getSourceType());
                 intent.putExtra("isRefreshDetail", true);
                 startActivity(intent);
             }

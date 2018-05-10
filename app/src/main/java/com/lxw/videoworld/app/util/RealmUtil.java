@@ -69,6 +69,14 @@ public class RealmUtil {
             public void execute(Realm realm) {
                 if (obj != null) {
                     SourceHistoryModel oldSourceHistoryModel = mRealm.where(SourceHistoryModel.class).equalTo("link", obj.getLink()).findFirst();
+                    if (oldSourceHistoryModel != null) {
+                        if (obj.getLocalFilePath() == null && oldSourceHistoryModel.getLocalFilePath() != null) {
+                            obj.setLocalFilePath(oldSourceHistoryModel.getLocalFilePath());
+                        }
+                        if (obj.getLocalUrl() == null && oldSourceHistoryModel.getLocalUrl() != null) {
+                            obj.setLocalUrl(oldSourceHistoryModel.getLocalUrl());
+                        }
+                    }
                     if (!isUpdateProgress && oldSourceHistoryModel != null) {
                         obj.setSeek(oldSourceHistoryModel.getSeek());
                         obj.setTotal(oldSourceHistoryModel.getTotal());
@@ -104,5 +112,4 @@ public class RealmUtil {
             return null;
         }
     }
-
 }

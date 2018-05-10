@@ -240,7 +240,9 @@ public class DownloadListFragment extends BaseFragment {
 
                             SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(xlTaskInfo.sourceUrl);
                             SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
-                            sourceHistoryModel.setLink(url);
+                            sourceHistoryModel.setLink(xlTaskInfo.sourceUrl);
+                            sourceHistoryModel.setLocalUrl(url);
+                            sourceHistoryModel.setLocalFilePath(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
                             if (oldSourceHistoryModel != null) {
                                 oldSourceHistoryModel.setStatus(Constant.STATUS_0);
                                 sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());

@@ -399,7 +399,10 @@ public class DownloadManager {
 
             SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
             SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
-            sourceHistoryModel.setLink(localUrl);
+            sourceHistoryModel.setLink(url);
+            sourceHistoryModel.setLocalUrl(localUrl);
+            sourceHistoryModel.setLocalFilePath(PATH_OFFLINE_DOWNLOAD +
+                    XLTaskHelper.instance().getFileName(url));
             if (oldSourceHistoryModel != null) {
                 oldSourceHistoryModel.setStatus(Constant.STATUS_0);
                 sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());

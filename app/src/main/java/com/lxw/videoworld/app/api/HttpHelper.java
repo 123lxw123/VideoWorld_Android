@@ -94,6 +94,10 @@ public class HttpHelper {
         return httpService.getDetail(url, sourceType);
     }
 
+    public Observable<BaseResponse<SourceListModel>> getLocalSearch(String keyword){
+        return httpService.getLocalSearch(keyword);
+    }
+
     public Observable<BaseResponse<String>> addUserInfo(String sms, String contact, String address, String history){
         return httpService.addUserInfo(BaseApplication.uid, sms, contact, address, history);
     }

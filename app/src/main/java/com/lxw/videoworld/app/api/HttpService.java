@@ -50,4 +50,9 @@ public interface HttpService {
 
 //    @GET
 //    Observable<BaseResponse<MaoYanMovieModel>> getMaoYanMovies(@Url String url);
+
+    @Headers("Cache-Control: public, max-age=43200")
+    @FormUrlEncoded
+    @POST("localSearch")
+    Observable<BaseResponse<SourceListModel>> getLocalSearch(@Field("keyword") String keyword);
 }

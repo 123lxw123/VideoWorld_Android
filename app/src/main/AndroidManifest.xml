@@ -156,8 +156,10 @@
         <activity
             android:name=".app.ui.CollectActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".app.ui.HistoryActivity"
+        <activity
+            android:name=".app.ui.HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".app.ui.LocalSearchActivity"
             android:screenOrientation="portrait" />
     </application>
 

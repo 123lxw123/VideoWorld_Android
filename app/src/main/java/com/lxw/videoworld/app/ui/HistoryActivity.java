@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceHistoryModel;
+import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.app.util.StringUtil;
 import com.lxw.videoworld.framework.base.BaseActivity;
@@ -92,8 +93,13 @@ public class HistoryActivity extends BaseActivity {
                 helper.getView(R.id.cardview_history_item).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        String url = item.getLink();
+                        if (item.getLocalFilePath() != null && item.getLocalFilePath().startsWith(Constant.PATH_SD_CARD))
+                            url = DownloadManager.getLoclUrl(item.getLocalFilePath());
+                        else if (item.getLocalUrl() != null)
+                            url = item.getLocalUrl();
                         Intent intent = new Intent(HistoryActivity.this, PlayVideoActivity.class);
-                        intent.putExtra("url", item.getLink());
+                        intent.putExtra("url", url);
                         startActivity(intent);
                     }
                 });

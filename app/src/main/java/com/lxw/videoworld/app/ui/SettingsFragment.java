@@ -74,8 +74,9 @@ public class SettingsFragment extends Fragment {
             settings.add(new KeyValueModel("下载中心", ""));
             settings.add(new KeyValueModel("收藏记录", ""));
             settings.add(new KeyValueModel("播放记录", ""));
-            settings.add(new KeyValueModel("主题切换", ""));
             settings.add(new KeyValueModel("本地播放", ""));
+            settings.add(new KeyValueModel("主题切换", ""));
+            settings.add(new KeyValueModel("磁力搜索", ""));
             settings.add(new KeyValueModel("缓存清理", ValueUtil.formatFileSize(FileUtil.getFileSize(new File(PATH_OFFLINE_DOWNLOAD)))));
             settings.add(new KeyValueModel("版本更新", "V " + ManifestUtil.getApkVersionName(SettingsFragment.this.getContext())));
             settings.add(new KeyValueModel("和谐Q群", "126257036"));
@@ -174,6 +175,10 @@ public class SettingsFragment extends Fragment {
                             intent2.setAction(Intent.ACTION_PICK);
                             intent2.setDataAndType(Uri.fromFile(new File(Constant.PATH_OFFLINE_DOWNLOAD)), "video/*");
                             startActivityForResult(intent2, 1);
+                            break;
+                        case "磁力搜索":
+                            Intent intent7 = new Intent(getContext(), SearchActivity.class);
+                            startActivity(intent7);
                             break;
                         case "缓存清理":
                             CustomDialog customDialog = new CustomDialog(SettingsFragment.this.getActivity(), "清理缓存", "清理缓存将会删除所有下载记录以及下载路径中的所有文件，确定要清理缓存？", "立即清理", "取消") {
@@ -333,7 +338,9 @@ public class SettingsFragment extends Fragment {
                     String url = DownloadManager.getLoclUrl(path);
 
                     SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
-                    sourceHistoryModel.setLink(url);
+                    sourceHistoryModel.setLink(path);
+                    sourceHistoryModel.setLocalUrl(url);
+                    sourceHistoryModel.setLocalFilePath(path);
                     SourceDetailModel sourceDetailModel = new SourceDetailModel();
                     sourceDetailModel.setTitle(path);
                     sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
