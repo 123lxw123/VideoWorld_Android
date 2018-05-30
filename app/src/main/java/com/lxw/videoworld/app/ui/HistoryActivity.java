@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -94,12 +95,20 @@ public class HistoryActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         String url = item.getLink();
-                        if (item.getLocalFilePath() != null && item.getLocalFilePath().startsWith(Constant.PATH_SD_CARD))
+                        if (item.getLocalFilePath() != null && item.getLocalFilePath().startsWith(Constant.PATH_SD_CARD)) {
                             url = DownloadManager.getLoclUrl(item.getLocalFilePath());
-                        else if (item.getLocalUrl() != null)
+                            if (!TextUtils.isEmpty(item.getLocalUrl())) {
+                                SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLocalUrl(item.getLocalUrl());
+                                if (sourceHistoryModel != null) {
+                                    sourceHistoryModel.setLocalUrl(url);
+                                    RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+                                }
+                            }
+                        } else if (item.getLocalUrl() != null)
                             url = item.getLocalUrl();
                         Intent intent = new Intent(HistoryActivity.this, PlayVideoActivity.class);
                         intent.putExtra("url", url);
+                        if (!TextUtils.isEmpty(item.getLink())) intent.putExtra("sourceUrl", item.getLink());
                         startActivity(intent);
                     }
                 });

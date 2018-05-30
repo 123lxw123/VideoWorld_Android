@@ -346,7 +346,7 @@ public class SourceDetailFragment extends BaseFragment {
             intent.putStringArrayListExtra("urlList", links);
             startActivity(intent);
         } else {
-            DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(0), true, false, links);
+            DownloadManager.addNormalTask(SourceDetailFragment.this.getActivity(), links.get(position), true, false, links);
         }
     }
 

@@ -192,7 +192,7 @@ public class DownloadListFragment extends BaseFragment {
                     statusText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DownloadManager.removeTask(xlTaskInfo.mTaskId);
+                            DownloadManager.stopTask(xlTaskInfo.mTaskId);
                             DownloadManager.startTask(getActivity(), xlTaskInfo);
                         }
                     });
@@ -244,7 +244,6 @@ public class DownloadListFragment extends BaseFragment {
                             sourceHistoryModel.setLocalUrl(url);
                             sourceHistoryModel.setLocalFilePath(PATH_OFFLINE_DOWNLOAD + xlTaskInfo.mFileName);
                             if (oldSourceHistoryModel != null) {
-                                oldSourceHistoryModel.setStatus(Constant.STATUS_0);
                                 sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
                             } else {
                                 SourceDetailModel sourceDetailModel = new SourceDetailModel();
@@ -252,7 +251,6 @@ public class DownloadListFragment extends BaseFragment {
                                 sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
                             }
                             sourceHistoryModel.setStatus(Constant.STATUS_1);
-                            RealmUtil.copyOrUpdateHistoryModel(oldSourceHistoryModel, false);
                             RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
 
                             Intent intent = new Intent(getContext(), PlayVideoActivity.class);
@@ -278,7 +276,7 @@ public class DownloadListFragment extends BaseFragment {
                 statusText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DownloadManager.removeTask(xlTaskInfo.mTaskId);
+                        DownloadManager.stopTask(xlTaskInfo.mTaskId);
                         DownloadManager.startTask(getActivity(), xlTaskInfo);
                         setDownloadStatus(Constant.STATUS_1, helper, xlTaskInfo);
                     }

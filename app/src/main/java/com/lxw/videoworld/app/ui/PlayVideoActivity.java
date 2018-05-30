@@ -46,6 +46,7 @@ public class PlayVideoActivity extends BaseActivity {
     private boolean isTransition;
     private Transition transition;
     private String url;
+    private String sourceUrl;
     private ArrayList<String> urlList;
 
     @Override
@@ -71,6 +72,7 @@ public class PlayVideoActivity extends BaseActivity {
         ButterKnife.bind(this);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         url = getIntent().getStringExtra("url");
+        sourceUrl = getIntent().getStringExtra("sourceUrl");
         urlList = getIntent().getStringArrayListExtra("urlList");
         if (urlList == null) urlList = new ArrayList<>();
         if (TextUtils.isEmpty(url) && urlList.size() == 0) {
@@ -117,7 +119,8 @@ public class PlayVideoActivity extends BaseActivity {
         //全屏
         videoPlayer.setIfCurrentIsFullscreen(false);
         // 播放记录
-        SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
+        SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLocalUrl(url);
+        if (sourceHistoryModel == null) sourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
         if (sourceHistoryModel != null && sourceHistoryModel.getSeek() > 0) videoPlayer.setSeekOnStart(sourceHistoryModel.getSeek());
         videoPlayer.setUpUrl(url, urlList);
         //过渡动画
@@ -129,6 +132,7 @@ public class PlayVideoActivity extends BaseActivity {
         super.onNewIntent(intent);
         url = intent.getStringExtra("url");
         urlList = intent.getStringArrayListExtra("urlList");
+        sourceUrl = getIntent().getStringExtra("sourceUrl");
         if (urlList == null) urlList = new ArrayList<>();
         if (TextUtils.isEmpty(url) && urlList.size() == 0) {
             url = "";

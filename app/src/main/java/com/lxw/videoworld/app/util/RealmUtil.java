@@ -3,6 +3,7 @@ package com.lxw.videoworld.app.util;
 import com.lxw.videoworld.app.model.SourceCollectModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceHistoryModel;
+import com.lxw.videoworld.framework.log.LoggerHelper;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -20,15 +21,28 @@ public class RealmUtil {
     private static Realm mRealm = Realm.getDefaultInstance();
 
     public static void copyOrUpdateModel(final RealmModel obj) {
-        try (Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build())) {
+        Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build());
+        try {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     if (obj != null) {
                         if (obj instanceof SourceCollectModel)
                             ((SourceCollectModel) obj).setTime(System.currentTimeMillis());
-                        if (obj instanceof SourceHistoryModel)
+                        if (obj instanceof SourceHistoryModel){
+                            SourceHistoryModel oldSourceHistoryModel = realm.where(SourceHistoryModel.class).equalTo("link", ((SourceHistoryModel) obj).getLink()).findFirst();
+                            if (oldSourceHistoryModel != null) {
+                                if (((SourceHistoryModel) obj).getLocalFilePath() == null && oldSourceHistoryModel.getLocalFilePath() != null) {
+                                    ((SourceHistoryModel) obj).setLocalFilePath(oldSourceHistoryModel.getLocalFilePath());
+                                }
+                                if (((SourceHistoryModel) obj).getLocalUrl() == null && oldSourceHistoryModel.getLocalUrl() != null) {
+                                    ((SourceHistoryModel) obj).setLocalUrl(oldSourceHistoryModel.getLocalUrl());
+                                }
+                            }
                             ((SourceHistoryModel) obj).setTime(System.currentTimeMillis());
+                            LoggerHelper.debug("RealmUtil", "seek==" + ((SourceHistoryModel) obj).getSeek() / 1000);
+                            LoggerHelper.debug("RealmUtil", "status==" + ((SourceHistoryModel) obj).getStatus());
+                        }
                         if (obj instanceof SourceDetailModel)
                             ((SourceDetailModel) obj).setTime(System.currentTimeMillis());
                         realm.copyToRealmOrUpdate(obj);
@@ -37,6 +51,8 @@ public class RealmUtil {
             });
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            realm.close();
         }
     }
 
@@ -69,14 +85,6 @@ public class RealmUtil {
             public void execute(Realm realm) {
                 if (obj != null) {
                     SourceHistoryModel oldSourceHistoryModel = mRealm.where(SourceHistoryModel.class).equalTo("link", obj.getLink()).findFirst();
-                    if (oldSourceHistoryModel != null) {
-                        if (obj.getLocalFilePath() == null && oldSourceHistoryModel.getLocalFilePath() != null) {
-                            obj.setLocalFilePath(oldSourceHistoryModel.getLocalFilePath());
-                        }
-                        if (obj.getLocalUrl() == null && oldSourceHistoryModel.getLocalUrl() != null) {
-                            obj.setLocalUrl(oldSourceHistoryModel.getLocalUrl());
-                        }
-                    }
                     if (!isUpdateProgress && oldSourceHistoryModel != null) {
                         obj.setSeek(oldSourceHistoryModel.getSeek());
                         obj.setTotal(oldSourceHistoryModel.getTotal());
@@ -103,13 +111,30 @@ public class RealmUtil {
     }
 
     public static SourceHistoryModel queryHistoryModelByLink(String link) {
-        try (Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build())) {
+        Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build());
+        try {
             SourceHistoryModel sourceHistoryModel = realm.where(SourceHistoryModel.class).equalTo("link", link).findFirst();
             if (sourceHistoryModel != null) return realm.copyFromRealm(sourceHistoryModel);
             else return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        } finally {
+            realm.close();
+        }
+    }
+
+    public static SourceHistoryModel queryHistoryModelByLocalUrl(String localUrl) {
+        Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build());
+        try {
+            SourceHistoryModel sourceHistoryModel = realm.where(SourceHistoryModel.class).equalTo("localUrl", localUrl).findFirst();
+            if (sourceHistoryModel != null) return realm.copyFromRealm(sourceHistoryModel);
+            else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            realm.close();
         }
     }
 }
