@@ -82,6 +82,13 @@ public class DownloadManager {
                 ToastUtil.showMessage("资源已在下载队列中");
                 String localUrl = XLTaskHelper.instance().getLoclUrl(PATH_OFFLINE_DOWNLOAD +
                         XLTaskHelper.instance().getFileName(link));
+                SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(link);
+                if (sourceHistoryModel != null) {
+                    sourceHistoryModel.setLocalUrl(localUrl);
+                    sourceHistoryModel.setLocalFilePath(PATH_OFFLINE_DOWNLOAD +
+                            XLTaskHelper.instance().getFileName(link));
+                    RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
+                }
                 if (isPlayVideo && !(link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent"))) {
                     ArrayList<String> newLinks = new ArrayList<>();
                     for (int i = 0; i < links.size(); i++) {
@@ -92,6 +99,39 @@ public class DownloadManager {
                     intent.putExtra("url", localUrl);
                     intent.putStringArrayListExtra("urlList", newLinks);
                     context.startActivity(intent);
+                }
+                String fileName = XLTaskHelper.instance().getFileName(link);
+                if (xLTaskInfos != null && !TextUtils.isEmpty(fileName)) {
+                    for (int i = 0; i < xLTaskInfos.size(); i++) {
+                        XLTaskInfo xlTaskInfo = xLTaskInfos.get(i);
+                        String newFileName = xlTaskInfo.mFileName;
+                        if (!TextUtils.isEmpty(newFileName) && newFileName.equals(fileName)) {
+                            if ((xlTaskInfo.mTaskStatus == 0 && (xlTaskInfo.mDownloadSize != xlTaskInfo.mFileSize || xlTaskInfo.mFileSize <= 0)) || xlTaskInfo.mTaskStatus == 3) {
+                                DownloadManager.stopTask(xlTaskInfo.mTaskId);
+                            }
+                            if ((xlTaskInfo.mTaskStatus == 0 && (xlTaskInfo.mDownloadSize != xlTaskInfo.mFileSize || xlTaskInfo.mFileSize <= 0)) || xlTaskInfo.mTaskStatus == 3 && xlTaskInfo.mTaskStatus == 4) {
+                                XLDownloadManager.getInstance().releaseTask(xlTaskInfo.mTaskId);
+                                if (xlTaskInfo.index >= 0) {
+                                    addTorrentTask(xlTaskInfo.sourceUrl, xlTaskInfo.torrentPath,
+                                            PATH_OFFLINE_DOWNLOAD, Collections.singletonList(xlTaskInfo.index), true);
+                                } else {
+                                    if (link.startsWith("magnet:?") || XLTaskHelper.instance().getFileName(link).endsWith("torrent")) {
+                                        if (link.startsWith("magnet:?")) {
+                                            taskId = addMagnetTask(link, PATH_OFFLINE_DOWNLOAD, null, context, false, true, false, null, null);
+                                        } else {
+                                            taskId = addMagnetTask(getRealUrl(link), PATH_OFFLINE_DOWNLOAD, null, context, false, true, false, null, null);
+                                        }
+                                    } else {
+                                        taskId = addThunderTask(link, PATH_OFFLINE_DOWNLOAD, null, context, false, false, links, null, null);
+                                    }
+                                    XLTaskInfo xLTaskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
+                                    xLTaskInfo.sourceUrl = link;
+                                    xLTaskInfo.mFileName = XLTaskHelper.instance().getFileName(link);
+                                    updateXLTaskInfo(xLTaskInfo);
+                                }
+                            }
+                        }
+                    }
                 }
                 return -1;
             }
@@ -404,7 +444,7 @@ public class DownloadManager {
             sourceHistoryModel.setLocalFilePath(PATH_OFFLINE_DOWNLOAD +
                     XLTaskHelper.instance().getFileName(url));
             if (oldSourceHistoryModel != null) {
-                oldSourceHistoryModel.setStatus(Constant.STATUS_0);
+                sourceHistoryModel.setStatus(oldSourceHistoryModel.getStatus());
                 sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
             } else {
                 SourceDetailModel sourceDetailModel = new SourceDetailModel();
@@ -413,7 +453,6 @@ public class DownloadManager {
             }
             if (isPlayVideo) sourceHistoryModel.setStatus(Constant.STATUS_1);
             else if (sourceHistoryModel.getStatus() == null) sourceHistoryModel.setStatus(Constant.STATUS_0);
-            RealmUtil.copyOrUpdateHistoryModel(oldSourceHistoryModel, false);
             RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
 
             if (isPlayVideo) {

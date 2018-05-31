@@ -78,7 +78,8 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
         if (drawerlayoutSourceLinks.isDrawerOpen(GravityCompat.END)) {
             drawerlayoutSourceLinks.closeDrawers();
             return true;
-        } return false;
+        }
+        return false;
     }
 
     public void setUpUrl(String url, ArrayList<String> urlList) {
@@ -261,22 +262,33 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
     @Override
     public void onAutoCompletion() {
         SourceHistoryModel oldSourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
+        if (oldSourceHistoryModel == null)
+            oldSourceHistoryModel = RealmUtil.queryHistoryModelByLocalUrl(mOriginUrl);
+        int position = mPlayPosition;
+        ArrayList<String> urls = new ArrayList<>();
+        if (mUriList != null) {
+            for (int i = 0; i < mUriList.size(); i++) {
+                urls.add(mUriList.get(i).getUrl());
+            }
+        }
         super.onAutoCompletion();
-        if (sourceLinkAdapter.getData().size() > 0) {
+        if (mPlayPosition > position && sourceLinkAdapter.getData().size() > 0) {
+//            setUpUrl(urls.get(mPlayPosition), urls);
+//            startPlayLogic();
+
             for (int i = 0; i < sourceLinkAdapter.getData().size(); i++) {
                 sourceLinkAdapter.getData().get(i).setSelected(i == mPlayPosition);
                 sourceLinkAdapter.notifyDataSetChanged();
                 recyclerviewSourceLinks.smoothScrollToPosition(i);
             }
-
             SourceHistoryModel sourceHistoryModel = new SourceHistoryModel();
-            sourceHistoryModel.setLink(mOriginUrl);
+            sourceHistoryModel.setLink(sourceLinkAdapter.getData().get(mPlayPosition).getValue());
             if (oldSourceHistoryModel != null) {
                 sourceHistoryModel.setSourceDetailModel(oldSourceHistoryModel.getSourceDetailModel());
             } else {
                 SourceDetailModel sourceDetailModel = new SourceDetailModel();
-                sourceDetailModel.setTitle(mOriginUrl);
-                if (mUriList != null) sourceDetailModel.setLinks(GsonUtil.bean2json(mUriList));
+                sourceDetailModel.setTitle(sourceLinkAdapter.getData().get(mPlayPosition).getValue());
+                sourceDetailModel.setLinks(GsonUtil.bean2json(urls));
                 sourceHistoryModel.setSourceDetailModel(sourceDetailModel);
             }
             sourceHistoryModel.setStatus(Constant.STATUS_1);
@@ -295,8 +307,10 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
-                if (sourceHistoryModel != null) {
+                SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLocalUrl(mOriginUrl);
+                if (sourceHistoryModel == null)
+                    sourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
+                if (sourceHistoryModel != null && getCurrentPositionWhenPlaying() > 0) {
                     sourceHistoryModel.setSeek(getCurrentPositionWhenPlaying());
                     sourceHistoryModel.setTotal(getDuration());
                     sourceHistoryModel.setStatus(Constant.STATUS_1);
