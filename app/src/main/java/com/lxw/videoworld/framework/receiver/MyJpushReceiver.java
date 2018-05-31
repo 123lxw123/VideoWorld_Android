@@ -64,7 +64,7 @@ public class MyJpushReceiver extends BroadcastReceiver {
                     JSONObject jsonObject = new JSONObject(extras);
                     String scheme = jsonObject.getString("url");
                     if(!TextUtils.isEmpty(scheme)){
-                        String[] split = scheme.split(":.:");
+                        String[] split = scheme.split("::");
                         if(split.length > 1){
                             String url = split[0];
                             String type = split[1];

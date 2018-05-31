@@ -1,1 +1,1 @@
-include ':app', ':bottom-navigation-bar', ':infinitecycleviewpager'
+include ':app', ':infinitecycleviewpager', ':thunder'

@@ -88,15 +88,17 @@
    *;
 }
 #基线包使用，生成mapping.txt
-#-printmapping mapping.txt
-#生成的mapping.txt在app/buidl/outputs/mapping/release路径下，移动到/app路径下
+-printmapping mapping.txt
+#生成的mapping.txt在app/bu／idl/outputs/mapping/release路径下，移动到/app路径下
 
 #修复后的项目使用，保证混淆结果一致
--applymapping mapping.txt
+#-applymapping mapping.txt
 
 #hotfix
 -keep class com.taobao.sophix.**{*;}
 -keep class com.ta.utdid2.device.**{*;}
+#防止inline
+-dontoptimize
 
 # jpush
 -dontoptimize
@@ -120,3 +122,18 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
+# gsyVideoPlayer
+-keep class tv.danmaku.ijk.** { *; }
+-dontwarn tv.danmaku.ijk.**
+-keep class com.shuyu.gsyvideoplayer.** { *; }
+-dontwarn com.shuyu.gsyvideoplayer.**
+# xunlei
+-keep class com.xunlei.downloadlib.parameter.** { *; }
+#微信分享
+-keep class com.tencent.mm.opensdk.** { *;}
+-keep class com.tencent.wxop.** {*;}
+-keep class com.tencent.mm.sdk.** {*;}
+# jsoup
+-keep class org.jsoup.** {*;}
+# SweetAlert
+-keep class cn.pedant.** { *; }

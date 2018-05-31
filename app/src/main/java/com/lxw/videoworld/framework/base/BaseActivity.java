@@ -13,11 +13,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.framework.activitystack.ActivityStack;
 import com.lxw.videoworld.framework.log.LoggerHelper;
-import com.lxw.videoworld.framework.widget.LoadingDialog;
 
 import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /** 是否旋转屏幕 **/
     private boolean isAllowScreenRoate = Constant.isAllowScreenRoate;
     /** activity 加载中进度条 **/
-    private LoadingDialog progressBar;
+    private MaterialDialog progressBar;
     /** activity标签 **/
     private String activityTag = "";
 
@@ -83,7 +83,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 //            contentView.setPadding(0, getStatusBarHeight(this), 0, 0);
         }
 
-        progressBar = new LoadingDialog(BaseActivity.this);
+        progressBar = new MaterialDialog.Builder(this)
+                .title("Loading")
+                .cancelable(true)
+                .progress(true, 70)
+                .titleColor(getCustomColor(R.styleable.BaseColor_com_font_A))
+                .backgroundColor(getResources().getColor(R.color.color_FFFFFF))
+                .widgetColor(getCustomColor(R.styleable.BaseColor_com_assist_A))
+                .build();
     }
 
     @Override
@@ -125,7 +132,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     //显示加载中进度条
     public void showProgressBar(){
         if(progressBar == null){
-            progressBar = new LoadingDialog(BaseActivity.this);
+            progressBar = new MaterialDialog.Builder(this)
+                    .title("Loading")
+                    .cancelable(true)
+                    .progress(true, 70)
+                    .titleColor(getCustomColor(R.styleable.BaseColor_com_font_A))
+                    .backgroundColor(getResources().getColor(R.color.color_FFFFFF))
+                    .widgetColor(getCustomColor(R.styleable.BaseColor_com_assist_A))
+                    .build();
         }
         if(!progressBar.isShowing()){
             progressBar.show();
@@ -134,9 +148,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     //隐藏加载中进度条
     public void hideProgressBar(){
-        if(progressBar != null && progressBar.isShowing()){
+        if(progressBar != null){
             progressBar.dismiss();
         }
+        progressBar = null;
     }
 
     //toast提示信息
@@ -169,11 +184,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public LoadingDialog getProgressBar() {
+    public MaterialDialog getProgressBar() {
         return progressBar;
     }
 
-    public void setProgressBar(LoadingDialog progressBar) {
+    public void setProgressBar(MaterialDialog progressBar) {
         this.progressBar = progressBar;
     }
 }

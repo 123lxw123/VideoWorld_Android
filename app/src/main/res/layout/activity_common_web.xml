@@ -23,11 +23,11 @@
             android:src="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/txt_feedback"
+            android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/txt_feedback"
+            android:text="@string/txt_common_detail"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp_18" />
 

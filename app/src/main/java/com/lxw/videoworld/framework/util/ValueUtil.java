@@ -1,8 +1,13 @@
 package com.lxw.videoworld.framework.util;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.support.annotation.StyleableRes;
 import android.text.TextUtils;
 
+import com.lxw.videoworld.R;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,4 +78,54 @@ public class ValueUtil {
         }
         return null;
     }
+
+    public static String formatFileSize(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
+
+        if (size >= gb) {
+            return String.format("%.1f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            return String.format(f > 100 ? "%.0f M" : "%.1f M", f);
+        } else if (size >= kb) {
+            float f = (float) size / kb;
+            return String.format(f > 100 ? "%.0f K" : "%.1f K", f);
+        } else
+            return String.format("%d B", size);
+    }
+
+    public static String formatTime(long timeSecond) {
+        if (timeSecond < 0) return "";
+        DecimalFormat decimalFormat = new DecimalFormat("00");
+        long second = timeSecond % 60;
+        long minute = (timeSecond / 60) % 60;
+        long hour = timeSecond / 60 / 60;
+        if (hour > 99) return "99:59:59";
+        else return decimalFormat.format(hour) + ":" + decimalFormat.format(minute) + ":" + decimalFormat.format(second);
+    }
+
+    /**
+     * 获取主题某颜色的值
+     * @param index 如 R.styleable.BaseColor_com_wm_bg
+     * @return
+     */
+    public static int getCustomColor(Context context, @StyleableRes int index){
+        return getCustomColor(context, index, 0xFFFFFF);
+    }
+
+    /**
+     * 获取主题某颜色的值
+     * @param index 如 R.styleable.BaseColor_com_wm_bg
+     * @param defValue 默认颜色值
+     * @return
+     */
+    public static int getCustomColor(Context context, @StyleableRes int index, int defValue){
+        TypedArray a = context.obtainStyledAttributes(null, R.styleable.BaseColor, 0, 0);
+        int color = a.getColor(index, defValue);
+        a.recycle();
+        return color;
+    }
+
 }

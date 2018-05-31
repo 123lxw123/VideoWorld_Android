@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lxw.videoworld">
 
     <!-- glide配置 -->
@@ -12,6 +13,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 在sdcard中创建/删除文件的权限 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 获取手机网络状态 -->
@@ -19,34 +22,33 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 读取日历 -->
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <!-- 读联系人权限 -->
+    <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
+    读联系人权限
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- 写联系人权限 -->
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <!-- <uses-permission android:name="android.permission.WRITE_CONTACTS" /> -->
     <!-- 拨号权限 -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <!-- 读短信权限 -->
-    <uses-permission android:name="android.permission.READ_SMS" />
+    <!-- <uses-permission android:name="android.permission.READ_SMS" /> -->
     <!-- 精准位置信息GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 仅网络定位的权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 读取上网记录权限 -->
-    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />
-    <!-- 读取通话记录 -->
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <!-- 读短信权限 -->
-    <uses-permission android:name="android.permission.READ_SMS" />
 
+    <!-- 读取上网记录权限 -->
+    <!-- <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" /> -->
+    <!-- 读取通话记录 -->
+    <!-- <uses-permission android:name="android.permission.READ_CALL_LOG" /> -->
     <application
         android:name=".framework.application.BaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/svg_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/svg_launcher"
         android:supportsRtl="true"
-        android:theme="@style/GoldAppTheme">
+        android:theme="@style/GoldAppTheme"
+        tools:replace="android:icon">
 
         <!-- Hotfix2.0 配置 -->
         <meta-data
@@ -92,7 +94,7 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
-                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /><!--富文本页面 Javascript 回调API  -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- 富文本页面 Javascript 回调API -->
                 <category android:name="com.lxw.videoworld" />
             </intent-filter>
         </receiver>
@@ -105,13 +107,60 @@
         <activity
             android:name=".app.ui.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".app.ui.FeedbackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".app.ui.CommonWebActivity"
+        <activity
+            android:name=".app.ui.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.CommonWebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.PlayVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentAppTheme" />
+        <activity
+            android:name=".app.ui.DownloadManagerActivity"
+            android:screenOrientation="portrait" />
 
-        <service android:name=".app.service.BackgroundIntentService"/>
+        <service android:name=".app.service.BackgroundIntentService" />
+
+        <activity
+            android:name=".app.ui.PreViewActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".app.service.AppInstallReceiver"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <!-- 有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider -->
+        <!-- 这里主要为授予有米SDK拥有打开apk安装界面的功能 -->
+        <!-- 请务必修改 android:authorities 为贵应用的标识，一般为 包名.fileProvider -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.lxw.videoworld.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider" />
+        </provider>
+
+        <activity
+            android:name=".app.ui.CollectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".app.ui.LocalSearchActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

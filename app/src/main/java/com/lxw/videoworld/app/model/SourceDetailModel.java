@@ -2,12 +2,17 @@ package com.lxw.videoworld.app.model;
 
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by lxw9047 on 2017/5/3.
  */
-public class SourceDetailModel implements Serializable {
+public class SourceDetailModel extends RealmObject implements Serializable {
 
+    @PrimaryKey
     private String url;
+    private String sourceType;
     private String id;
     private String category;// 一级分类
     private String type;// 二级分类
@@ -49,6 +54,14 @@ public class SourceDetailModel implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
     }
 
     public String getTitle() {

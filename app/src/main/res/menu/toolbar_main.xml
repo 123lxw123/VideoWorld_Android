@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_change_theme"
-        android:icon="@drawable/ic_change_theme"
-        android:title="@string/menu_change_theme"
-        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_change_source"
@@ -18,5 +13,11 @@
         android:icon="@drawable/ic_search"
         app:showAsAction="always"
         android:title="@string/menu_search"/>
+
+    <item
+        android:id="@+id/action_selector"
+        android:icon="@drawable/ic_selector"
+        android:title="@string/txt_selector"
+        app:showAsAction="always" />
 
 </menu>

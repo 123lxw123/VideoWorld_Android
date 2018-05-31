@@ -4,8 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VideoWorld_Android.iml" filepath="$PROJECT_DIR$/VideoWorld_Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bottom-navigation-bar/bottom-navigation-bar.iml" filepath="$PROJECT_DIR$/bottom-navigation-bar/bottom-navigation-bar.iml" />
       <module fileurl="file://$PROJECT_DIR$/infinitecycleviewpager/infinitecycleviewpager.iml" filepath="$PROJECT_DIR$/infinitecycleviewpager/infinitecycleviewpager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thunder/thunder.iml" filepath="$PROJECT_DIR$/thunder/thunder.iml" />
     </modules>
   </component>
 </project>

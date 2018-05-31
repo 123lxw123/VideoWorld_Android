@@ -6,8 +6,8 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.TrafficStats;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,5 +173,56 @@ public class NetUtil {
         }
         // 判断packageNames中是否有目标程序的包名，有TRUE，没有FALSE
         return packageNames.contains(packageName);
+    }
+
+    /**
+     * 没有连接网络
+     */
+    public static final int NETWORK_NONE = -1;
+    /**
+     * 移动网络
+     */
+    public static final int NETWORK_MOBILE = 0;
+    /**
+     * 无线网络
+     */
+    public static final int NETWORK_WIFI = 1;
+
+    public static int getNetWorkState(Context context) {
+        // 得到连接管理器对象
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetworkInfo = connectivityManager
+                .getActiveNetworkInfo();
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+
+            if (activeNetworkInfo.getType() == (ConnectivityManager.TYPE_WIFI)) {
+                return NETWORK_WIFI;
+            } else if (activeNetworkInfo.getType() == (ConnectivityManager.TYPE_MOBILE)) {
+                return NETWORK_MOBILE;
+            }
+        } else {
+            return NETWORK_NONE;
+        }
+        return NETWORK_NONE;
+    }
+
+
+    private static long lastTotalRxBytes = 0;
+    private static long lastTimeStamp = 0;
+
+    public static String getNetSpeedText(Context context) {
+        long nowTotalRxBytes = getTotalRxBytes(context.getApplicationInfo().uid);
+        long nowTimeStamp = System.currentTimeMillis();
+        long speed = ((nowTotalRxBytes - lastTotalRxBytes) * 1000 / (nowTimeStamp - lastTimeStamp));//毫秒转换
+        lastTimeStamp = nowTimeStamp;
+        lastTotalRxBytes = nowTotalRxBytes;
+        if (speed >= 1024) return  String.format("%.2f", speed / (double) 1024).toString() + " M/s";
+        else return String.valueOf(speed) + " K/s";
+    }
+
+    private static long getTotalRxBytes(int uid) {
+        return TrafficStats.getUidRxBytes(uid) == TrafficStats.UNSUPPORTED ? 0 : (TrafficStats.getTotalRxBytes() / 1024);//转为KB
     }
 }

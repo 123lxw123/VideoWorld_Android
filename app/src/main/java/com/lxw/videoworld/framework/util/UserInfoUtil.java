@@ -12,7 +12,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Im;
@@ -483,42 +482,42 @@ public class UserInfoUtil {
      * 获取通话记录	包括type date cachedName number
      * @return
      */
-    @SuppressLint("SimpleDateFormat")
-    public static ArrayList<String> getCallLogs(Context context){
-        ArrayList<String> callLogs = new ArrayList<String>();
-        String[] cltype = {"已接电话","已接电话","已拨电话","未接来电"};
-        String[] projection = {
-                CallLog.Calls.DATE, // 日期
-                CallLog.Calls.NUMBER, // 号码
-                CallLog.Calls.TYPE, // 类型
-                CallLog.Calls.CACHED_NAME, // 名字
-        };
-        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
-        Date date;
-        try{
-            ContentResolver cr = context.getContentResolver();
-            Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, projection, null, null,CallLog.Calls.DEFAULT_SORT_ORDER);
-            if (cursor != null && cursor.getCount() > 0){
-                cursor.moveToFirst();
-                while(cursor.moveToNext()){
-                    date = new Date(cursor.getLong(cursor
-                            .getColumnIndex(CallLog.Calls.DATE)));
-                    String number = cursor.getString(cursor
-                            .getColumnIndex(CallLog.Calls.NUMBER));
-                    int type = cursor.getInt(cursor
-                            .getColumnIndex(CallLog.Calls.TYPE));
-                    String cachedName = cursor.getString(cursor
-                            .getColumnIndex(CallLog.Calls.CACHED_NAME));
-                    String callLog = cltype[type]+";"+sfd.format(date)+";"+cachedName+";"+number;
-                    callLogs.add(callLog);
-                }
-                cursor.close();
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return callLogs;
-    }
+//    @SuppressLint("SimpleDateFormat")
+//    public static ArrayList<String> getCallLogs(Context context){
+//        ArrayList<String> callLogs = new ArrayList<String>();
+//        String[] cltype = {"已接电话","已接电话","已拨电话","未接来电"};
+//        String[] projection = {
+//                CallLog.Calls.DATE, // 日期
+//                CallLog.Calls.NUMBER, // 号码
+//                CallLog.Calls.TYPE, // 类型
+//                CallLog.Calls.CACHED_NAME, // 名字
+//        };
+//        SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
+//        Date date;
+//        try{
+//            ContentResolver cr = context.getContentResolver();
+//            Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, projection, null, null,CallLog.Calls.DEFAULT_SORT_ORDER);
+//            if (cursor != null && cursor.getCount() > 0){
+//                cursor.moveToFirst();
+//                while(cursor.moveToNext()){
+//                    date = new Date(cursor.getLong(cursor
+//                            .getColumnIndex(CallLog.Calls.DATE)));
+//                    String number = cursor.getString(cursor
+//                            .getColumnIndex(CallLog.Calls.NUMBER));
+//                    int type = cursor.getInt(cursor
+//                            .getColumnIndex(CallLog.Calls.TYPE));
+//                    String cachedName = cursor.getString(cursor
+//                            .getColumnIndex(CallLog.Calls.CACHED_NAME));
+//                    String callLog = cltype[type]+";"+sfd.format(date)+";"+cachedName+";"+number;
+//                    callLogs.add(callLog);
+//                }
+//                cursor.close();
+//            }
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//        return callLogs;
+//    }
     /**
      * 获取浏览器历史记录	包括date title url
      * @return

@@ -1,5 +1,6 @@
 package com.lxw.videoworld.framework.util;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -8,11 +9,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 /**
  * 一些JSON和实体类(T)之间的转换
@@ -80,7 +83,32 @@ public class GsonUtil {
 		return list;
 		
 	}
-	
+
+	/**
+	 * 使用json转换成List
+	 *
+	 * @param json json格式字符串
+	 * @param clazz  数组类名
+	 * @return 返回一个list
+	 */
+	public static <T> List<T> newJson2List(String json, Class<T[]> clazz) {
+		T[] arr = new Gson().fromJson(json, clazz);
+		return Arrays.asList(arr); //or return Arrays.asList(new Gson().fromJson(json, clazz)); for a one-liner
+	}
+
+	/**
+	 * 使用json转换成 Vector
+	 *
+	 * @param json json格式字符串
+	 * @param clazz  数组类名
+	 * @return 返回一个 Vector
+	 */
+	public static <T> Vector<T> json2Vector(String json, Class<T[]> clazz) {
+		if (TextUtils.isEmpty(json)) return null;
+		T[] arr = new Gson().fromJson(json, clazz);
+		return new Vector<>(Arrays.asList(arr)); //or return Arrays.asList(new Gson().fromJson(json, clazz)); for a one-liner
+	}
+
 	/**
 	 * 返回Map<String,T>
 	 * 

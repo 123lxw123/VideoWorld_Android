@@ -1,16 +1,14 @@
 package com.lxw.videoworld.framework.base;
 
+import android.content.res.TypedArray;
+import android.support.annotation.StyleableRes;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import com.lxw.videoworld.R;
+
 /**
  * Created by Zion on 2016/11/20.
- * 懒加载fragment
- * ①isPrepared参数在系统调用onActivityCreated时设置为true,这时onCreateView方法已调用完毕
- * (一般我们在这方法里执行findviewbyid等方法),确保 initData()方法不会报空指针异常。
- * ②isVisible参数在fragment可见时通过系统回调setUserVisibileHint方法设置为true,不可见时为false，这是fragment实现懒加载的关键。
- * ③isFirst确保ViewPager来回切换时BaseFragment的initData方法不会被重复调用，
- * initData在该Fragment的整个生命周期只调用一次,第一次调用initData()方法后马上执行 isFirst = false。
  */
 
 public abstract class BaseFragment extends Fragment {
@@ -21,6 +19,23 @@ public abstract class BaseFragment extends Fragment {
     }
     public void showMessage(String message, int showTime){
         Toast.makeText(BaseFragment.this.getActivity(), message, showTime).show();
+    }
+
+    public int getCustomColor(@StyleableRes int index){
+        return getCustomColor(index, 0xFFFFFF);
+    }
+
+    /**
+     * 获取主题某颜色的值
+     * @param index 如 R.styleable.BaseColor_com_wm_bg
+     * @param defValue 默认颜色值
+     * @return
+     */
+    public int getCustomColor(@StyleableRes int index, int defValue){
+        TypedArray a = getActivity().obtainStyledAttributes(null, R.styleable.BaseColor, 0, 0);
+        int color = a.getColor(index, defValue);
+        a.recycle();
+        return color;
     }
 
 }

@@ -8,7 +8,7 @@ import com.lxw.videoworld.framework.application.BaseApplication;
 public class ToastUtil {
 
 	public static void showMessage(final String msg) {
-		Toast.makeText(BaseApplication.getappContext(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(BaseApplication.getAppContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 
 	public static void showMessage(Activity activity, final String msg) {

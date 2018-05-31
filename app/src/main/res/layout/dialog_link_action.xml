@@ -26,6 +26,33 @@
     <View style="@style/split_style" />
 
     <LinearLayout
+        android:id="@+id/ll_play_video"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp">
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_play_video" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="下载(边下边播)"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_thunder"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
@@ -48,7 +75,7 @@
             android:layout_margin="12dp"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:text="手机迅雷 (边下边播)"
+            android:text="手机迅雷"
             android:textColor="?attr/com_font_A"
             android:textSize="@dimen/sp_14" />
     </LinearLayout>

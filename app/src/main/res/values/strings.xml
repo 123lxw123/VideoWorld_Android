@@ -6,7 +6,7 @@
     <string name="txt_tab2">电视</string>
     <string name="txt_tab3">综艺</string>
     <string name="txt_tab4">动漫</string>
-    <string name="txt_tab5">游戏</string>
+    <string name="txt_tab5">我的</string>
     <string name="menu_search">搜索</string>
     <string name="menu_change_source">切换影视源</string>
     <string name="menu_change_theme">切换主题</string>
@@ -23,6 +23,9 @@
     <string name="txt_type8">战争</string>
     <string name="txt_type9">恐怖</string>
     <string name="txt_type10">灾难</string>
+    <string name="txt_type20">记录</string>
+    <string name="txt_type21">伦理</string>
+    <string name="txt_type28">福利</string>
 
     <string name="txt_type11">华语</string>
     <string name="txt_type12">欧美</string>
@@ -33,6 +36,13 @@
     <string name="txt_type17">大陆</string>
     <string name="txt_type18">台湾</string>
     <string name="txt_type19">其他</string>
+
+    <string name="txt_type22">国产</string>
+    <string name="txt_type23">港台</string>
+    <string name="txt_type24">欧美</string>
+    <string name="txt_type25">日剧</string>
+    <string name="txt_type26">韩剧</string>
+    <string name="txt_type27">泰剧</string>
 
     <string name="txt_date">更新日期</string>
     <string name="txt_name">名称</string>
@@ -56,7 +66,7 @@
     <string name="txt_episodes">集数</string>
 
     <string name="txt_link">链接</string>
-    <string name="txt_thunder">手机迅雷(边下边播)</string>
+    <string name="txt_thunder">手机迅雷</string>
     <string name="txt_copy_link">复制下载链接</string>
 
     <string name="txt_detail">资源详情</string>
@@ -69,24 +79,39 @@
     <string name="txt_search_empty_tips">请输入搜索内容</string>
     <string name="txt_search_timeout">搜索超时</string>
 
-    <string name="txt_change_source">切换资源库中</string>
-    <string name="txt_change_search">切换搜索引擎中</string>
+    <string name="txt_change_source_a">切换至资源库 A </string>
+    <string name="txt_change_source_b">切换至资源库 B </string>
+    <string name="txt_change_source_c">切换至资源库 C </string>
+    <string name="txt_change_source_d">切换至资源库 D </string>
+    <string name="txt_change_search_a">切换至搜索引擎 A </string>
+    <string name="txt_change_search_b">切换至搜索引擎 B </string>
 
     <string name="ok">确定</string>
+    <string name="all">全部</string>
     <string name="cancel">取消</string>
     <string name="update">新版本更新</string>
     <string name="no_update_tips">当前已是最新版本</string>
     <string name="update_file_name">VideoWorld.apk</string>
 
-    <string name="txt_version">版本   %1$s</string>
-    <string name="txt_QQ1">和谐群   %1$s</string>
-    <string name="txt_QQ2">福利群   %1$s</string>
+    <string name="txt_download_path">下载路径</string>
+    <string name="txt_version">版本号</string>
+    <string name="txt_clear_cache">清理缓存</string>
+    <string name="txt_collect">收藏记录</string>
+    <string name="txt_history">播放记录</string>
+    <string name="txt_QQ">和谐群</string>
     <string name="txt_feedback">反馈</string>
+    <string name="txt_common_detail">详情</string>
     <string name="txt_feedback_commit">提交</string>
-    <string name="txt_feedback_tips">意见、建议、吐槽...畅所欲言</string>
+    <string name="txt_feedback_tips">意见、建议、吐槽…畅所欲言</string>
     <string name="txt_no_feedback_tips">请先输入您的反馈内容</string>
     <string name="txt_feedback_success_tips">感谢您的反馈</string>
     <string name="txt_about">关于</string>
+    <string name="txt_local_play">本地播放</string>
+    <string name="txt_download_manager">下载中心</string>
+    <string name="txt_selector">筛选</string>
+    <string name="txt_download">下载</string>
+    <string name="txt_no_data">暂无数据</string>
+    <string name="txt_load_more">加载更多中…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

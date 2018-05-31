@@ -6,6 +6,7 @@ import android.net.ParseException;
 
 import com.google.gson.JsonParseException;
 import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.log.LoggerHelper;
 import com.lxw.videoworld.framework.util.StringUtil;
@@ -97,7 +98,6 @@ public abstract class HttpManager<T> {
             public void onSubscribe(Disposable d) {
                 disposable = d;
                 if(flag_dialog){
-                    ((BaseActivity)context).getProgressBar().setHttpManager(HttpManager.this);
                     ((BaseActivity)context).showProgressBar();
                 }
             }

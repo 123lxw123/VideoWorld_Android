@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.api.HttpHelper;
 import com.lxw.videoworld.framework.base.BaseActivity;
-import com.lxw.videoworld.framework.http.BaseResponse;
+import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.ToastUtil;
 
@@ -22,7 +22,7 @@ public class FeedbackActivity extends BaseActivity {
 
     @BindView(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.txt_feedback)
+    @BindView(R.id.txt_title)
     TextView txtFeedback;
     @BindView(R.id.edit_feedback)
     EditText editFeedback;

@@ -3,7 +3,6 @@ package com.lxw.videoworld.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,13 @@ import android.widget.TextView;
 import com.lxw.videoworld.R;
 import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.SourceDetailModel;
+import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.image.ImageManager;
 import com.lxw.videoworld.framework.util.StringUtil;
 import com.lxw.videoworld.framework.util.ValueUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,7 +33,7 @@ import butterknife.Unbinder;
  * Created by lxw9047 on 2017/6/12.
  */
 
-public class SourceBannerFragment extends Fragment {
+public class SourceBannerFragment extends BaseFragment {
 
     //    @BindView(R.id.img_banner)
 //    ImageView imgBanner;
@@ -61,6 +62,8 @@ public class SourceBannerFragment extends Fragment {
     private int picWidth;
     private int picHeight;
 
+    List<SourceDetailModel> detailModels = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +79,26 @@ public class SourceBannerFragment extends Fragment {
             WindowManager wm = this.getActivity().getWindowManager();
             picWidth = wm.getDefaultDisplay().getWidth() * 2 / 3;
             picHeight = wm.getDefaultDisplay().getHeight() / 2;
-            if (!TextUtils.isEmpty(item.getCategory()) && (item.getCategory().equals(Constant.CATEGORY_21) || item.getCategory().equals(Constant.CATEGORY_19))) {
-                picHeight = wm.getDefaultDisplay().getWidth() * 1 / 2;
-            } else {
-                picWidth = picHeight * 3 / 4;
-            }
+            picWidth = picHeight * 3 / 4;
             FrameLayout flPicture = ((FrameLayout) rootView.findViewById(R.id.fl_picture));
             flPicture.getLayoutParams().width = picWidth;
             flPicture.getLayoutParams().height = picHeight;
+            refreshUI(item);
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        return rootView;
+    }
+
+    public void setSourceDetails(List<SourceDetailModel> detailModels) {
+        this.detailModels = detailModels;
+    }
+
+    public void refreshUI(final SourceDetailModel item){
+        this.item = item;
+        if (rootView != null){
             // 图片
             List<String> images = ValueUtil.string2list(item.getImages());
             if (images != null && images.size() > 0) {
@@ -121,17 +136,13 @@ public class SourceBannerFragment extends Fragment {
             ll_banner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!detailModels.isEmpty()) Constant.detailModels = detailModels;
                     Intent intent = new Intent(SourceBannerFragment.this.getActivity(), SourceDetailActivity.class);
                     intent.putExtra("sourceDetailModel", (Serializable) item);
                     startActivity(intent);
                 }
             });
         }
-        ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null) {
-            parent.removeView(rootView);
-        }
-        return rootView;
     }
 
 }

@@ -3,6 +3,7 @@ package com.lxw.videoworld.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -21,7 +22,7 @@ public class CommonWebActivity extends BaseActivity {
 
     @BindView(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.txt_feedback)
+    @BindView(R.id.txt_title)
     TextView txtFeedback;
     @BindView(R.id.webview)
     WebView webview;
@@ -69,5 +70,14 @@ public class CommonWebActivity extends BaseActivity {
         if(!TextUtils.isEmpty(url)){
             webview.loadUrl(url);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && webview.canGoBack()) {
+            webview.goBack();// 返回前一个页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
