@@ -58,7 +58,7 @@
  - 首页  
  
 
-tps://github.com/123lxw123/VideoWorld_Android/blob/master/Gif/2017_06_20_17_32_30_2017620175341.gif) 
+![](https://github.com/123lxw123/VideoWorld_Android/blob/master/Gif/2017_06_20_17_32_30_2017620175341.gif) 
  - 详情页  
  
 
