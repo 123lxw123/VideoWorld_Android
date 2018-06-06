@@ -7,10 +7,3 @@
 /build
 /captures
 .externalNativeBuild
-/thunder
-/app/src/main/java/com/lxw/videoworld/app/ui/MainActivity.java
-/app/src/main/java/com/lxw/videoworld/app/ui/SearchActivity.java
-/app/src/main/java/com/lxw/videoworld/app/ui/SourceTypeFragment.java
-/app/src/main/java/com/lxw/videoworld/app/widget/DownloadManagerDialog.java
-/app/src/main/java/com/lxw/videoworld/app/config/Constant.java
-/app/src/main/java/com/lxw/videoworld/framework/application/BaseApplication.java
