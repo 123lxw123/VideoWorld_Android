@@ -20,16 +20,16 @@
 影视天地在小众的酷安市场上架，经过多个版本的迭代好，凭借丰富的内容资源，出色的用户体验，获得很不错的口碑，也有大 V 在[今日头条][5]及[微信公众号][6]安利推荐，深感荣幸。  
 
 <center>
-    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-25-19-39-50-625_com.ss.android.png">
-    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-25-19-18-18-138_com.tencent.mm.png">
+    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-25-19-39-50-625_com.ss.android.png" width="540" height="960">
+    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-25-19-18-18-138_com.tencent.mm.png" width="540" height="960">
 </center>  
 
 
 # Gif 效果图
 <center>
-    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-25-19-18-48-685_com.coolapk.ma.png">
-    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-24-10-26-01-315_com.lxw.videow.png">
-    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-24-10-14-15-153_com.lxw.videow.png">
+    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-25-19-18-48-685_com.coolapk.ma.png" width="540" height="960">
+    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-24-10-26-01-315_com.lxw.videow.png" width="960" height="540">
+    <img src="https://github.com/123lxw123/VideoWorld_Android/blob/master/Screenshots/Screenshot_2018-05-24-10-14-15-153_com.lxw.videow.png" width="540" height="960">
 </center>  
 
 
