@@ -43,6 +43,8 @@
     <string name="txt_type25">日剧</string>
     <string name="txt_type26">韩剧</string>
     <string name="txt_type27">泰剧</string>
+    <string name="txt_type29">港剧</string>
+    <string name="txt_type30">台剧</string>
 
     <string name="txt_date">更新日期</string>
     <string name="txt_name">名称</string>
@@ -83,6 +85,7 @@
     <string name="txt_change_source_b">切换至资源库 B </string>
     <string name="txt_change_source_c">切换至资源库 C </string>
     <string name="txt_change_source_d">切换至资源库 D </string>
+    <string name="txt_change_source_e">切换至资源库 E </string>
     <string name="txt_change_search_a">切换至搜索引擎 A </string>
     <string name="txt_change_search_b">切换至搜索引擎 B </string>
 
