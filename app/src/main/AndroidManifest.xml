@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.lxw.videoworld">
+
+    <!-- glide配置 -->
+    <!-- <meta-data -->
+    <!-- android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule" -->
+    <!-- android:value="http://blog.csdn.net/wyb112233/article/details/GlideModule" /> -->
+
+
+    <!-- 访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 往sdcard中写入数据的权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 在sdcard中创建/删除文件的权限 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 获取手机网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 读取日历 -->
+    <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
+    读联系人权限
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 写联系人权限 -->
+    <!-- <uses-permission android:name="android.permission.WRITE_CONTACTS" /> -->
+    <!-- 拨号权限 -->
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
+    <!-- 读短信权限 -->
+    <!-- <uses-permission android:name="android.permission.READ_SMS" /> -->
+    <!-- 精准位置信息GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 仅网络定位的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- 读取上网记录权限 -->
+    <!-- <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" /> -->
+    <!-- 读取通话记录 -->
+    <!-- <uses-permission android:name="android.permission.READ_CALL_LOG" /> -->
+    <application
+        android:name=".framework.application.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/svg_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/svg_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/GoldAppTheme"
+        tools:replace="android:icon">
+
+        <!-- Hotfix2.0 配置 -->
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="114702-1" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="d3162097817a58e5e257dca8bb9978ad" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDA8vKlUHT+gSYtVvQesbQ3S4lOr3VBXRK4Ch9dRQl+E33FPHTgnOOggrSyW/sopZIqn/rvzf2IpNBwEFlERgn+R7cYlpC0S1TupZAw2KGk6FCG97c197LmkWZ1a5T3JLDphXIty3Ogdl0iSq6mlOaRq67ajT/GS8A4kzV0Vcrjw9SUTZvClaUFGEjbIi93XBzKLZ0qKiJO7uQkgUyZjTB5+gfCX66WgzzP3KfEitCNfeukOuRsE4EXCSYUipjYgz1zr54ZjSSpF9SrV2OeT8YdXawV2E6OZubK9lusDI48ee+PkG67fH6htNr1skgzI1Y2M/wTjezMuP5XrI1zxIuTAgMBAAECggEBAJWhEii/PytK7ldE0mWnO3GSI3YgvRamXejY+L+01QqvhN5a5ux03lVQZ17V0+0OkU565/flz9KStY3iL8exZPiLluL7iFY5ATFctXgb1ybyfdhc6/hvEY6afVFbz5blHkjKEuSOnSl4APuh3NUULcYT1LJpzWYywmtdRZvlGEUN8lz+Z3VKvkGvHmkgwVFaFhgtJOmVIRaR9YE/dI7tvd+IhwjppvT3ECa+XR9eeleuY+1yg26bvDUmawATS01nQyHzvV3ruMQ1Jb6TcJbUJ+VZQZ2N+iJvHslWxWerxrEdwHgk2JmsOtp1Ceaw+yCJosRmuXcsVwCL0KZwhoiBgekCgYEA+wqnmGvY/xwPBnnh0nqHHGeAgtqsswxcjeR2/VIuYNCEykPCEzFc/Ke7FUjBtst8R2/RRoSdNY865t4PUV6YEOuI8BpSl+xS5MIC/74R6OV6eMWOjBh1THkZlc1m+/xsZH4n4tZombHgCewEekvOEFE+2riLC2TvP5LGj7Z0p7cCgYEAxMKPBspuzA8epXQCOn47mtJAZZs2W5839L8FPQHgjXAdHQxpSt583ilBwT04zK3zN5iIVrBtDtWKNxnCMxPaszE7Ue+RZVKQDEbVC/Euw6rrMxPs+l2Eg3GsgPhdf7BnJ7eLjOzBTbMmaRqWym996m+M8udrzVu+zHGMfgdq4wUCgYEAqBpZYdKOCz5RvWduVVAhG18figA+duMHMyjSmQ0n60KWOQ8obUu31aPHvhfrR6l4/ikdPRheYVgY/DGkljs+ns3p88XcmsjwNSjJc1FmksrfuPGpY5yZJ21MOajClmhQePaVZOtoPcsDmAFIelA6m2icK0A6M5YSM0Lo3aEy+n8CgYAX7yK+zLkVkXFE5wuuWdSeTJ0QvwSpuIByARp+BVBvZAfmlK/qL4446APbobrbCv3e8WsEQInDmC4r7bI1zGB6E68HlIC3NofXNnaL8Vai7pOVrwLQobeQ1a8KMSwOcELcDfOnvNT2wqgVeOqGzXEfp1oZ4hS28kYPUHCqk/RokQKBgQCA/iEWphmJVZVtQPQaoGLOshDdKBoPg43EnxaVjcldDpWxGvhKVE6l/7PuGY19RbQYcnJuptaqMSgSxxd8+PTVEfXWsCXpH4wrnQPrslbsYNMYQHgd2Sp0s/rKGRRatAkB6F5SUI6KzHUI3JdlW8SJN9p0Z6PZBNKONwKtDk0KHg==" />
+
+        <activity
+            android:name=".app.ui.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentAppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".app.ui.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 微信分享 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <receiver
+            android:name=".framework.receiver.MyJpushReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- 富文本页面 Javascript 回调API -->
+                <category android:name="com.lxw.videoworld" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".app.ui.SourceDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".app.ui.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.CommonWebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.PlayVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentAppTheme" />
+        <activity
+            android:name=".app.ui.DownloadManagerActivity"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".app.service.BackgroundIntentService" />
+
+        <activity
+            android:name=".app.ui.PreViewActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".app.service.AppInstallReceiver"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <!-- 有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider -->
+        <!-- 这里主要为授予有米SDK拥有打开apk安装界面的功能 -->
+        <!-- 请务必修改 android:authorities 为贵应用的标识，一般为 包名.fileProvider -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.lxw.videoworld.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider" />
+        </provider>
+
+        <activity
+            android:name=".app.ui.CollectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.ui.HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".app.ui.LocalSearchActivity"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

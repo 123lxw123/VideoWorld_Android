@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BaseColor">
+    <!--tab 自定义颜色-->
+    <attr name="color_source_link" format="color" />
+    <attr name="color_tab_text_default" format="color" />
+    <attr name="color_tab_indicator" format="color" />
+    <!--自定义 loadingView 颜色-->
+    <attr name="color_progress" format="color" />
+    <attr name="color_progress_background" format="color" />
+    <attr name="color_bg_white" format="color" />
+    <attr name="color_bg_gray" format="color" />
+    <!--基本色 START-->
+    <attr name="com_wm_bg" format="color" />
+    <attr name="com_space_line" format="color" />
+    <attr name="com_main_A" format="color" />
+    <attr name="com_main_B" format="color" />
+    <attr name="com_assist_A" format="color" />
+    <attr name="com_assist_B" format="color" />
+    <attr name="com_font_A" format="color" />
+    <attr name="com_font_B" format="color" />
+    <attr name="com_font_C" format="color" />
+    <attr name="com_font_D" format="color" />
+    <attr name="com_dialog_bg" format="color" />
+    <!--基本色 END-->
+    </declare-styleable>
+
+    <declare-styleable name="LoadingView">
+        <attr name="titleText" format="string" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="progressBackground" format="color" />
+        <attr name="progressWidth" format="color" />
+        <attr name="progressHeight" format="color" />
+        <attr name="progressSpeed" format="integer" />
+        <attr name="progressSleep" format="integer" />
+        <attr name="marginSpace" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="NumberProgressBar">
+        <attr name="progress" format="integer" />
+        <attr name="max" format="integer" />
+
+        <attr name="progress_unreached_color" format="color" />
+        <attr name="progress_reached_color" format="color" />
+
+        <attr name="progress_reached_bar_height" format="dimension" />
+        <attr name="progress_unreached_bar_height" format="dimension" />
+
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+
+        <attr name="progress_text_offset" format="dimension" />
+    </declare-styleable>
+</resources>

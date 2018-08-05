@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/com_wm_bg"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="?attr/com_wm_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp" >
+
+        <TextView
+            android:id="@+id/share_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="@string/txt_link"
+            android:textSize="@dimen/sp_16"
+            android:textColor="?attr/com_font_A"/>
+    </LinearLayout>
+
+    <View style="@style/split_style" />
+
+    <LinearLayout
+        android:id="@+id/ll_play_video"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp">
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_play_video" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="下载(边下边播)"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_thunder"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp">
+
+        <ImageView
+            android:scaleType="centerInside"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_thunder" />
+
+        <TextView
+            android:id="@+id/share_tip_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="手机迅雷"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        style="@style/split_style"/>
+
+    <LinearLayout
+        android:id="@+id/ll_copy_link"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp" >
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/share_icon_link" />
+
+        <TextView
+            android:id="@+id/share_tip_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="12dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="复制下载链接"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_link"
+        style="@style/split_style" />
+
+    <LinearLayout
+        android:id="@+id/ll_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_bg"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="取消"
+            android:textColor="?attr/com_font_A"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+</LinearLayout>

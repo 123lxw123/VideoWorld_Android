@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <!-- 大小 -->
+    <size
+        android:height="@dimen/dp_8"/><!-- 宽度和高度 -->
+
+    <!-- 填充 -->
+    <solid
+        android:color="?attr/com_wm_bg"/><!-- 填充的颜色 -->
+
+</shape>
