@@ -3,7 +3,9 @@ package com.lxw.videoworld.app.api;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.http.CacheManager;
+import com.lxw.videoworld.framework.util.NetUtil;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -50,11 +52,11 @@ public class CacheInterceptor implements Interceptor {
         }
         String key = sb.toString();
         String cache = CacheManager.getInstance().getCache(key);
-        if (TextUtils.isEmpty(cache)) {// 没缓存
+        if (TextUtils.isEmpty(cache) || url.contains("addAdmire")) {// 没缓存
             return getResponseAndSaveCache(key, cache, chain, request);
-        } else {
+        } else if (NetUtil.isNetworkAvailable(BaseApplication.getAppContext())) {
             String[] splits = cache.split(SPLIT);
-            if (System.currentTimeMillis() - Long.valueOf(splits[1]) > 1000 * 60 * 60 * 6) {// 缓存过期了
+            if (System.currentTimeMillis() - Long.valueOf(splits[1]) > 1000 * 60 * 15) {// 缓存过期了
                 return getResponseAndSaveCache(key, cache, chain, request);
             } else {// 返回缓存
                 return new Response.Builder()
@@ -66,14 +68,24 @@ public class CacheInterceptor implements Interceptor {
                         .addHeader("content-type", "application/json")
                         .build();
             }
+        } else {
+            String[] splits = cache.split(SPLIT);
+            return new Response.Builder()
+                    .code(200)
+                    .message("SUCCESS")
+                    .request(chain.request())
+                    .protocol(Protocol.HTTP_1_0)
+                    .body(ResponseBody.create(MediaType.parse("application/json"), splits[0]))
+                    .addHeader("content-type", "application/json")
+                    .build();
         }
     }
 
     public Response getResponseAndSaveCache(String key, String cache, Chain chain, Request request) throws IOException {
         Response response = null;
-        try{
+        try {
             response = chain.proceed(request);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // 服务器返回正确结果才缓存
@@ -87,10 +99,10 @@ public class CacheInterceptor implements Interceptor {
             if (contentType != null) {
                 charset = contentType.charset(Charset.forName("UTF-8"));
             }
-            String newCache =  buffer.clone().readString(charset) + SPLIT + System.currentTimeMillis();
+            String newCache = buffer.clone().readString(charset) + SPLIT + System.currentTimeMillis();
             CacheManager.getInstance().putCache(key, newCache);
             Log.d(CacheManager.TAG, "put cache-> key:" + key + "-> cache:" + cache);
-        } else if (!TextUtils.isEmpty(cache)){
+        } else if (!TextUtils.isEmpty(cache)) {
             String[] splits = cache.split(SPLIT);
             response = new Response.Builder()
                     .code(200)
