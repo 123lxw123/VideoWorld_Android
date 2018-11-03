@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/com_main_A"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/txt_admire"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_18" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txt_desc"
+            android:text="@string/txt_admire_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:textColor="?attr/com_main_A"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/txt_tips"
+            android:text="@string/txt_admire_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_3"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:textColor="@color/com_main_A_red"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/txt_step1"
+            android:text="1、选择赞赏金额"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:textColor="?attr/com_main_A"
+            android:textSize="@dimen/sp_16" />
+
+        <LinearLayout
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_tab1"
+                    android:gravity="center"
+                    android:text="4元\n（30 天）"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_tab_bg"
+                    android:paddingTop="@dimen/dp_3"
+                    android:paddingBottom="@dimen/dp_3"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:paddingRight="@dimen/dp_5"
+                    android:textColor="@color/selector_tab_color"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_tab2"
+                    android:gravity="center"
+                    android:text="9元\n（90 天）"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_tab_bg"
+                    android:paddingTop="@dimen/dp_3"
+                    android:paddingBottom="@dimen/dp_3"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:paddingRight="@dimen/dp_5"
+                    android:textColor="@color/selector_tab_color"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_tab3"
+                    android:gravity="center"
+                    android:text="17元\n（180天）"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_tab_bg"
+                    android:paddingTop="@dimen/dp_3"
+                    android:paddingBottom="@dimen/dp_3"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:paddingRight="@dimen/dp_5"
+                    android:textColor="@color/selector_tab_color"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_tab4"
+                    android:gravity="center"
+                    android:text="33元\n（360天）"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_tab_bg"
+                    android:paddingTop="@dimen/dp_3"
+                    android:paddingBottom="@dimen/dp_3"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:paddingRight="@dimen/dp_5"
+                    android:textColor="@color/selector_tab_color"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_step2"
+            android:text="2、保存赞赏码到相册(微信、支付宝)"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:textColor="?attr/com_main_A"
+            android:textSize="@dimen/sp_16" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/img_wx_admire"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_180" />
+
+            <ImageView
+                android:src="@drawable/img_alp_admire"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_180" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_save_image"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/selector_btn_bg"
+            android:text="一键保存"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="@dimen/sp_16"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_40" />
+
+        <TextView
+            android:id="@+id/txt_step3"
+            android:text="3、扫描相册赞赏码支付(微信、支付宝)"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:textColor="?attr/com_main_A"
+            android:textSize="@dimen/sp_16" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/img_wx_scan"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_250" />
+
+            <ImageView
+                android:src="@drawable/img_alp_scan"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_250" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_step4"
+            android:text="4、上传赞赏截图"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:textColor="?attr/com_main_A"
+            android:textSize="@dimen/sp_16" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_shotscreen"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_250"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/img_add_image"
+                android:src="@drawable/img_add_image"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_250" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_admire"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/selector_btn_bg"
+            android:text="一键上传"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="@dimen/sp_16"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_40" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
