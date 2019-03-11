@@ -484,4 +484,16 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
+
+    public void startFloatingVideoService(View view) {
+//        if (FloatingVideoService.isStarted) {
+//            return;
+//        }
+//        if (!Settings.canDrawOverlays(this)) {
+//            Toast.makeText(this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+//            startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 2);
+//        } else {
+//            startService(new Intent(MainActivity.this, FloatingVideoService.class));
+//        }
+    }
 }
