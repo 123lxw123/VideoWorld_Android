@@ -112,7 +112,7 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.3'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
-    implementation 'com.shuyu:gsyVideoPlayer-java:4.1.0'
+    implementation 'com.shuyu:gsyVideoPlayer-java:6.0.3'
     implementation 'org.jsoup:jsoup:1.10.3'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
