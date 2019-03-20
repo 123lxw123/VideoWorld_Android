@@ -80,7 +80,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);
 
-        uid = android.os.Build.SERIAL;
+        uid = ManifestUtil.getDeviceUid(this);
         appContext = getApplicationContext();
         // app启动次数
         appStartCount = SharePreferencesUtil.getIntSharePreferences(appContext, APP_START_COUNT, 0);
