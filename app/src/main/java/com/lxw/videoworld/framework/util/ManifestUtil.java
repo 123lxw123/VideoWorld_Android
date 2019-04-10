@@ -1,9 +1,14 @@
 package com.lxw.videoworld.framework.util;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.WindowManager;
 
 public class ManifestUtil {
@@ -78,5 +83,22 @@ public class ManifestUtil {
 		WindowManager wm = activity.getWindowManager();
 		int height = wm.getDefaultDisplay().getHeight();
 		return height;
+	}
+
+	public static String getDeviceUid(Application application) {
+		String serial = Build.SERIAL;
+		String androidId =  Settings.System.getString(application.getContentResolver(), Settings.System.ANDROID_ID);
+		String deviceId =  ((TelephonyManager) application.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+		StringBuilder stringBuilder = new StringBuilder();
+		if (!TextUtils.isEmpty(serial)) {
+			stringBuilder.append(serial);
+		}
+		if (!TextUtils.isEmpty(deviceId)) {
+			stringBuilder.append(deviceId);
+		}
+		if (TextUtils.isEmpty(serial) && TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(androidId)) {
+			stringBuilder.append(androidId);
+		}
+		return stringBuilder.toString();
 	}
 }

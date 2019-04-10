@@ -3,7 +3,11 @@ package com.lxw.videoworld.framework.util;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -11,6 +15,8 @@ import android.text.TextUtils;
 import com.lxw.videoworld.app.config.Constant;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 /**
@@ -148,7 +154,7 @@ public class FileUtil {
                     Uri localUri = localContentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, localContentValues);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -167,4 +173,23 @@ public class FileUtil {
         return localContentValues;
     }
 
+    public static boolean saveDrawable(Context context, int drawable, String path, String fileName) {
+        Resources res = context.getResources();
+        BitmapDrawable d = (BitmapDrawable) res.getDrawable(drawable);
+        Bitmap img = d.getBitmap();
+        try {
+            OutputStream os = new FileOutputStream(path + fileName);
+            img.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.close();
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    img, fileName, null);
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri = Uri.fromFile(new File(path, fileName));
+            intent.setData(uri);
+            context.sendBroadcast(intent);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

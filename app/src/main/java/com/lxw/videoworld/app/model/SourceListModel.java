@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SourceListModel implements Serializable {
     private List<SourceDetailModel> list;
+    private UserSignAdmireModel userSignAdmire;
 
     public List<SourceDetailModel> getList() {
         return list;
@@ -16,5 +17,13 @@ public class SourceListModel implements Serializable {
 
     public void setList(List<SourceDetailModel> list) {
         this.list = list;
+    }
+
+    public UserSignAdmireModel getUserSignAdmire() {
+        return userSignAdmire;
+    }
+
+    public void setUserSignAdmire(UserSignAdmireModel userSignAdmire) {
+        this.userSignAdmire = userSignAdmire;
     }
 }

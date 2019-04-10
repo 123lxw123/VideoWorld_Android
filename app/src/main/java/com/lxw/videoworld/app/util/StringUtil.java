@@ -177,6 +177,35 @@ public class StringUtil {
                     } else links.add(tempList.get(i).trim());
             }
         }
-        return links;
+        ArrayList<String> playList = new ArrayList<>();
+        ArrayList<String> otherList = new ArrayList<>();
+        ArrayList<String> resultList = new ArrayList<>();
+        for (int  i = 0; i < links.size(); i++) {
+            if (StringUtil.isAutoPlay(links.get(i))) {
+                playList.add(links.get(i));
+            } else {
+                otherList.add(links.get(i));
+            }
+        }
+        resultList.addAll(playList);
+        resultList.addAll(otherList);
+        return resultList;
+    }
+
+    public static boolean isAutoPlay(String link) {
+        if (TextUtils.isEmpty(link)) return false;
+        try {
+            String[] suffixs = link.split("\\.");
+            String suffix = suffixs[suffixs.length - 1];
+            for (int i = 0; i < Constant.videos.length; i++) {
+                if (Constant.videos[i].equals(suffix)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
