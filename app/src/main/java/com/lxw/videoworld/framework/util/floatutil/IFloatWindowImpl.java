@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -10,11 +10,6 @@ import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-
-/**
- * Created by yhao on 2017/12/22.
- * https://github.com/yhaolpz
- */
 
 public class IFloatWindowImpl extends IFloatWindow {
 

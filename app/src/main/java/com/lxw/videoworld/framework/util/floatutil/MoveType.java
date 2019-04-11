@@ -1,14 +1,9 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-/**
- * Created by yhao on 2017/12/22.
- * https://github.com/yhaolpz
- */
 
 public class MoveType {
     static final int fixed = 0;

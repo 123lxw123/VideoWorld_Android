@@ -26,9 +26,7 @@ public class CustomDialog {
     public CustomDialog(Activity context, String title, String message, String okText, String cancelText, boolean flag_cancel) {
         mMaterialDialog = new MaterialDialog(context);
         // 不能返回键取消，不能点击对话框外部取消
-        if(!flag_cancel){
-            mMaterialDialog.setCanceledOnTouchOutside(false);
-        }
+        mMaterialDialog.setCanceledOnTouchOutside(flag_cancel);
         String okText1, cancelText1;
         if (!TextUtils.isEmpty(title)) {
             mMaterialDialog.setTitle(title);

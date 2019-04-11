@@ -26,6 +26,7 @@ import com.lxw.videoworld.app.config.Constant;
 import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
+import com.lxw.videoworld.app.util.SignUtil;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.image.ImageManager;
@@ -259,9 +260,10 @@ public class LocalSearchActivity extends BaseActivity implements SearchView.OnQu
                 public void onSuccess(BaseResponse<SourceListModel> response) {
                     SourceListModel sourceListModel = response.getResult();
                     sourceAdapter.setNewData(sourceListModel.getList());
-                    if (sourceListModel == null || sourceListModel.getList() == null || sourceListModel.getList().size() == 0)
+                    if (sourceListModel.getList() == null || sourceListModel.getList().size() == 0)
                         ToastUtil.showMessage("暂无数据");
                     closeKeyboard();
+                    SignUtil.handleSign(LocalSearchActivity.this, sourceListModel.getUserSignAdmire());
                 }
 
                 @Override

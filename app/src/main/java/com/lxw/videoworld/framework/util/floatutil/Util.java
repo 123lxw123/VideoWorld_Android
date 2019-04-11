@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -8,13 +8,6 @@ import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-
-import java.lang.reflect.Method;
-
-/**
- * Created by yhao on 2017/12/22.
- * https://github.com/yhaolpz
- */
 
 public class Util {
 

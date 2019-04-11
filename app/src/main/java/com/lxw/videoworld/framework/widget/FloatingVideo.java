@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.video;
+package com.lxw.videoworld.framework.widget;
 
 
 import android.content.Context;
@@ -7,7 +7,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.gsyvideoplayer.R;
+import com.lxw.videoworld.R;
+import com.lxw.videoworld.app.config.Constant;
+import com.lxw.videoworld.app.model.SourceHistoryModel;
+import com.lxw.videoworld.app.util.RealmUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -18,12 +21,12 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 
 /**
  * 多窗体下的悬浮窗页面支持Video
- * Created by shuyu on 2017/12/25.
  */
 
 public class FloatingVideo extends StandardGSYVideoPlayer {
 
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
+    private Timer timer;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -52,6 +55,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
 
         mTextureViewContainer = (ViewGroup) findViewById(R.id.surface_container);
         mStartButton = findViewById(R.id.start);
+        mLoadingProgressBar = findViewById(R.id.loading);
 
         if (isInEditMode())
             return;
@@ -170,7 +174,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
                     && mCurrentState != CURRENT_STATE_ERROR
                     && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
                 if (getActivityContext() != null) {
-                   FloatingVideo.this.post(new Runnable() {
+                    FloatingVideo.this.post(new Runnable() {
                         @Override
                         public void run() {
                             hideAllWidget();
@@ -184,4 +188,38 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
             }
         }
     }
+
+    @Override
+    public void onPrepared() {
+        super.onPrepared();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLocalUrl(mOriginUrl);
+                if (sourceHistoryModel == null)
+                    sourceHistoryModel = RealmUtil.queryHistoryModelByLink(mOriginUrl);
+                if (sourceHistoryModel != null && getCurrentPositionWhenPlaying() > 0) {
+                    sourceHistoryModel.setSeek(getCurrentPositionWhenPlaying());
+                    sourceHistoryModel.setTotal(getDuration());
+                    sourceHistoryModel.setStatus(Constant.STATUS_1);
+                    if (sourceHistoryModel.getTotal() - sourceHistoryModel.getSeek() <= 3000)
+                        sourceHistoryModel.setSeek(sourceHistoryModel.getTotal());
+                    RealmUtil.copyOrUpdateModel(sourceHistoryModel);
+                }
+            }
+        }, 3000, 3000);
+    }
+
+    public void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
 }

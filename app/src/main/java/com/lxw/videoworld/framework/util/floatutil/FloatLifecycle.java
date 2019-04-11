@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.app.Activity;
 import android.app.Application;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 /**
- * Created by yhao on 17-12-1.
  * 用于控制悬浮窗显示周期
  * 使用了三种方法针对返回桌面时隐藏悬浮按钮
  * 1.startCount计数，针对back到桌面可以及时隐藏

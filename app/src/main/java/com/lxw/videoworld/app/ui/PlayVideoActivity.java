@@ -21,11 +21,11 @@ import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.util.StatusBarUtil;
 import com.lxw.videoworld.framework.util.ToastUtil;
+import com.lxw.videoworld.framework.util.floatutil.FloatWindow;
 import com.lxw.videoworld.framework.widget.CustomListGSYVideoPlayer;
 import com.lxw.videoworld.framework.widget.OnTransitionListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
 
@@ -121,8 +121,10 @@ public class PlayVideoActivity extends BaseActivity {
         // 播放记录
         SourceHistoryModel sourceHistoryModel = RealmUtil.queryHistoryModelByLocalUrl(url);
         if (sourceHistoryModel == null) sourceHistoryModel = RealmUtil.queryHistoryModelByLink(url);
-        if (sourceHistoryModel != null && sourceHistoryModel.getSeek() > 0) videoPlayer.setSeekOnStart(sourceHistoryModel.getSeek());
+        if (sourceHistoryModel != null && sourceHistoryModel.getSeek() > 0)
+            videoPlayer.setSeekOnStart(sourceHistoryModel.getSeek());
         videoPlayer.setUpUrl(url, urlList);
+        FloatWindow.destroy();
         //过渡动画
         initTransition();
     }
@@ -144,17 +146,6 @@ public class PlayVideoActivity extends BaseActivity {
         setUpView();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        videoPlayer.onVideoPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onDestroy() {
@@ -174,8 +165,7 @@ public class PlayVideoActivity extends BaseActivity {
         }
         if (!videoPlayer.resolveBackPress()) {
             //释放所有
-            videoPlayer.setStandardVideoAllCallBack(null);
-            GSYVideoPlayer.releaseAllVideos();
+            videoPlayer.release();
             if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 super.onBackPressed();
             } else {
@@ -189,7 +179,6 @@ public class PlayVideoActivity extends BaseActivity {
             }
         }
     }
-
 
     private void initTransition() {
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -218,5 +207,4 @@ public class PlayVideoActivity extends BaseActivity {
         }
         return false;
     }
-
 }

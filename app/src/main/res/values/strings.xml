@@ -103,6 +103,7 @@
     <string name="txt_history">播放记录</string>
     <string name="txt_QQ">和谐群</string>
     <string name="txt_feedback">反馈</string>
+    <string name="txt_admire">赞赏</string>
     <string name="txt_common_detail">详情</string>
     <string name="txt_feedback_commit">提交</string>
     <string name="txt_feedback_tips">意见、建议、吐槽…畅所欲言</string>
@@ -115,6 +116,8 @@
     <string name="txt_download">下载</string>
     <string name="txt_no_data">暂无数据</string>
     <string name="txt_load_more">加载更多中…</string>
+    <string name="txt_admire_desc">Hello，影视天地的服务运行在云服务器上，开发者需要支付一笔不小的开销，即使这样开发者仍然不希望接入广告，影响用户体验。如果您喜欢影视天地，可以赞赏一下帮助开发者提供更好的服务，同时您也将获赠畅玩特权天数</string>
+    <string name="txt_admire_tips">(赞赏务必上传截图，否则无法获赠畅玩天数；畅玩特权是与设备绑定的，更换设备将无法享受该账号畅玩特权)</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

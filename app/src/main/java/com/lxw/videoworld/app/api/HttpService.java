@@ -23,12 +23,12 @@ public interface HttpService {
     @Headers("Cache-Control: public, max-age=3600")
     @FormUrlEncoded
     @POST("config")
-    Observable<BaseResponse<ConfigModel>> getConfig(@Field("id") String id);
+    Observable<BaseResponse<ConfigModel>> getConfig(@Field("uid") String uid, @Field("id") String id);
 
     @Headers("Cache-Control: public, max-age=43200")
     @FormUrlEncoded
     @POST("list")
-    Observable<BaseResponse<SourceListModel>> getList(@Field("sourceType") String sourceType, @Field("category") String category,
+    Observable<BaseResponse<SourceListModel>> getList(@Field("uid") String uid, @Field("sourceType") String sourceType, @Field("category") String category,
       @Field("type") String type, @Field("start") String start, @Field("limit") String limit);
 
     @FormUrlEncoded
@@ -42,7 +42,7 @@ public interface HttpService {
     @Headers("Cache-Control: public, max-age=43200")
     @FormUrlEncoded
     @POST("detail")
-    Observable<BaseResponse<SourceDetailModel>> getDetail(@Field("url") String url, @Field("sourceType") String sourceType);
+    Observable<BaseResponse<SourceDetailModel>> getDetail(@Field("uid") String uid, @Field("url") String url, @Field("sourceType") String sourceType);
 
     @FormUrlEncoded
     @POST("userInfo")
@@ -54,5 +54,9 @@ public interface HttpService {
     @Headers("Cache-Control: public, max-age=43200")
     @FormUrlEncoded
     @POST("localSearch")
-    Observable<BaseResponse<SourceListModel>> getLocalSearch(@Field("keyword") String keyword);
+    Observable<BaseResponse<SourceListModel>> getLocalSearch(@Field("uid") String uid, @Field("keyword") String keyword);
+
+    @FormUrlEncoded
+    @POST("addAdmire")
+    Observable<BaseResponse<String>> addAdmire(@Field("uid") String uid, @Field("amount") int amount, @Field("image") String image);
 }

@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
@@ -12,11 +12,6 @@ import android.view.ViewGroup;
 
 import java.util.HashMap;
 import java.util.Map;
-
-/**
- * Created by yhao on 2017/12/22.
- * https://github.com/yhaolpz
- */
 
 public class FloatWindow {
 

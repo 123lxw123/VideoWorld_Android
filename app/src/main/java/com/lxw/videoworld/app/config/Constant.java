@@ -36,6 +36,9 @@ public class Constant {
 
     public static final String KEY_NOTICE = "KEY_NOTICE";
 
+    public static final String KEY_USER_SIGN_ADMIRE = "KEY_USER_SIGN_ADMIRE";
+    public static final String USER_SIGN_ADMIRE_TIPS = "(签到 3 天即可获得 1 天畅玩特权，赞赏亦可获赠畅玩特权)";
+
     public static String THEME_TYPE;
     public static final String THEME_TYPE_1 = "1";// glod
     public static final String THEME_TYPE_2 = "2";// red
@@ -48,7 +51,7 @@ public class Constant {
     public static final String DOWNLOAD_TYPE_COMPLETE = "DOWNLOAD_TYPE_COMPLETE";
 
     public static final String API_VERSION = "v1/";
-    // !!!测试地址!!!
+    // TODO !!!测试地址!!!
     public static final String BASE_URL = "http://localhost:8080/videoworld/" + Constant.API_VERSION;
 
     /** 是否debug模式 **/

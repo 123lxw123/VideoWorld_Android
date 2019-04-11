@@ -1,5 +1,6 @@
 package com.lxw.videoworld.framework.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -7,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,6 +24,9 @@ import com.lxw.videoworld.app.util.RealmUtil;
 import com.lxw.videoworld.framework.application.BaseApplication;
 import com.lxw.videoworld.framework.util.GsonUtil;
 import com.lxw.videoworld.framework.util.NetUtil;
+import com.lxw.videoworld.framework.util.floatutil.FloatWindow;
+import com.lxw.videoworld.framework.util.floatutil.MoveType;
+import com.lxw.videoworld.framework.util.floatutil.Screen;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.ListGSYVideoPlayer;
@@ -32,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 /**
  * Created by Zion on 2018/4/15.
@@ -72,6 +79,31 @@ public class CustomListGSYVideoPlayer extends ListGSYVideoPlayer {
         resolveUrlList();
         resolvePlaySpeed();
         resolveMoreScaleTypeUI();
+        resolveFloatPlay();
+    }
+
+    public void resolveFloatPlay() {
+        final TextView floatPlay = findViewById(R.id.float_play);
+        floatPlay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FloatWindow.destroy();
+                FloatPlayerView floatPlayerView = new FloatPlayerView(getApplicationContext(), mUrl, getCurrentPositionWhenPlaying());
+                FloatWindow
+                        .with(getApplicationContext())
+                        .setView(floatPlayerView)
+                        .setWidth(Screen.width, 0.6f)
+                        .setHeight(Screen.width, 0.4f)
+                        .setX(Screen.width, 0.8f)
+                        .setY(Screen.height, 0.3f)
+                        .setFilter(false)
+                        .setMoveType(MoveType.slide)
+                        .setMoveStyle(500, new BounceInterpolator())
+                        .build();
+                FloatWindow.get().show();
+                ((Activity) getActivityContext()).finish();
+            }
+        });
     }
 
     public boolean resolveBackPress() {

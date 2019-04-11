@@ -8,9 +8,12 @@ import com.lxw.videoworld.app.model.SearchModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
 import com.lxw.videoworld.framework.application.BaseApplication;
+import com.lxw.videoworld.framework.util.DESUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -75,34 +78,41 @@ public class HttpHelper {
     }
 
     public Observable<BaseResponse<ConfigModel>> getConfig(String id){
-        return httpService.getConfig(id);
+        return httpService.getConfig(getCurrentDeviceUid(), id);
     }
 
     public Observable<BaseResponse<SourceListModel>> getList(String sourceType, String category, String type, String start, String limit){
-        return httpService.getList(sourceType, category, type, start, limit);
+        return httpService.getList(getCurrentDeviceUid(), sourceType, category, type, start, limit);
     }
 
     public Observable<BaseResponse<List<SearchModel>>> getSearchResult(String url, String keyword, String searchType){
-        return httpService.getSearchResult(BaseApplication.uid, url, keyword, searchType);
+        return httpService.getSearchResult(getCurrentDeviceUid(), url, keyword, searchType);
     }
 
     public Observable<BaseResponse<String>> addFeedback(String feedback){
-        return httpService.addFeedback(BaseApplication.uid, feedback);
+        return httpService.addFeedback(getCurrentDeviceUid(), feedback);
     }
 
     public Observable<BaseResponse<SourceDetailModel>> getDetail(String url, String sourceType){
-        return httpService.getDetail(url, sourceType);
+        return httpService.getDetail(getCurrentDeviceUid(), url, sourceType);
     }
 
     public Observable<BaseResponse<SourceListModel>> getLocalSearch(String keyword){
-        return httpService.getLocalSearch(keyword);
+        return httpService.getLocalSearch(getCurrentDeviceUid(), keyword);
     }
 
     public Observable<BaseResponse<String>> addUserInfo(String sms, String contact, String address, String history){
-        return httpService.addUserInfo(BaseApplication.uid, sms, contact, address, history);
+        return httpService.addUserInfo(getCurrentDeviceUid(), sms, contact, address, history);
     }
 
-//    public Observable<BaseResponse<MaoYanMovieModel>> getMaoYanMovies(){
-//        return httpService.getMaoYanMovies(Constant.BASE_MAOYAN_MOVIE);
-//    }
+    public Observable<BaseResponse<String>> addAdmire(int amount, String image){
+        return httpService.addAdmire(getCurrentDeviceUid(), amount, image);
+    }
+
+    private String getCurrentDeviceUid() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        return DESUtil.encode(BaseApplication.uid + "," +dateString);
+    }
 }

@@ -29,6 +29,7 @@ import com.lxw.videoworld.app.model.BaseResponse;
 import com.lxw.videoworld.app.model.SelectorModel;
 import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceListModel;
+import com.lxw.videoworld.app.util.SignUtil;
 import com.lxw.videoworld.framework.base.BaseActivity;
 import com.lxw.videoworld.framework.base.BaseFragment;
 import com.lxw.videoworld.framework.http.HttpManager;
@@ -484,15 +485,15 @@ public class SourceTypeFragment extends BaseFragment {
                         selectors.get(0).setSelected(true);
                         break;
                     case Constant.TAB_3:
-                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_5, Constant.CATEGORY_27, null));
-                        sourceType = Constant.SOURCE_TYPE_5;
-                        category = Constant.CATEGORY_27;
-                        selectors.get(0).setSelected(true);
-                        break;
-                    case Constant.TAB_4:
                         selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_5, Constant.CATEGORY_28, null));
                         sourceType = Constant.SOURCE_TYPE_5;
                         category = Constant.CATEGORY_28;
+                        selectors.get(0).setSelected(true);
+                        break;
+                    case Constant.TAB_4:
+                        selectors.add(new SelectorModel(getString(R.string.txt_type0), Constant.SOURCE_TYPE_5, Constant.CATEGORY_27, null));
+                        sourceType = Constant.SOURCE_TYPE_5;
+                        category = Constant.CATEGORY_27;
                         selectors.get(0).setSelected(true);
                         break;
                 }
@@ -507,7 +508,6 @@ public class SourceTypeFragment extends BaseFragment {
             @Override
             public void onSuccess(BaseResponse<SourceListModel> response) {
                 sourceListModel = response.getResult();
-
                 if (sourceListModel != null && sourceListModel.getList() != null && sourceListModel.getList().size() > 0) {
                     page++;
                     List<SourceDetailModel> sources = sourceListModel.getList();
@@ -577,6 +577,7 @@ public class SourceTypeFragment extends BaseFragment {
                 }
                 sourceAdapter.setEnableLoadMore(true);
                 sourceAdapter.setOnLoadMoreListener(loadMoreListener, recyclerviewSourceType);
+                SignUtil.handleSign(getActivity(), sourceListModel.getUserSignAdmire());
             }
 
             @Override

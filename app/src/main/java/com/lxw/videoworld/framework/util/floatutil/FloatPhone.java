@@ -1,13 +1,13 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.WindowManager;
 
 /**
- * Created by yhao on 17-11-14.
  * 7.1及以上需申请权限
  */
 
@@ -55,6 +55,7 @@ class FloatPhone extends FloatView {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void init() {
         if (Util.hasPermission(mContext)) {

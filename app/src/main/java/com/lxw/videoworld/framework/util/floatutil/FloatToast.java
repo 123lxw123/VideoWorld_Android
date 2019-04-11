@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.content.Context;
 import android.view.View;

@@ -1,11 +1,6 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.view.View;
-
-/**
- * Created by yhao on 2017/12/22.
- * https://github.com/yhaolpz
- */
 
 public abstract class IFloatWindow {
     public abstract void show();

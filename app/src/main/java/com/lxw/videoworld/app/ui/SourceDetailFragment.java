@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -87,6 +88,8 @@ public class SourceDetailFragment extends BaseFragment {
     @BindView(R.id.button_collect)
     Button buttonCollect;
     Unbinder unbinder;
+    @BindView(R.id.refresh_detail)
+    SwipeRefreshLayout refreshDetail;
     private View rootView;
     private boolean flag_expand = false;// 简介展开收起标识
     private int width;
@@ -143,6 +146,7 @@ public class SourceDetailFragment extends BaseFragment {
 
             @Override
             public void onSuccess(BaseResponse<SourceDetailModel> response) {
+                refreshDetail.setRefreshing(false);
                 sourceDetailModel = response.getResult();
                 if (sourceDetailModel != null) {
                     initDatas();
@@ -153,6 +157,7 @@ public class SourceDetailFragment extends BaseFragment {
 
             @Override
             public void onFailure(BaseResponse<SourceDetailModel> response) {
+                refreshDetail.setRefreshing(false);
                 SourceDetailModel sourceDetailModel = RealmUtil.queryDetailModelByUrl(url);
                 if (sourceDetailModel != null) {
                     initDatas();
@@ -163,6 +168,12 @@ public class SourceDetailFragment extends BaseFragment {
     }
 
     private void initViews() {
+        refreshDetail.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getSourceDetail();
+            }
+        });
         // 收藏
         final SourceCollectModel resultSourceCollectModel = RealmUtil.queryCollectModelByUrl(sourceDetailModel.getUrl());
         if (resultSourceCollectModel != null) {
@@ -308,7 +319,7 @@ public class SourceDetailFragment extends BaseFragment {
                     if (originLink.startsWith("thunder://") && !originLink.contains("*")) {
                         originLink = DownloadManager.getRealUrl(originLink);
                     }
-                    if (originLink.endsWith("m3u8")) originLink = "【在线播放】" + originLink;
+                    if (StringUtil.isAutoPlay(item)) originLink = "【在线播放】" + originLink;
                     else if (sourceDetailModel.getSourceType().equals(Constant.SOURCE_TYPE_5) && !item.startsWith("thunder://"))
                         originLink = "【其他】" + originLink;
                     else originLink = "【边下边播】" + originLink;
@@ -350,7 +361,7 @@ public class SourceDetailFragment extends BaseFragment {
         sourceHistoryModel.setStatus(Constant.STATUS_1);
         RealmUtil.copyOrUpdateHistoryModel(sourceHistoryModel, false);
         if (sourceDetailModel != null && (sourceDetailModel.getSourceType().equals(Constant.SOURCE_TYPE_4) ||
-                sourceDetailModel.getSourceType().equals(Constant.SOURCE_TYPE_5) && links.get(position).contains("m3u8"))) {
+                sourceDetailModel.getSourceType().equals(Constant.SOURCE_TYPE_5) && StringUtil.isAutoPlay(links.get(position)))) {
             Intent intent = new Intent(SourceDetailFragment.this.getActivity(), PlayVideoActivity.class);
             intent.putExtra("url", links.get(position));
             intent.putStringArrayListExtra("urlList", links);

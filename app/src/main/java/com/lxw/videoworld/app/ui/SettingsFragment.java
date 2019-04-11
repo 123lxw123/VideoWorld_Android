@@ -29,6 +29,7 @@ import com.lxw.videoworld.app.model.SourceDetailModel;
 import com.lxw.videoworld.app.model.SourceHistoryModel;
 import com.lxw.videoworld.app.service.DownloadManager;
 import com.lxw.videoworld.app.util.RealmUtil;
+import com.lxw.videoworld.app.util.SignUtil;
 import com.lxw.videoworld.framework.http.HttpManager;
 import com.lxw.videoworld.framework.util.DownloadUtil;
 import com.lxw.videoworld.framework.util.FileUtil;
@@ -71,18 +72,19 @@ public class SettingsFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_settings, container, false);
             ButterKnife.bind(this, rootView);
             settings.clear();
+            settings.add(new KeyValueModel("我的账号", ""));
             settings.add(new KeyValueModel("下载中心", ""));
             settings.add(new KeyValueModel("收藏记录", ""));
             settings.add(new KeyValueModel("播放记录", ""));
+            settings.add(new KeyValueModel("赞赏支持", ""));
             settings.add(new KeyValueModel("本地播放", ""));
             settings.add(new KeyValueModel("主题切换", ""));
             settings.add(new KeyValueModel("磁力搜索", ""));
+            settings.add(new KeyValueModel("和谐Q群", "126257036"));
             settings.add(new KeyValueModel("缓存清理", ValueUtil.formatFileSize(FileUtil.getFileSize(new File(PATH_OFFLINE_DOWNLOAD)))));
             settings.add(new KeyValueModel("版本更新", "V " + ManifestUtil.getApkVersionName(SettingsFragment.this.getContext())));
-            settings.add(new KeyValueModel("和谐Q群", "126257036"));
             settings.add(new KeyValueModel("移动网络暂停下载", ""));
-            settings.add(new KeyValueModel("赞赏", ""));
-            settings.add(new KeyValueModel("反馈", ""));
+            settings.add(new KeyValueModel("反馈交流", ""));
             adapter = new BaseQuickAdapter<KeyValueModel, BaseViewHolder>(R.layout.item_setting, settings) {
                 @Override
                 protected void convert(BaseViewHolder helper, KeyValueModel item) {
@@ -215,14 +217,16 @@ public class SettingsFragment extends Fragment {
                             clip.setText("126257036");
                             ToastUtil.showMessage("已复制群号");
                             break;
+                        case "我的账号":
+                            SignUtil.showSignAdmire(getActivity(), false);
+                            break;
                         case "移动网络暂停下载":
                             break;
-                        case "赞赏":
-                            Intent intent3 = new Intent(SettingsFragment.this.getContext(), PreViewActivity.class);
-                            intent3.putExtra("isAdmire", true);
+                        case "赞赏支持":
+                            Intent intent3 = new Intent(SettingsFragment.this.getContext(), AdmireActivity.class);
                             startActivity(intent3);
                             break;
-                        case "反馈":
+                        case "反馈交流":
                             Intent intent4 = new Intent(getContext(), FeedbackActivity.class);
                             startActivity(intent4);
                             break;

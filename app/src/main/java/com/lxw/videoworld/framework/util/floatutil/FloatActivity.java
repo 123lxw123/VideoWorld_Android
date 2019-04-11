@@ -1,4 +1,4 @@
-package com.example.gsyvideoplayer.utils.floatUtil;
+package com.lxw.videoworld.framework.util.floatutil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.List;
 
 /**
  * 用于在内部自动申请权限
- * https://github.com/yhaolpz
  */
 
 public class FloatActivity extends Activity {
