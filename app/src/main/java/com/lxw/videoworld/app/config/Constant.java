@@ -222,5 +222,5 @@ public class Constant {
     public static final String BASE_DIAOSI_SEARCH_2 = "http://www.diaosisou.org/list/keyword/page/size_d";// 大小
     public static final String BASE_DIAOSI_SEARCH_3 = "http://www.diaosisou.org/list/keyword/page/rala_d";// 相关度
 
-    public static final String BASE_MAOYAN_MOVIE = "https://box.maoyan.com/promovie/api/box/second.json";
+    public static final String BASE_MAOYAN_MOVIE = "https://piaofang.maoyan.com/second-box";
 }
